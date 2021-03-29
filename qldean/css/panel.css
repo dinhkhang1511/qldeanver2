@@ -1,0 +1,348 @@
+.top-bar{
+    position: relative;
+    float: left;
+    width: 100%;
+    height: 35px;
+    background-color: rgb(47, 55, 70);
+}
+.left-bar{
+    position: relative;
+    float: left;
+    width: auto;
+    background-color: rgb(58, 70, 92);
+    color: white;
+    height: calc(100% - 35px);
+
+}
+
+.left-bar div{
+
+    padding: 10px 30px 10px 20px;
+    border-top: 1pt solid rgba(158, 158, 158, 0.185);
+    font-size: 14px;
+}
+
+.left-bar div:first-child{
+
+
+    background-color: rgb(47, 55, 70);
+    height: 27px;
+}
+
+.left-bar div:first-child span{
+    float: left;
+    margin-top: 7px;
+    margin-left: 8px;
+    
+}
+
+.left-bar div:first-child svg{
+    float: left;
+    fill: rgba(218, 218, 218, 0.616);
+}
+
+#name-user{
+    color: chartreuse;
+    margin-top: 9px;
+    margin-left: 20px;
+}
+
+
+
+.content{
+    position: relative;
+    float: left;
+    margin-left: 70px;
+    margin-top: 50px;
+
+    width: 75%;
+    height: 400px;
+}
+
+
+#button-bar{
+    position: relative;
+    float: left;
+    background-color: rgb(230, 230, 230);
+    width: 100%;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 0px;
+}
+
+#button-bar svg{
+    float: left;
+    fill: rgba(0, 0, 0, 0.753);
+    margin-top: 5px;
+}
+
+#button-bar i{
+    margin-top: 8px;
+    margin-left: 10px;
+    float: left;
+
+}
+
+#name-item{
+    margin-top: 7px;
+    margin-left: 10px;
+    float: left; 
+}
+
+#button-item{
+    float: left;
+    position: relative;
+    color: white;
+    background-color: rgb(55, 136, 81);
+    margin-left: 20px;
+    padding: 7px 8px;
+    border-radius: 3%;
+}
+
+#button-item svg{
+    float: left;
+    margin: 0;
+    margin-right: 10px;
+    fill: white;
+    margin-top: 1px;
+}
+
+
+#leave-btn{
+    float: left;
+    position: relative;
+    color: white;
+    background-color: rgb(136, 128, 55);
+    margin-left: 20px;
+    padding: 7px 8px;
+    border-radius: 3%;
+}
+
+#leave-btn svg{
+    float: left;
+    margin: 0;
+    margin-right: 10px;
+    fill: white;
+    margin-top: 1px;
+}
+
+
+
+
+
+
+
+
+.chose-bar{
+    position: relative;
+    float: left;
+    background-color: rgb(230, 230, 230);
+    width: 100%;
+    margin-top: 10px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 0px;
+}
+
+.chose-bar select {
+    min-width: 150px;
+    height: 30px;
+    outline: none;
+    border: 1px solid rgba(93, 93, 93, 0.507);
+    background-color: white;
+}
+
+.chose-bar input{
+    min-width: 150px;
+    height: 28px;
+    padding: 0px 10px;
+    outline: none;
+    border: 1px solid rgba(93, 93, 93, 0.507);
+    background-color: white;
+}
+
+.chose-bar button{
+    height: 30px;
+    padding: 0px 10px;
+    outline: none;
+    border: 1px solid rgba(93, 93, 93, 0.507);
+
+    color: white;
+    border: none;
+}
+
+table{
+    position: relative;
+    float: left;
+    margin-top: 10px;
+    width: calc(100% + 10px);
+    background-color: white;
+    border-collapse: collapse;
+}
+
+
+table, th, td {
+    border: 1px solid rgba(0, 0, 0, 0.144);
+
+  }
+
+
+  th, td {
+      padding: 5px;
+  }
+
+table tr:first-child td{
+    color: black;
+    font-weight: bold;
+    border: 1px solid rgba(0, 0, 0, 0.034);
+    background-color: rgb(230, 230, 230);
+}
+
+.edit-co-btn{
+    background-color: rgb(73, 109, 38);
+    width: 50px;
+    float: left;
+    text-align: center;
+    margin: 5px;
+    padding: 3px;
+    color: white;
+    border-radius: 4px;
+}
+.delete-co-btn{
+    background-color: steelblue;
+    width: 50px;
+    float: left;
+    text-align: center;
+    margin: 5px;
+    padding: 3px;
+    color: white;
+    border-radius: 4px;
+}
+.btn-co{
+    width: 133px;
+}
+
+
+.nav-page{
+    position: relative;
+    float: left;
+    margin-top: 20px;
+} 
+.nav-page span{
+    position: relative;
+    padding: 6px  10px 4px 10px;
+    border-radius: 2px;
+    background-color: rgb(216, 216, 216);
+}
+
+
+.Add-New-Row{
+    margin-top: 10px;
+    position: relative;
+    float: left;
+    width: 100%;
+    border: 5px solid rgba(0, 0, 0, 0.096);
+    height: auto;
+}
+
+
+
+.Add-New-Row div{
+    float: left;
+    position: relative;
+    width: 100%;
+
+    margin-top: 10px;
+}
+
+.Add-New-Row div span:first-child{
+    position: relative;
+    width: 20%;
+    float: left;
+    padding-right: 10px;
+    text-align: right;
+    margin-top: 7px;
+
+}
+
+.Add-New-Row div span:nth-child(2){
+    position: relative;
+    float: left;
+    width: calc(70% - 100px);
+    height: auto;
+}
+
+.Add-New-Row div button{
+    position: relative;
+    float: left;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    padding: 7px 10px;
+    background-color: cornflowerblue;
+    outline: none;
+    border: none;
+    border-radius: 2px;
+    color: white;
+}
+
+
+.Add-New-Row div button:first-child{
+    margin-left: calc(20% + 10px);
+}
+
+.Add-New-Row div button:nth-child(2){
+    background-color: tomato;
+}
+
+.Add-New-Row div button:first-child{
+    background-color: seagreen;
+}
+
+
+
+
+.input-new-row-short{
+    position: relative;
+    float: left;
+    width: calc(50% - 31px);
+    padding: 4px 7px;
+    height: 20px;
+    outline: none;
+    border: 1pt solid rgba(0, 0, 0, 0.294);
+
+}
+
+
+.input-new-row-long{
+    position: relative;
+    float: left;
+    width: calc(100% - 14px);
+    padding: 4px 7px;
+    height: 20px;
+    outline: none;
+    border: 1pt solid rgba(0, 0, 0, 0.294);
+
+}
+
+
+.select-new-row{
+    position: relative;
+    float: left;
+    width: calc(50% - 14px);
+    padding: 4px 7px;
+    height: 35px;
+    outline: none;
+}
+
+
+#label-Add-New{
+    position: relative;
+    width: calc(100% - 5px);
+    background-color:rgba(0, 0, 0, 0.096);
+    padding: 5px 0px;
+    padding-left: 5px;
+    margin: 0px;
+
+
+
+}
