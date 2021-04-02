@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 var listCheckJoinHTML = [
-  ["addheadQLdean", "qldean/Home.html" , "qldean/Login.html" , "qldean/Panel.html" , "qldean/Panel1.html"],
+  ["addheadQLdean", "qldean/Home.html" , "qldean/Login.html" , "qldean/Panel.html" , "qldean/Panel1.html" , "qldean/Admin.html"],
 ];
 
 var preventFolder = [
@@ -13,6 +13,7 @@ var preventFolder = [
 //READ AND RETURN CLIENT
 module.exports = (res,req_bundle) => {
         // Read File
+
         fs.readFile(req_bundle.filePath, (err, content) => {
             if (err) {
               if (err.code == "ENOENT") {

@@ -6,5 +6,7 @@ module.exports = (setroute = require("./Setroute")) => {
     setroute.pushRoute(root_1,"GET","panel", "qldean/Panel.html");
     setroute.pushRoute(root_1,"GET","panel1", "qldean/Panel1.html");
 
+    setroute.pushRoute(root_1,"GET","admin", "qldean/Admin.html");
+
     return setroute.getRoute();
 }
