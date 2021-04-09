@@ -9,7 +9,8 @@ module.exports = class InleModel{
             const rows = await this.query(SQLcommand);
             return rows;
         } catch(e){
-            console.log(e);
+            
+            return (JSON.parse(JSON.stringify(e)).sqlMessage + "fail");
         }
     }
 }

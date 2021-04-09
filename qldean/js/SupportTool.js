@@ -83,3 +83,8 @@ function iOS() {
   // iPad on iOS 13 detection
   || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
 }
+
+
+function isNumeric(num){
+  return !isNaN(num)
+}

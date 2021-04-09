@@ -3,7 +3,8 @@ const fs = require("fs");
 const path = require("path");
 
 var listCheckJoinHTML = [
-  ["addheadQLdean", "qldean/Home.html" , "qldean/Login.html" , "qldean/Panel.html" , "qldean/Panel1.html" , "qldean/Admin.html"],
+  ["addheadQLdean", "qldean/Home.html" , "qldean/Login.html" , "qldean/Panel.html" , "qldean/Panel1.html" ,
+   "qldean/AdminxQuanlykhoa.html" , "qldean/AdminxQuanlytieuban.html" ,"qldean/AdminxQuanlysinhvien.html", "qldean/AdminxQuanlygiangvien.html" ],
 ];
 
 var preventFolder = [
