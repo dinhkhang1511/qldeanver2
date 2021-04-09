@@ -15,6 +15,8 @@ var preventFolder = [
 module.exports = (res,req_bundle) => {
         // Read File
 
+        req_bundle.filePath = String(req_bundle.filePath).replace(/\\/g,"/");
+
         fs.readFile(req_bundle.filePath, (err, content) => {
             if (err) {
               if (err.code == "ENOENT") {
