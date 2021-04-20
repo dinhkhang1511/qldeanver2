@@ -1,8 +1,8 @@
 <script>
-    $('title').append("Admin");
+    $('title').append("Giảng viên");
  
     window.onload = function(){
-        $('<script />', { type : 'text/javascript', src : "/qldean/js/AdminJS/AdminxQuanlykhoa.js"}).appendTo('head');
+        $('<script />', { type : 'text/javascript', src : "/qldean/js/TeacherJS/TeacherxDanhsachtatcadetai.js"}).appendTo('head');
         
         $('<script />', { type : 'text/javascript', src : "/qldean/js/Responsive.js"}).appendTo('head');
         $('<script />', { type : 'text/javascript', src : "/qldean/js/SupportTool.js"}).appendTo('head');
@@ -13,15 +13,15 @@
 <div class="top-bar">
 
     <div id="name-user">
-        Admin: Phương thanh
+        GV: Phương thanh
     </div>
 
 </div> 
 
 
 <div class="left-bar">
-    <a href="/admin/quanlykhoa">
-    <div>
+
+    <div id="trangchu-link">
         <svg height="25px"  viewBox="0 0 59.465 59.465" width="25px">	<g>
             <path d="M58.862,33.886L45.045,20.069v-9.112c0-1.136-0.921-2.056-2.056-2.056c-1.137,0-2.057,0.92-2.057,2.056v5.001L31.185,6.21
                 c-0.801-0.803-2.104-0.803-2.905,0L0.603,33.886c-0.803,0.804-0.803,2.104,0,2.907c0.802,0.803,2.104,0.803,2.907,0L29.732,10.57
@@ -36,11 +36,16 @@
 
         <span>Trang chủ</span>
         </div>
-    </a>
-    <a style="color: tomato;"  href="/admin/quanlykhoa"><div>Quản lý khoa</div></a>
-    <a href="/admin/quanlytieuban"><div>Quản lý tiểu bang</div></a>
-    <a href="/admin/quanlysinhvien"><div>Quản lý sinh viên</div></a>
-    <a href="/admin/quanlygiangvien"><div>Quản lý giảng viên</div></a>
+
+
+        <div  class="item-many">
+            <p >Đề tài</p>
+            <p id="detai-link" class="item-temp">Tất cả</p>
+            <p id="phutrach-link" class="item-temp">Phụ trách</p>
+        </div>
+
+
+    <div id="phancong-link">Phân công</div>
 </div>
 
 
@@ -67,4 +72,19 @@
 
     </div>
 
+
 </div>
+
+
+<style>
+.item-temp{
+    display: block;
+}
+</style>
+
+<script>
+    var url_string = window.location.href;
+    if(url_string.includes('/giangvien/detai')) {
+        document.getElementById('detai-link').style.color = "tomato"
+        }
+</script>

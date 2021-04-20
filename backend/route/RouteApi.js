@@ -22,13 +22,14 @@ module.exports = (setroute = require("./Setroute")) => {
     setroute.pushRoute(root_1,"GET","api/xoasv", "qldean/AdminController@xoasv");
     setroute.pushRoute(root_1,"GET","api/timmasv", "qldean/AdminController@timmasv");
 
-
     setroute.pushRoute(root_1,"GET","api/danhsachgiangvien", "qldean/AdminController@danhsachgiangvien");
     setroute.pushRoute(root_1,"GET","api/dieukienthemgv", "qldean/AdminController@dieukienthemgv");
     setroute.pushRoute(root_1,"GET","api/themgv", "qldean/AdminController@themgv");
     setroute.pushRoute(root_1,"GET","api/suagv", "qldean/AdminController@suagv");
     setroute.pushRoute(root_1,"GET","api/xoagv", "qldean/AdminController@xoagv");
     setroute.pushRoute(root_1,"GET","api/timmagv", "qldean/AdminController@timmagv");
+
+    setroute.pushRoute(root_1,"GET","api/danhsachtatcadetai", "qldean/TeacherController@danhsachtatcadetai");
     
 
     return setroute.getRoute();

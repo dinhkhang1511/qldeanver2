@@ -1,0 +1,88 @@
+<script>
+    $('title').append("Admin");
+ 
+    window.onload = function(){
+        $('<script />', { type : 'text/javascript', src : "/qldean/js/AdminJS/AdminxPhancongphutrach.js"}).appendTo('head');
+        
+        $('<script />', { type : 'text/javascript', src : "/qldean/js/Responsive.js"}).appendTo('head');
+        $('<script />', { type : 'text/javascript', src : "/qldean/js/SupportTool.js"}).appendTo('head');
+        $('<script />', { type : 'text/javascript', src : "/qldean/js/EventClick.js"}).appendTo('head');
+    }
+</script>
+
+
+
+<div class="top-bar">
+    <div id="name-user">
+        Admin: Phương thanh
+    </div>
+</div>
+
+<div class="left-bar">
+                <!-- Sidebar  -->
+                <nav id="sidebar">
+
+
+                    <ul class="list-unstyled components">
+                     
+                        <li>
+                            <a href="#">Tiểu ban</a>
+                        </li>
+                        <li>
+                            <a href="#">Sinh viên</a>
+                        </li>
+                        <li>
+                            <a href="#">Giảng viên</a>
+                        </li>
+                        <li>
+                            <a id="click-toggle-phancong" href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Phân công phụ trách</a>
+                            <ul class="collapse list-unstyled" id="pageSubmenu">
+                                <li  class="active">
+                                    <a href="#">Hướng dẫn</a>
+                                </li>
+                                <li>
+                                    <a href="#">Phản biện</a>
+                                </li>
+                                <li>
+                                    <a href="#">Tiểu ban</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Tài khoản</a>
+                        </li>
+                        <li>
+                            <a href="#">Thống kê</a>
+                        </li>
+                    </ul>
+        
+                </nav>
+    
+</div>
+
+
+<div class="content">
+
+    <div id="button-bar">
+       
+    </div>
+
+    <div id="chose-bar">
+
+    </div>
+
+    <table id="table_data">
+
+    </table>
+
+    <div class="Add-New-Row">
+
+    </div>
+
+    <div class="nav-page">
+
+    </div>
+
+</div>
+
+

@@ -4,10 +4,7 @@ module.exports = async (callback, scanner) => {
     let head_params = scanner.head_params;
     
     if (index === 'danhsachkhoa'){
-        let limit = 2;
-        let page = Number(head_params.get('page')) - 1;
-        let count = await Model.InleSQL("SELECT COUNT(maKhoa) FROM khoa;");
-        let result = await Model.InleSQL("SELECT * FROM khoa LIMIT "+limit+" OFFSET " + page*limit);
+        {sfds:ss}
         callback(JSON.stringify([result, count[0]['COUNT(maKhoa)']]), 'application/json');
     }
     if (index === 'themkhoa'){
