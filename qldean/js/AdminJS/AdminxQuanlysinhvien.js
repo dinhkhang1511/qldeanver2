@@ -141,7 +141,8 @@ function LoadAddFormSinhvien() {
     $('.Add-New-Row').append(returnFormInputTextLength('Tên','' ));
     $('.Add-New-Row').append(returnFormInputTime('Ngày sinh',2,''));
     $('.Add-New-Row').append(returnFormInputText('Lớp', ''));
-    $('.Add-New-Row').append(returnFormInputTextRight('Email', '@ptithcm.edu.vn'));
+    $('.Add-New-Row').append(returnFormInputSelect('Khóa', [2018,2019,2020,2021], 2021));
+    // $('.Add-New-Row').append(returnFormInputTextRight('Email', '@ptithcm.edu.vn'));
     $('.Add-New-Row').append(returnFormInputText('GPA', ''));
     $('.Add-New-Row').append(returnFormBtn(listBtnpk,listColorpk,listIdBtn));
 }
@@ -164,7 +165,8 @@ function LoadSuaFormSinhvien() {
     $('.Add-New-Row').append(returnFormInputTextLength('Tên','LeTuan' ));
     $('.Add-New-Row').append(returnFormInputTime('Ngày sinh',2,'2012-23-12'));
     $('.Add-New-Row').append(returnFormInputText('Lớp', 'CNTT'));
-    $('.Add-New-Row').append(returnFormInputTextLength('Email', 'letan@ptithcm.edu.vn'));
+    $('.Add-New-Row').append(returnFormInputSelect('Khóa', [2018,2019,2020,2021], 2019));
+    // $('.Add-New-Row').append(returnFormInputTextLength('Email', 'letan@ptithcm.edu.vn'));
     $('.Add-New-Row').append(returnFormInputText('GPA', '3'));
     $('.Add-New-Row').append(returnFormBtn(listBtnpk,listColorpk,listIdBtn));
 }
