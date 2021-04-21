@@ -162,7 +162,7 @@ function LoadSuaGiangvien() {
     $('#button-bar').empty();
     $('.Add-New-Row').empty();
 
-    $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên') + returnNameIndex('Thêm mới') +  returnReturnBtn());
+    $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên') + returnNameIndex('Sửa') +  returnReturnBtn());
     $('.Add-New-Row').append(returnFormLabel('Sửa giảng viên'));
     $('.Add-New-Row').append(returnFormLabelInfo('Mã giảng viên','GV12'));
     $('.Add-New-Row').append(returnFormInputTextLength('Tên','Nguyen ngoc' ));

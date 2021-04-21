@@ -158,7 +158,7 @@ function LoadSuaFormSinhvien() {
     $('#button-bar').empty();
     $('.Add-New-Row').empty();
 
-    $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên') + returnNameIndex('Thêm mới') +  returnReturnBtn());
+    $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên') + returnNameIndex('Sửa') +  returnReturnBtn());
     $('.Add-New-Row').append(returnFormLabel('Sửa sinh viên'));
     $('.Add-New-Row').append(returnFormLabelInfo('Mã sinh viên','TB12'));
     $('.Add-New-Row').append(returnFormInputTextLength('Tên','LeTuan' ));
