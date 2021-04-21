@@ -444,7 +444,7 @@ table tr:first-child td{
 .input-new-row-short{
     position: relative;
     float: left;
-    width: calc(50% - 31px);
+    width: calc(50% - 150px);
     padding: 4px 7px;
     height: 30px;
     outline: none;
@@ -457,7 +457,7 @@ table tr:first-child td{
 .input-new-row-long{
     position: relative;
     float: left;
-    width: calc(100% - 44px);
+    width: calc(50% - 80px);
     margin-top: 4px;
     padding: 4px 7px;
     height: 30px;

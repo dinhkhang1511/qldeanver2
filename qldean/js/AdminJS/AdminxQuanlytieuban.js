@@ -5,7 +5,7 @@ var tol_page = 0;
 var listLabelpk = ['Tiểu ban','Ngày','Giờ','Trạng thái'];
 var data = [{TieuBan:"TB12" , Ngay:'23/12/1212', Gio: '12:10', trangthai:"dang phan cong"},{TieuBan:"TB12" , Ngay:'23/12/1212', Gio: '12:10', trangthai:"dang phan cong"},{TieuBan:"TB12" , Ngay:'23/12/1212', Gio: '12:10', trangthai:"dang phan cong"},{TieuBan:"TB12" , Ngay:'23/12/1212', Gio: '12:10', trangthai:"dang phan cong"},{TieuBan:"TB12" , Ngay:'23/12/1212', Gio: '12:10', trangthai:"dang phan cong"}]
 var listButtonpk = ['Phân công','Sửa','Xóa'];
-var listIdBtnTable = ['phancongx', 'suax' , 'xoax']
+var listIdBtnTable = ['phancongx', 'suax' , 'xoax'];
 
 
 var listBtnpk =  ['Thêm','Thoát'];
@@ -174,7 +174,7 @@ function LoadSuaTieuban() {
     $('.Add-New-Row').empty();
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý tiểu ban') + returnNameIndex('Thêm mới') +  returnReturnBtn());
-    $('.Add-New-Row').append(returnFormLabel('Thêm mới tiểu ban'));
+    $('.Add-New-Row').append(returnFormLabel('Sửa tiểu ban'));
     $('.Add-New-Row').append(returnFormLabelInfo('Mã tiểu ban','TB12'));
     $('.Add-New-Row').append(returnFormInputTime('Thời gian',1,'2021-12-11T07:30'));
     $('.Add-New-Row').append(returnFormBtn(listSuaBtnpk,listSuaColorpk,listSuaIdBtn));

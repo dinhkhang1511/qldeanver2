@@ -78,7 +78,13 @@ function returnFormInputSelect(str,sle,va) {
     return element
 }
 function returnFormInputText(str, str_){
+    return '<div><span>'+str+':  </span><span><input   class="input-new-row-short" value="'+str_+'" type="text" ></span></div>'
+}
+function returnFormInputTextLength(str, str_){
     return '<div><span>'+str+':  </span><span><input   class="input-new-row-long" value="'+str_+'" type="text" ></span></div>'
+}
+function returnFormInputTextRight(str, str_){
+    return '<div><span>'+str+':  </span><span><input style="text-align: right;" class="input-new-row-long" value="'+str_+'" type="text" ></span></div>'
 }
 
 function returnFormBtn(listBtn,listColor,listIdBtn) {
