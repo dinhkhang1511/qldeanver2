@@ -1,0 +1,91 @@
+<script>
+    $('title').append("Giảng viên - Tất cả đồ án");
+ 
+    window.onload = function(){
+        $('<script />', { type : 'text/javascript', src : "/qldean/js/TeacherJS/TeacherxPhancong.js"}).appendTo('head');
+        
+        $('<script />', { type : 'text/javascript', src : "/qldean/js/Responsive.js"}).appendTo('head');
+        $('<script />', { type : 'text/javascript', src : "/qldean/js/SupportTool.js"}).appendTo('head');
+        $('<script />', { type : 'text/javascript', src : "/qldean/js/EventClick.js"}).appendTo('head');
+    
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+    }
+</script>
+
+<div class="top-bar">
+    <div id="name-user">
+        GV: Ngoc thanh
+    </div>
+
+    <div id="logout">
+        Đăng xuất
+    </div>
+</div> 
+
+
+<div class="left-bar">
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+
+
+        <ul class="list-unstyled components">
+
+
+            <li>
+                <a id="click-toggle-phancong" href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Chấm điểm</a>
+                <ul class="collapse list-unstyled" id="pageSubmenu">
+                    <li>
+                        <a href="">Hướng dẫn</a>
+                    </li>
+                    <li>
+                        <a href="">Phản biện</a>
+                    </li>
+                    <li>
+                        <a href="">TIểu ban</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="active">
+                <a href="/giangvien/phancong">Phân công đồ án</a>
+            </li>
+            <li>
+                <a href="/giangvien/taikhoan">Tài khoản</a>
+            </li>
+        </ul>
+
+    </nav>
+
+</div>
+
+
+<div class="content">
+
+    <div id="button-bar">
+
+    </div>
+
+    <div class="chose-bar">
+
+    </div>
+ 
+    <table id="table_data">
+
+    </table>  
+
+     <div id="no-color-btn-follow-row" class="btn-follow-row">
+
+    </div>
+
+    <div class="Add-New-Row">
+
+    </div>
+
+
+    <div class="nav-page">
+
+    </div>
+
+
+</div>

@@ -4,8 +4,9 @@ const path = require("path");
 
 var listCheckJoinHTML = [
   ["addheadQLdean", "qldean/Home.html" , "qldean/Login.html" , "qldean/Panel.html" , "qldean/Panel1.html" ,
-   "qldean/AdminxQuanlykhoa.html" , "qldean/AdminxQuanlytieuban.html" ,"qldean/AdminxQuanlysinhvien.html", "qldean/AdminxQuanlygiangvien.html", 
-   "qldean/TeacherxDanhsachtatcadetai.html" , 'qldean/AdminxPhancongphutrach.html' , 'qldean/AdminxPhancongphanbien.html' , 'qldean/AdminxPhanconghuongdan.html' , 'qldean/AdminxPhancongtieuban.html' , "qldean/AdminxTaikhoan.html"],
+    "qldean/Admin/AdminxQuanlytieuban.html" ,"qldean/Admin/AdminxQuanlysinhvien.html", "qldean/Admin/AdminxQuanlygiangvien.html", 
+    "qldean/Admin/AdminxPhancongphutrach.html" , 'qldean/Admin/AdminxPhancongphanbien.html' , 'qldean/Admin/AdminxPhanconghuongdan.html' , 'qldean/Admin/AdminxPhancongtieuban.html' , "qldean/Admin/AdminxTaikhoan.html",
+    "qldean/Teacher/TeacherxPhancong.html" , "qldean/Teacher/TeacherxTaikhoan.html"],
 ];
 
 var preventFolder = [

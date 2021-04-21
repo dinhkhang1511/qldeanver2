@@ -31,6 +31,28 @@
     z-index: 1;
 }
 
+
+.switchbtn{
+    position: relative;
+    float: left;
+    width: auto;
+    margin-left: 11px;
+    height: auto;
+}
+.switchbtn span{
+    float: left;
+    position: relative;
+    padding: 6px 10px;
+    background-color: rgb(187, 187, 187);
+    margin-left: 10px;
+    color: white;
+    cursor: pointer;
+}
+
+#activeswitchbar{
+    background-color: rgb(49, 121, 40);
+}
+
 .left-bar div{
     position: relative;
     padding: 15px 30px;

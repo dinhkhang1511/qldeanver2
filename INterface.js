@@ -139,3 +139,6 @@ function returNavForm(le, num) {
     return element;
 }
 
+function returnSwitchBtn(str,str_) {
+    return '<div  class="switchbtn"><span class="loadswitch1" id="activeswitchbar">'+str+'</span><span class="loadswitch2">'+str_+'</span></div>';
+}

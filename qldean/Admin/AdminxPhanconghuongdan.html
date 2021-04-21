@@ -1,8 +1,8 @@
 <script>
-    $('title').append("Admin");
+    $('title').append("Admin - Phụ trách hướng dẫn");
  
     window.onload = function(){
-        $('<script />', { type : 'text/javascript', src : "/qldean/js/AdminJS/AdminxPhancongtieuban.js"}).appendTo('head');
+        $('<script />', { type : 'text/javascript', src : "/qldean/js/AdminJS/AdminxPhanconghuongdan.js"}).appendTo('head');
         
         $('<script />', { type : 'text/javascript', src : "/qldean/js/Responsive.js"}).appendTo('head');
         $('<script />', { type : 'text/javascript', src : "/qldean/js/SupportTool.js"}).appendTo('head');
@@ -45,13 +45,13 @@
             <li>
                 <a id="click-toggle-phancong" href="#pageSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle collapse">Phân công phụ trách</a>
                 <ul class="collapse list-unstyled show" id="pageSubmenu">
-                    <li >
+                    <li class="active">
                         <a href="/admin/phanconghuongdan">Hướng dẫn</a>
                     </li>
                     <li>
                         <a href="/admin/phancongphanbien">Phản biện</a>
                     </li>
-                    <li class="active">
+                    <li>
                         <a href="/admin/phancongtieuban">Tiểu ban</a>
                     </li>
                 </ul>
@@ -97,6 +97,7 @@
 
     </div>
 
+
     <!-- <div id="button-bar">
 
             <svg height="20px"  viewBox="0 0 59.465 59.465" width="20px"><g>
@@ -105,15 +106,19 @@
                 </g></svg><i class="fa fa-angle-right"></i>
                 <div id="name-item">Phụ trách</div>
                 <i class="fa fa-angle-right"></i>
-                <div id="name-item">Tiểu ban</div>
+                <div id="name-item">Hướng dẫn</div>
                 <i class="fa fa-angle-right"></i>
 
 
     </div>
 
+    <div class="chose-bar"><input id="input-search" type="text" src="" alt="" placeholder="Nhập GPA tối thiểu">
+        <button id="search-index" style="background-color: tomato;" type="submit">Lọc GPA</button>
+        <button  id="refresh-index"  style="background-color: slateblue;" type="submit">Làm mới</button>
+        </div> 
     <table id="table_data">
-        <tr><td>Mã sinh viên</td><td>Tên sinh viên</td><td>Lớp</td><td>Mã đề tài</td><td>Tiểu ban</td><td>GPA</td></tr>
-        <tr><td>SV02</td><td>Trần Văn Giàu</td><td>CNTT</td><td>DT01</td><td>TB07</td><td>3.8</td>
+        <tr><td>Mã sinh viên</td><td>Tên sinh viên</td><td>Lớp</td><td>Mã đề tài</td><td>GVHD</td><td>GPA</td></tr>
+        <tr><td>SV02</td><td>Trần Văn Giàu</td><td>CNTT</td><td>DT01</td><td>GV06</td><td>3.8</td>
             <td  class="btn-co"><div  class="chitiet-co-btn">Chi tiết</div><div class="phancongx-co-btn">Phân công</div></td>
             <tr>
     </table>  -->
@@ -128,3 +133,7 @@
     </div> -->
 
 </div>
+
+
+
+
