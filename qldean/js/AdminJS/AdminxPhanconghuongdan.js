@@ -83,7 +83,7 @@ function LoadChitietHuongdan() {
     $('.Add-New-Row').append(returnLormOneInfo('Tiểu ban: TB02'));
 
     $('.Add-New-Row').append(returnLormOneInfo('Giảng viên hướng dẫn: GV02 - Trần Minh Chiến'));
-    $('.Add-New-Row').append(returnLormBtn(listBtnpk,listColorpk,listIdBtn));
+    $('.Add-New-Row').append(returnLormBtn(['Thoát'],['tomato'],['thoat']));
 
 }
 
