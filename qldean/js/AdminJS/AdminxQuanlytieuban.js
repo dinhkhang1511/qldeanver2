@@ -173,7 +173,7 @@ function LoadSuaTieuban() {
     $('#button-bar').empty();
     $('.Add-New-Row').empty();
 
-    $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý tiểu ban') + returnNameIndex('Thêm mới') +  returnReturnBtn());
+    $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý tiểu ban') + returnNameIndex('Sửa') +  returnReturnBtn());
     $('.Add-New-Row').append(returnFormLabel('Sửa tiểu ban'));
     $('.Add-New-Row').append(returnFormLabelInfo('Mã tiểu ban','TB12'));
     $('.Add-New-Row').append(returnFormInputTime('Thời gian',1,'2021-12-11T07:30'));
