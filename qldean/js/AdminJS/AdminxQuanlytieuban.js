@@ -158,7 +158,6 @@ function LoadAddFormTieuban() {
     $('.Add-New-Row').append(returnFormLabelInfo('Mã tiểu ban','TB12'));
     $('.Add-New-Row').append(returnFormInputTime('Thời gian',1,''));
     $('.Add-New-Row').append(returnFormBtn(listBtnpk,listColorpk,listIdBtn));
-
 }
 
 
@@ -349,8 +348,6 @@ function LoadPhancongTieuban() {
 //CLICK-----------------------------------------------
 function EventAdminClick(event) {
     var x = event.target;
-
-
     if( x.parentNode.className == "no-color-lum-table"){
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#no-color-btn-follow-row').attr("id", "yes-color-btn-follow-row");
