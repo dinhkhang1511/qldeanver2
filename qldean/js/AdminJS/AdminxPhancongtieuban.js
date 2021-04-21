@@ -16,7 +16,7 @@ var listIdBtn = ['phancong', 'thoa'];
 function LoadListTieuban() {
   
     $('#button-bar').show();
-    $('.chose-bar').show();
+    $('.chose-bar').hide();
     $('#table_data').show();
     $('.btn-follow-row').show();
     $('.nav-page').show();
@@ -31,7 +31,7 @@ function LoadListTieuban() {
     $('.nav-page').empty();
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Phụ trách')  + returnNameIndex('Tiểu ban') );
-    $('.chose-bar').append(returnSearchForm('Nhập GPA tối thiểu','Lọc') );
+    // $('.chose-bar').append(returnSearchForm('Nhập GPA tối thiểu','Lọc') );
     $('#table_data').append(returnTable(listLabelpk,data));
     $('.btn-follow-row').append(returnButtonTable(listButtonpk,listIdBtnTable));
     $('.nav-page').append(returNavForm(4, 2));
