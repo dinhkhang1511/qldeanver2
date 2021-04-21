@@ -54,22 +54,38 @@ function LoadPhancongHuongdan() {
 
     $('.Add-New-Row').append(returnLormInfo(listInfoHuongdan1));
     $('.Add-New-Row').append(returnLormInfo(listInfoHuongdan2));
-    $('.Add-New-Row').append(returnLormOneInfo('Giảng viên hướng dẫn: GV02 - Trần Minh Chiến'));
+    // $('.Add-New-Row').append(returnLormOneInfo('Giảng viên hướng dẫn: GV02 - Trần Minh Chiến'));
     $('.Add-New-Row').append(returnLormOneInfo('Tiểu ban: TB02'));
 
     $('.Add-New-Row').append(returnLormInputSelect('Phân công giáo viên hướng dẫn: ',['GV92 - Nguyen thanh tung', 'GV92 - Vo thanh huy'] , ''));
     $('.Add-New-Row').append(returnLormBtn(listBtnpk,listColorpk,listIdBtn));
 
-     
-    returnLormInputSelect(str,sle,va)
-
-    $('.Add-New-Row').append(returnFormLabelInfo('Mã sinh vi','TB12'));
-    $('.Add-New-Row').append(returnFormInputTime('Thời gian',1,''));
-    $('.Add-New-Row').append(returnFormBtn(listBtnpk,listColorpk,listIdBtn));
 }
 
 
+function LoadChitietHuongdan() {
+    $('#button-bar').show();
+    $('.chose-bar').hide();
+    $('#table_data').hide();
+    $('.btn-follow-row').hide();
+    $('.nav-page').hide();
 
+    $('.Add-New-Row').show();
+
+    $('#button-bar').empty();
+    $('.Add-New-Row').empty();
+
+    $('#button-bar').append(returnIconHome() + returnNameIndex('Phụ trách')  + returnNameIndex('Hướng dẫn') +  returnReturnBtn());
+
+    $('.Add-New-Row').append(returnLormInfo(listInfoHuongdan1));
+    $('.Add-New-Row').append(returnLormInfo(listInfoHuongdan2));
+    // $('.Add-New-Row').append(returnLormOneInfo('Giảng viên hướng dẫn: GV02 - Trần Minh Chiến'));
+    $('.Add-New-Row').append(returnLormOneInfo('Tiểu ban: TB02'));
+
+    $('.Add-New-Row').append(returnLormOneInfo('Giảng viên hướng dẫn: GV02 - Trần Minh Chiến'));
+    $('.Add-New-Row').append(returnLormBtn(listBtnpk,listColorpk,listIdBtn));
+
+}
 
 
 //CLICK-----------------------------------------------
