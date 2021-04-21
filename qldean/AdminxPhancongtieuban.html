@@ -7,6 +7,10 @@
         $('<script />', { type : 'text/javascript', src : "/qldean/js/Responsive.js"}).appendTo('head');
         $('<script />', { type : 'text/javascript', src : "/qldean/js/SupportTool.js"}).appendTo('head');
         $('<script />', { type : 'text/javascript', src : "/qldean/js/EventClick.js"}).appendTo('head');
+    
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
     }
 </script>
 
@@ -19,45 +23,45 @@
 </div>
 
 <div class="left-bar">
-                <!-- Sidebar  -->
-                <nav id="sidebar">
+    <!-- Sidebar  -->
+    <nav id="sidebar">
 
 
-                    <ul class="list-unstyled components">
-                     
-                        <li>
-                            <a href="#">Tiểu ban</a>
-                        </li>
-                        <li>
-                            <a href="#">Sinh viên</a>
-                        </li>
-                        <li>
-                            <a href="#">Giảng viên</a>
-                        </li>
-                        <li>
-                            <a id="click-toggle-phancong" href="#pageSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle collapse">Phân công phụ trách</a>
-                            <ul class="collapse list-unstyled show" id="pageSubmenu">
-                                <li>
-                                    <a href="#">Hướng dẫn</a>
-                                </li>
-                                <li > 
-                                    <a href="#">Phản biện</a>
-                                </li>
-                                <li class="active">
-                                    <a href="#">Tiểu ban</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#">Tài khoản</a>
-                        </li>
-                        <li>
-                            <a href="#">Thống kê</a>
-                        </li>
-                    </ul>
-        
-                </nav>
-    
+        <ul class="list-unstyled components">
+         
+            <li>
+                <a href="/admin/quanlytieuban">Tiểu ban</a>
+            </li>
+            <li>
+                <a href="/admin/quanlysinhvien">Sinh viên</a>
+            </li>
+            <li>
+                <a href="/admin/quanlygiangvien">Giảng viên</a>
+            </li>
+            <li>
+                <a id="click-toggle-phancong" href="#pageSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle collapse">Phân công phụ trách</a>
+                <ul class="collapse list-unstyled show" id="pageSubmenu">
+                    <li >
+                        <a href="/admin/phanconghuongdan">Hướng dẫn</a>
+                    </li>
+                    <li>
+                        <a href="/admin/phancongphanbien">Phản biện</a>
+                    </li>
+                    <li class="active">
+                        <a href="/admin/phancongtieuban">Tiểu ban</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="/admin/taikhoan">Tài khoản</a>
+            </li>
+            <li>
+                <a href="/admin/thongke">Thống kê</a>
+            </li>
+        </ul>
+
+    </nav>
+
 </div>
 
 
@@ -94,28 +98,3 @@
     </div>
 
 </div>
-
-
-<!-- jQuery CDN - Slim version (=without AJAX) -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<!-- Popper.JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-<!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-
-<script type="text/javascript">
-
-    $(document).ready(function () {
-        $('#sidebarCollapse').on('click', function () {
-            $('#sidebar').toggleClass('active');
-        });
-    });
-
-    // $(document).ready(function(){
-    //     $('#click-toggle-phancong').trigger('click');
-    // });
-
-
-
-
-</script>

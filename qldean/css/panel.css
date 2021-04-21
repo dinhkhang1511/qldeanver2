@@ -173,7 +173,6 @@
 
 
 
-
 .chose-bar{
     position: relative;
     float: left;
@@ -217,7 +216,7 @@ table{
     position: relative;
     float: left;
     margin-top: 10px;
-    width: calc(100% + 10px);
+    width: calc(100%);
     background-color: white;
     border-collapse: collapse;
 }
@@ -225,9 +224,13 @@ table{
 
 table, th, td {
     border: 1px solid rgba(0, 0, 0, 0.144);
+    cursor: pointer;
+}
 
-  }
 
+.yes-color-lum-table{
+    background-color: rgb(184, 184, 184);
+}
 
   th, td {
       padding: 5px;
@@ -251,6 +254,34 @@ table tr:first-child td{
     border-radius: 4px;
     cursor: pointer;
 }
+
+.btn-follow-row{
+    position: relative;
+    margin-top: 10px;
+    float: left;
+    height: auto;
+    width: auto;
+    float: right;
+}
+
+.btn-follow-row div{
+    width: auto;
+    float: left;
+    text-align: center;
+    margin: 5px;
+    padding: 3px 7px;
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+
+#yes-color-btn-follow-row div{
+    background-color: rgb(71, 127, 233);
+}
+
 .delete-co-btn{
     background-color: steelblue;
     width: 50px;
@@ -330,6 +361,7 @@ table tr:first-child td{
     float: left;
     border: 5px solid rgba(0, 0, 0, 0.096);
     height: auto;
+    width: 100%;
 }
 
 
@@ -342,7 +374,7 @@ table tr:first-child td{
     margin-top: 10px;
 }
 
-.Add-New-Row div span:first-child{
+.Add-New-Row div span:first-child:not(.label-item-add){
     position: relative;
     width: 20%;
     float: left;
@@ -375,15 +407,7 @@ table tr:first-child td{
 
 
 .Add-New-Row div button:first-child:not(.left_row_tb_btn){
-    margin-left: calc(20% + 10px);
-}
-
-.Add-New-Row div button:nth-child(2){
-    background-color: tomato;
-}
-
-.Add-New-Row div button:first-child{
-    background-color: seagreen;
+    margin-left: calc(20%);
 }
 
 .Add-New-Row div div:not(.one-row-item-add) {
@@ -396,6 +420,8 @@ table tr:first-child td{
     white-space: nowrap;
     padding-right: 10px;
 }
+
+
 
 .one-row-item-add{
     width: 500px;
@@ -475,8 +501,7 @@ table tr:first-child td{
 .label-item-add{
     padding: 5px;
     float: left;
-    text-align: center;
-    min-width: 10px;
+    text-align: left;
     background-color: rgb(224, 224, 224);
 }
 
@@ -507,7 +532,7 @@ table tr:first-child td{
     outline: none;
 }
 
-.slide-select-phan-cong{
+.slide-select-lorm{
     position: relative;
     font-size: large;
     width: 400px;
