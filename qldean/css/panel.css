@@ -6,6 +6,20 @@
     background-color: rgb(83, 104, 148);
     z-index: 1;
 }
+
+
+#logout{
+    position: relative;
+    float: right;
+    right: 0px;
+    top: 0px;
+    padding: 6px 11px;
+    color: white;
+    width: auto;
+    text-align: center;
+    margin-top: 0px;
+    background-color: tomato;
+}
 .left-bar{
     position: fixed;
     float: left;
@@ -81,6 +95,9 @@
     color: rgb(17, 233, 125);
     margin-top: 7px;
     margin-left: 12px;
+    width: 200px;
+    float: left;
+
 }
 
 
