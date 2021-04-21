@@ -148,7 +148,6 @@ function LoadAddFormSinhvien() {
 
 
 function LoadSuaFormSinhvien() {
-
     $('#button-bar').show();
     $('.chose-bar').hide();
     $('#table_data').hide();
@@ -156,7 +155,6 @@ function LoadSuaFormSinhvien() {
     $('.nav-page').hide();
 
     $('.Add-New-Row').show();
-
     $('#button-bar').empty();
     $('.Add-New-Row').empty();
 
