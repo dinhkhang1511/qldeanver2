@@ -67,8 +67,9 @@ module.exports = async (callback, scanner) => {
     if (index === 'danhsachsinhvien'){
         let limit = 10;
         let page = Number(head_params.get('page')) - 1;
-        let count = await Model.InleSQL("select count( maSV) from SinhVien;");
-        let result = await Model.InleSQL("select MaSV, TenSV, NgaySinh, Lop, Email, GPA from SinhVien limit" +limit+ " OFFSET " + page*limit);
+        let count = await Model.InleSQL("select count( maSV) from sinhvien;");
+        let result = await Model.InleSQL("select MaSV, TenSV, NgaySinh, Lop, Email, GPA from sinhvien limit " +limit+ " OFFSET " + page*limit);
+        console.log("select MaSV, TenSV, NgaySinh, Lop, Email, GPA from sinhvien limit " +limit+ " OFFSET " + page*limit)
         let data = [];
         data.push(result)
         data.push(count)
