@@ -6,9 +6,9 @@ module.exports = class Connect{
         this.portSERVER = 7000;
         // MONGO DB
         this.hostsql = 'localhost';
-        this.user = 'tan';
-        this.password = '12345';
-        this.database = 'quan_ly_do_an';
+        this.user = 'root';
+        this.password = '';
+        this.database = 'qldoan';
     }
     //MONGO CONNECT
     async connectMongoDB (callback){

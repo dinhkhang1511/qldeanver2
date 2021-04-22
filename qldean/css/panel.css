@@ -7,6 +7,18 @@
     z-index: 1;
 }
 
+#input-text-title{
+    float: left;
+    position: relative;
+    width: 80px;
+    padding: 3px;
+    margin-top: 5px;
+    margin-left: 9px;
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.411);
+    font-size: 14px;
+    text-align: center;
+}
 
 #logout{
     position: relative;

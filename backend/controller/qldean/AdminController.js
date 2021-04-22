@@ -5,25 +5,25 @@ module.exports = async (callback, scanner) => {
 
 
     if (index === 'danhsachtieuban'){
-        let limit = 2;
+        let limit = 10;
         let page = Number(head_params.get('page')) - 1;
-        let count = await Model.InleSQL("SELECT COUNT(maTieuBan) FROM tieu_ban");
-        let result = await Model.InleSQL("SELECT * FROM tieu_ban JOIN hoi_dong ON tieu_ban.maHoiDong=hoi_dong.maHoiDong LIMIT "+limit+" OFFSET " + page*limit);
-        callback(JSON.stringify([result, count[0]['COUNT(maTieuBan)']]), 'application/json');
+        let count = await Model.InleSQL("select count(*) from tieuban;");
+        let result = await Model.InleSQL("select maTB, ngay, gio, sum(total) sum from ( select maTB, ngay, gio, count(maTB) as total from (SELECT tb.MaTB, tb.ngay, tb.gio FROM tieuban tb INNER JOIN phanconggvtb pc ON tb.MaTB = pc.MaTB) as ListTB group by maTB union select maTB, ngay, gio,0 from tieuban group by maTB ) tmp group by (tmp.maTB) limit "+limit+" offset "+page*limit+";");
+        let data = [];
+        data.push(result)
+        data.push(count)
+
+        callback(JSON.stringify(data), 'application/json');
     }
     if (index === 'dieukienthemtb'){
-        let result = await Model.InleSQL("SELECT * FROM hoi_dong");
+        let result = await Model.InleSQL("select AUTO_IDTB();");
         callback(JSON.stringify(result), 'application/json');
     }
     if (index === 'themtb'){
-        let matieuban = head_params.get('matieuban');
-        let mahoidong = head_params.get('mahoidong');
         let gio = head_params.get('gio');
         let ngay = head_params.get('ngay');
         gio = gio + ":00"
-
-        let  result1 = await Model.InleSQL("INSERT INTO `tieu_ban` (`maTieuBan`, `ngay`, `gio`, `maHoiDong`) "+
-            "VALUES ("+matieuban+",'"+ngay+"','"+gio+"', '"+mahoidong+"')");
+        let  result1 = await Model.InleSQL("insert into TieuBan(maTB, ngay, gio) values('', '"+ngay+"', '"+gio+"');");
             if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
                 callback(JSON.stringify("that bai"), 'application/json');
             }else{
@@ -31,22 +31,23 @@ module.exports = async (callback, scanner) => {
             }
     }
     if (index === 'suatb'){
-        let matieuban = head_params.get('matieuban');
-        let mahoidong = head_params.get('mahoidong');
+        let maTB = head_params.get('maTB');
         let gio = head_params.get('gio');
         let ngay = head_params.get('ngay');
         gio = gio + ":00";
-
-        let result1 = await Model.InleSQL("UPDATE `tieu_ban` SET `ngay` = '"+ngay+"' ,  `gio` = '"+gio+"' , `mahoidong` = '"+mahoidong+"' WHERE `tieu_ban`.`maTieuBan` = "+matieuban);
-            if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
+        
+        let result1 = await Model.InleSQL("UPDATE `tieuban` SET `ngay` = '"+ngay+"' ,  `gio` = '"+gio+"' WHERE `tieuban`.`maTB` = '"+maTB+"'");
+        if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
                 callback(JSON.stringify("that bai"), 'application/json');
             }else{
                 callback(JSON.stringify(result1), 'application/json');
             }
     }
     if (index === 'xoatb'){
-        let matieuban = head_params.get('matieuban');
-        let  result1 = await Model.InleSQL("DELETE FROM `tieu_ban` WHERE `tieu_ban`.`maTieuBan` = " + matieuban);
+        let maTB = head_params.get('maTB');
+        console.log("delete from tieuban where MaTB='" + maTB+"'")
+        let  result1 = await Model.InleSQL("delete from phanconggvtb where MaTB='" + maTB+"'");
+        result1 = await Model.InleSQL("delete from tieuban where MaTB='" + maTB+"'");
             if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
                 callback(JSON.stringify("that bai"), 'application/json');
             }else{
@@ -63,93 +64,41 @@ module.exports = async (callback, scanner) => {
             }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    if (index === 'danhsachkhoa'){
-        {sfds:ss}
-        callback(JSON.stringify([result, count[0]['COUNT(maKhoa)']]), 'application/json');
-    }
-    if (index === 'themkhoa'){
-        let makhoa = head_params.get('makhoa');
-        let tenkhoa = head_params.get('tenkhoa');
-
-        let  result1 = await Model.InleSQL("INSERT INTO `khoa` (`maKhoa`, `tenKhoa`) "+
-            "VALUES ("+makhoa+",'"+tenkhoa+"')");
-            if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
-                callback(JSON.stringify("that bai"), 'application/json');
-            }else{
-                callback(JSON.stringify(result1), 'application/json');
-            }
-    }
-    if (index === 'suakhoa'){
-        let makhoa = head_params.get('makhoa');
-        let tenkhoa = head_params.get('tenkhoa');
-
-        let  result1 = await Model.InleSQL("UPDATE `khoa` SET `tenKhoa` = '"+tenkhoa+"' WHERE `khoa`.`maKhoa` = "+makhoa);
-            if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
-                callback(JSON.stringify("that bai"), 'application/json');
-            }else{
-                callback(JSON.stringify(result1), 'application/json');
-            }
-    }
-    if (index === 'xoakhoa'){
-        let makhoa = head_params.get('makhoa');
-        let  result1 = await Model.InleSQL("DELETE FROM `khoa` WHERE `khoa`.`maKhoa` = " + makhoa);
-            if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
-                callback(JSON.stringify("that bai"), 'application/json');
-            }else{
-                callback(JSON.stringify(result1), 'application/json');
-            }
-    }
-    if (index === 'timmakhoa'){
-        let makhoa = head_params.get('makhoa');  
-        let  result1 = await Model.InleSQL("SELECT * FROM `khoa` WHERE `khoa`.`maKhoa` = " + makhoa);
-            if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
-                callback(JSON.stringify("that bai"), 'application/json');
-            }else{
-                callback(JSON.stringify(result1), 'application/json');
-            }
-    }
-
-
-
     if (index === 'danhsachsinhvien'){
-        let limit = 2;
+        let limit = 10;
         let page = Number(head_params.get('page')) - 1;
-        let count = await Model.InleSQL("SELECT COUNT(maSV) FROM sinh_vien;");
-        let result = await Model.InleSQL("SELECT * FROM sinh_vien LIMIT "+limit+" OFFSET " + page*limit);
-        callback(JSON.stringify([result, count[0]['COUNT(maSV)']]), 'application/json');
-    }
-
-    if (index === 'dieukienthemsv'){
-        let result = await Model.InleSQL("SELECT maTaiKhoan FROM tai_khoan WHERE tai_khoan.quyen='sv' AND  NOT  EXISTS (SELECT * FROM sinh_vien WHERE sinh_vien.maTaiKhoan = tai_khoan.maTaiKhoan)");
-        let result1 = await Model.InleSQL("SELECT * FROM khoa");
+        let count = await Model.InleSQL("select count( maSV) from SinhVien;");
+        let result = await Model.InleSQL("select MaSV, TenSV, NgaySinh, Lop, Email, GPA from SinhVien limit" +limit+ " OFFSET " + page*limit);
         let data = [];
-        data.push(result);
-        data.push(result1);
+        data.push(result)
+        data.push(count)
+
         callback(JSON.stringify(data), 'application/json');
     }
 
+    if (index === 'dieukienthemsv'){
+        let khoa = head_params.get('khoa');  
+        let Id = await Model.InleSQL("select Auto_IDSV("+khoa+")");
+        let Email = await Model.InleSQL("select Auto_EmailSV('"+Id[0]['Auto_IDSV('+khoa+')']+"')");
+
+        callback(JSON.stringify({Email,Id,khoa}), 'application/json');
+    }
+
     if (index === 'themsv'){
-        let masv = head_params.get('masv');
-        let tensv = head_params.get('tensv');
-        let emailsv = head_params.get('emailsv');
-        let matk = head_params.get('matk');
-        let makhoa = head_params.get('makhoa');
-        let mksv = head_params.get('mksv');
-        let  result1 = await Model.InleSQL("INSERT INTO `sinh_vien` (`maSV`, `tenSV`, `email`, `matKhau`, `trangThai`, `maKhoa`, `maTaiKhoan`) "+
-            "VALUES ("+masv+",'"+tensv+"','"+emailsv+"', '"+mksv+"', 0, "+makhoa+", "+matk+")");
+        let MaSV = head_params.get('MaSV');
+        let TenSV = head_params.get('TenSV');
+        let NgaySinh = head_params.get('NgaySinh');
+        let Lop = head_params.get('Lop');
+        let GPA = head_params.get('GPA');
+        let Email = head_params.get('Email');
+        console.log(MaSV,TenSV,NgaySinh,Lop,GPA,Email)
+
+
+        console.log("INSERT INTO `sinhvien` (`MaSV`, `TenSV`, `NgaySinh`, `Lop`, `GPA`, `Email`) "+
+        "VALUES ('"+MaSV+"','"+TenSV+"','"+NgaySinh+"', '"+Lop+"', "+GPA+", '"+Email+"')")
+
+        let  result1 = await Model.InleSQL("INSERT INTO `sinhvien` (`MaSV`, `TenSV`, `NgaySinh`, `Lop`, `GPA`, `Email`) "+
+            "VALUES ('"+MaSV+"','"+TenSV+"','"+NgaySinh+"', '"+Lop+"', "+GPA+", '"+Email+"')");
             if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
                 callback(JSON.stringify("that bai"), 'application/json');
             }else{

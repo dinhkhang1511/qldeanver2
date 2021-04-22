@@ -11,49 +11,55 @@ var listBtnpk =  ['Thêm','Thoát'];
 var listColorpk = ['tomato', 'green'];
 var listIdBtn = ['them', 'thoa'];
 
-// var xhttp = new XMLHttpRequest();
-//     xhttp.onreadystatechange = function() {
-//         if (this.readyState == 4 && this.status == 200) {
-//                 if(String(this.responseURL).includes('api/danhsachsinhvien')){
-//                     var data = JSON.parse(this.responseText);
-//                     tol_page =   Math.ceil( Number(data[1]) / 2 );
-//                     LoadListSinhvien(data[0]);
-//                     LoadNavPage();
-//                 }
+var maSV;
+var EmailSV;
 
-//                 if(String(this.responseURL).includes('api/dieukienthemsv')){
-//                     var data = JSON.parse(this.responseText)
-//                     LoadAddListSinhvien(data[0], data[1]);
-//                 }
-//                 if(String(this.responseURL).includes('api/themsv')){
-//                     if(String(this.responseText) == '"that bai"')
-//                         alert('Trùng mã sinh viên, Email hoặc field rỗng')
-//                     else
-//                         loadAddListSinhvien();
-//                 }
 
-//                 if(String(this.responseURL).includes('api/suasv')){
-//                     if(String(this.responseText) == '"that bai"')
-//                         alert('Email hoặc field rỗng')
-//                     else loadListSinhvien();
-//                 }
+var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+                // if(String(this.responseURL).includes('api/danhsachsinhvien')){
+                //     var data = JSON.parse(this.responseText);
+                //     tol_page =   Math.ceil( Number(data[1]) / 2 );
+                //     LoadListSinhvien(data[0]);
+                //     LoadNavPage();
+                // }
 
-//                 if(String(this.responseURL).includes('api/xoasv')){
-//                     if(String(this.responseText) == '"that bai"')
-//                         alert('Email hoặc field rỗng')
-//                     else loadListSinhvien();
-//                 }
+                if(String(this.responseURL).includes('api/dieukienthemsv')){
+                    var data = JSON.parse(this.responseText)
+                    maSV =  data.Id[0]['Auto_IDSV('+Number(data.khoa)+')'];
+                    EmailSV = data.Email[0]["Auto_EmailSV('"+maSV+"')"]
+                    LoadAddFormSinhvien(EmailSV, maSV)
+                }
+                if(String(this.responseURL).includes('api/themsv')){
+                    if(String(this.responseText) == '"that bai"')
+                        alert('Fail')
+                    else
+                        loadAddListSinhvien();
+                }
 
-//                 if(String(this.responseURL).includes('/api/timmasv')){
-//                     if(String(this.responseText) == '"that bai"'){
-//                         alert('rỗng')
-//                     }else{
-//                         LoadListSinhvien(JSON.parse(this.responseText));
-//                         $('.nav-page').hide();
-//                     }
-//                 }
-//         }
-//     };
+                // if(String(this.responseURL).includes('api/suasv')){
+                //     if(String(this.responseText) == '"that bai"')
+                //         alert('Email hoặc field rỗng')
+                //     else loadListSinhvien();
+                // }
+
+                // if(String(this.responseURL).includes('api/xoasv')){
+                //     if(String(this.responseText) == '"that bai"')
+                //         alert('Email hoặc field rỗng')
+                //     else loadListSinhvien();
+                // }
+
+                // if(String(this.responseURL).includes('/api/timmasv')){
+                //     if(String(this.responseText) == '"that bai"'){
+                //         alert('rỗng')
+                //     }else{
+                //         LoadListSinhvien(JSON.parse(this.responseText));
+                //         $('.nav-page').hide();
+                //     }
+                // }
+        }
+    };
 
 ///LOAD----------------------------------------------------
 // function loadListSinhvien(){
@@ -61,25 +67,30 @@ var listIdBtn = ['them', 'thoa'];
 //     xhttp.send();
 // }
 
-// function loadAddListSinhvien() {
-//     xhttp.open("GET", "/api/dieukienthemsv", false);
-//     xhttp.send();
-// }
+function loadAddListSinhvien() {
+    console.log(String(document.getElementById('input-text-title').value))
+    xhttp.open("GET", "/api/dieukienthemsv?khoa="+String(document.getElementById('input-text-title').value), false);
+    xhttp.send();
+}
 
-// function addSinhvien() {
-//     var masv = document.getElementById('masv').value;
-//     var tensv = document.getElementById('tensv').value;
-//     var emailsv = document.getElementById('emailsv').value;
-//     var matk = document.getElementById('matk').value;
-//     var makhoa = document.getElementById('makhoa').value;
-//     var mksv = document.getElementById('mksv').value;
-//     if(isNumeric(masv)){
-//         xhttp.open("GET", "/api/themsv?masv="+masv+"&tensv="+tensv+"&emailsv="+emailsv+"&matk="+matk+"&makhoa="+makhoa+"&mksv="+mksv, false);
-//         xhttp.send();
-//     }else{
-//         alert("Mã sinh viên phải là số")
-//     }
-// }
+function addSinhvien() {
+
+    var tensv = document.getElementsByClassName('input-new-row-long').item(0).value;
+
+    var GPA = document.getElementsByClassName('input-new-row-short').item(0).value;
+
+    var e = document.getElementsByClassName('combo-box-add-long').item(0);
+    var lop = e.options[e.selectedIndex].text;
+
+    var thoigiantieuban = document.getElementsByClassName('thoigianform').item(0).value;
+    thoigiantieuban = String(thoigiantieuban).split('T')
+    var ngay = thoigiantieuban[0];
+
+    console.log(lop)
+    xhttp.open("GET", "/api/themsv?MaSV="+maSV+"&TenSV="+tensv+"&NgaySinh="+ngay+"&Lop="+lop+"&GPA="+GPA+"&Email="+EmailSV, false);
+    xhttp.send();
+
+}
 
 // function updateListSinhvien() {
 //     var masv = document.getElementsByClassName('label-item-add').item(0).innerHTML;
@@ -115,14 +126,14 @@ function LoadListSinhvien() {
     $('.btn-follow-row').empty();
     $('.nav-page').empty();
 
-    $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên') +  returnAddBtn());
+    $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên') + returnInputTextTitle("Nhập khóa") +  returnAddBtn());
     $('.chose-bar').append(returnSearchForm('Nhập mã sinh viên','Tìm kiếm') );
     $('#table_data').append(returnTable(listSVTitle,listSVdata));
     $('.btn-follow-row').append(returnButtonTable(listButtonpk,listIdBtnTable));
     $('.nav-page').append(returNavForm(4, 2));
 }
 
-function LoadAddFormSinhvien() {
+function LoadAddFormSinhvien(Email,Id) {
 
     $('#button-bar').show();
     $('.chose-bar').hide();
@@ -137,11 +148,12 @@ function LoadAddFormSinhvien() {
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên') + returnNameIndex('Thêm mới') +  returnReturnBtn());
     $('.Add-New-Row').append(returnFormLabel('Thêm mới sinh viên'));
-    $('.Add-New-Row').append(returnFormLabelInfo('Mã sinh viên','TB12'));
+    $('.Add-New-Row').append(returnFormLabelInfo('Mã sinh viên',Id));
     $('.Add-New-Row').append(returnFormInputTextLength('Tên','' ));
     $('.Add-New-Row').append(returnFormInputTime('Ngày sinh',2,''));
-    $('.Add-New-Row').append(returnFormInputText('Lớp', ''));
-    $('.Add-New-Row').append(returnFormInputSelect('Khóa', [2018,2019,2020,2021], 2021));
+    // $('.Add-New-Row').append(returnFormInputText('Lớp', ''));
+    $('.Add-New-Row').append(returnFormLabelInfo('Email',Email));
+    $('.Add-New-Row').append(returnFormInputSelect('Lớp', ['CNTT','ATTT','Marketing','KeToan'], 'CNTT'));
     // $('.Add-New-Row').append(returnFormInputTextRight('Email', '@ptithcm.edu.vn'));
     $('.Add-New-Row').append(returnFormInputText('GPA', ''));
     $('.Add-New-Row').append(returnFormBtn(listBtnpk,listColorpk,listIdBtn));
@@ -323,8 +335,14 @@ function EventAdminClick(event) {
         if(x.id == "suax"){
             LoadSuaFormSinhvien()
         }
+    }else if(x.id == 'them'){
+        addSinhvien();
     }else if(x.className == "add_new_btn" || x.parentNode.className == "add_new_btn" || x.parentNode.parentNode.className == "add_new_btn" ||  x.parentNode.parentNode.parentNode.className == "add_new_btn"){
-        LoadAddFormSinhvien()
+        // LoadAddFormSinhvien()
+        
+        if(String(document.getElementById('input-text-title').value) !== ''){
+            loadAddListSinhvien();
+        }
     }else if(x.className == "return_btn" || x.parentNode.className == "return_btn" || x.parentNode.parentNode.className == "return_btn" ||  x.parentNode.parentNode.parentNode.className == "return_btn"){
         LoadListSinhvien();
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
@@ -333,6 +351,7 @@ function EventAdminClick(event) {
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
     }
+    
     // if(x.className == "return_btn" || x.parentNode.className == "return_btn" || x.parentNode.parentNode.className == "return_btn"  ||  x.parentNode.parentNode.parentNode.className == "return_btn" || x.className == "exit-btn"){
     //     loadListSinhvien();
     // }
