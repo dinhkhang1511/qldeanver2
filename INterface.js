@@ -43,7 +43,10 @@ function returnTable(listLabel, data) {
     for(var i = 0; i < data.length; i++){
         element = element + '<tr id="collumtalbe-'+i+'" class="no-color-lum-table">';
         Object.keys(data[i]).forEach(key => {
+            if(String(data[i][key]) != 'null')
             element = element + '<td>'+String(data[i][key]).replace('T17:00:00.000Z','')+'</td>';
+            else 
+            element = element + '<td>'+'</td>';
         });
         element = element + '</tr>';
     }
@@ -77,9 +80,9 @@ function returnFormInputSelect(str,sle,va) {
     var element = '<div><span>'+str+': </span><span><select class="combo-box-add-long">'
     for(var i = 0; i < sle.length; i++){
         if(String(va) === String(sle[i]))
-        element = element + '<option selected value="">'+sle[i]+'</option>';
+        element = element + '<option selected value="'+sle[i]+'">'+sle[i]+'</option>';
         else
-        element = element + '<option value="">'+sle[i]+'</option>';
+        element = element + '<option value="'+sle[i]+'">'+sle[i]+'</option>';
     }
     element = element + '</select></span></div>';
     return element
@@ -129,9 +132,9 @@ function returnLormInputSelect(str,sle,va) {
     var element = '<div><div class="one-row-item-add" style="color:rgb(38, 77, 0);">' + str + '<select class="slide-select-lorm">';
     for(var i = 0; i < sle.length; i++){
         if(String(va) === String(sle[i]))
-        element = element + '<option selected value="">'+sle[i]+'</option>';
+        element = element + '<option selected value="'+sle[i]+'">'+sle[i]+'</option>';
         else
-        element = element + '<option value="">'+sle[i]+'</option>';
+        element = element + '<option value="'+sle[i]+'">'+sle[i]+'</option>';
     }
     element = element + '</select></div></div>';
     return element

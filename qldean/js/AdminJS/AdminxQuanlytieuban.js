@@ -5,6 +5,8 @@ var tol_page = 0;
 var currentrowtable = -1;
 
 var maTB;
+var ngaytemp;
+var giotemp;
 
 var data = [{TieuBan:"TB12" , Ngay:'23/12/1212', Gio: '12:10', trangthai:"dang phan cong"},
             {TieuBan:"TB12" , Ngay:'23/12/1212', Gio: '12:10', trangthai:"dang phan cong"},
@@ -60,6 +62,18 @@ var xhttp = new XMLHttpRequest();
                         alert('Fail')
                     else loadListTieuban();
                 }
+                if(String(this.responseURL).includes('api/danhsachGVphancongTB')){
+                    if(String(this.responseText) == '"that bai"')
+                        alert('Fail')
+                    else LoadPhancongTieuban(JSON.parse(this.responseText))
+                }
+                if(String(this.responseURL).includes('api/addGVintoTieuban')){
+                    if(String(this.responseText) == '"that bai"')
+                        alert('Fail')
+                    else loadListTieuban();
+                }
+
+                
 
                 // if(String(this.responseURL).includes('/api/timmatb')){
                 //     if(String(this.responseText) == '"that bai"'){
@@ -117,6 +131,30 @@ function updateListTieuban() {
         alert("Nhập ngày giờ")
     }
 
+}
+
+function loadphancongtieuban(){
+    ngaytemp = listinfoitem[currentrowtable].ngay;
+    giotemp = listinfoitem[currentrowtable].gio;
+    xhttp.open("GET", "/api/danhsachGVphancongTB?ngay="+listinfoitem[currentrowtable].ngay+"&gio="+listinfoitem[currentrowtable].gio, false);
+    xhttp.send();
+}
+
+
+
+function addphancongtieuban(){
+    let GV01 = String(document.getElementsByClassName("combo-box-add-long").item(0).value).split(' - ')[0];
+    let GV02 = String(document.getElementsByClassName("combo-box-add-long").item(1).value).split(' - ')[0];
+    let GV03 = String(document.getElementsByClassName("combo-box-add-long").item(2).value).split(' - ')[0];
+    let GV04 = String(document.getElementsByClassName("combo-box-add-long").item(3).value).split(' - ')[0];
+    let GV05 = String(document.getElementsByClassName("combo-box-add-long").item(4).value).split(' - ')[0];
+    console.log(GV01,GV02,GV03,GV04,GV05,maTB)
+
+
+    xhttp.open("GET", "/api/addGVintoTieuban?TB="+maTB+"&GV1="+GV01+"&GV2="+GV02+"&GV3="+GV03+"&GV4="+GV04+"&GV5="+GV05, false);
+    xhttp.send();
+    // xhttp.open("GET", "/api/addGVphancongTB", false);
+    // xhttp.send();
 }
 
 //ELEMENT-----------------------------------------------------
@@ -191,7 +229,8 @@ function LoadSuaTieuban(listData) {
     $('.Add-New-Row').append(returnFormBtn(['Xác nhận', 'Thoát'],['tomato','green'],['sua','thoat']));
 }
 
-function LoadPhancongTieuban() {
+function LoadPhancongTieuban(data) {
+    console.log(data,maTB,ngaytemp,giotemp)
     $('#button-bar').show();
     $('.chose-bar').hide();
     $('#table_data').hide();
@@ -204,16 +243,21 @@ function LoadPhancongTieuban() {
     $('.Add-New-Row').empty();
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý tiểu ban') + returnNameIndex('Phân công') +  returnReturnBtn());
 
-    $('.Add-New-Row').append(returnFormLabel('Phân công tiểu ban'));
-    $('.Add-New-Row').append(returnFormLabelInfo('Mã tiểu ban','TB12'));
-    $('.Add-New-Row').append(returnFormLabelInfo('Thời gian','13/12/2021 04:40'));
-    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 1',listGV,'01 - Nguyen van thong') );
-    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 2',listGV,'01 - Nguyen van ut') );
-    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 3',listGV,'01 - Nguyen van tay') );
-    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 4',listGV,'01 - Nguyen van thong') );
-    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 5',listGV,'01 - Nguyen van tu') );
+    let listdataGV = [];
+    for(let i = 0; i < data.length; i++){
+        listdataGV.push(data[i].MaGV + ' - '+ data[i].TenGv)
+    }
 
-    $('.Add-New-Row').append(returnFormBtn(listphancongbtn,listColorpk,listIdBtn));
+    $('.Add-New-Row').append(returnFormLabel('Phân công tiểu ban'));
+    $('.Add-New-Row').append(returnFormLabelInfo('Mã tiểu ban',maTB));
+    $('.Add-New-Row').append(returnFormLabelInfo('Thời gian',ngaytemp.replace('T17:00:00.000Z','')+' '+giotemp));
+    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 1',listdataGV,data[0].MaGV + ' - '+ data[0].TenGv) );
+    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 2',listdataGV,data[1].MaGV + ' - '+ data[1].TenGv) );
+    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 3',listdataGV,data[2].MaGV + ' - '+ data[2].TenGv) );
+    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 4',listdataGV,data[3].MaGV + ' - '+ data[3].TenGv) );
+    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 5',listdataGV,data[4].MaGV + ' - '+ data[4].TenGv) );
+
+    $('.Add-New-Row').append(returnFormBtn(['Xác nhận','Thoát'],['tomato','green'],['phancong','thoat']));
 
 }
 
@@ -230,7 +274,9 @@ function EventAdminClick(event) {
     }else if(x.parentNode.className == 'btn-follow-row'){
         if(x.id == "phancongx" ){
             console.log("xxxx")
-            LoadPhancongTieuban();
+            maTB = listinfoitem[currentrowtable].maTB
+            loadphancongtieuban()
+            // LoadPhancongTieuban();
         }else if(x.id == "suax"){
             console.log(currentrowtable)
             LoadSuaTieuban(listinfoitem[currentrowtable])
@@ -253,6 +299,9 @@ function EventAdminClick(event) {
     }else{
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
+    }
+    if(x.id == 'phancong'){
+        addphancongtieuban();
     }
     if(x.parentNode.className == "nav-page" ){
         page_num = Number(x.innerHTML)
