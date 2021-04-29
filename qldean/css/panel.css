@@ -268,8 +268,9 @@ table{
     float: left;
     margin-top: 10px;
     width: calc(100%);
-    background-color: white;
+    background-color: rgb(247, 247, 247);
     border-collapse: collapse;
+    border-radius: 5px;
 }
 
 
@@ -284,14 +285,14 @@ table, th, td {
 }
 
   th, td {
-      padding: 5px;
+      padding: 8px 5px;
   }
 
 table tr:first-child td{
     color: black;
     font-weight: bold;
     border: 1px solid rgba(0, 0, 0, 0.034);
-    background-color: rgb(230, 230, 230);
+    background-color: rgb(214, 214, 214);
 }
 
 .edit-co-btn{
@@ -624,3 +625,246 @@ table tr:first-child td{
 
 }
 
+
+
+
+.Detail-project{
+    position: relative;
+    float: left;
+    margin-top: 20px;
+    width: 100%;
+    height: auto;
+    color: black;
+}
+
+
+
+#detail-doan{
+    position: relative;
+    float: left;
+    width: 100%;
+    margin-top: 20px;
+    height: auto;
+}
+
+#btn-update-detail-doan{
+    position: relative;
+    float: right;
+    background-color: tomato;
+    color: white;
+    border-radius: 4px;
+    padding: 5px 10px;
+    margin-top: 3px;
+    font-size: small;
+}
+
+
+
+
+#info-sv{
+    position: relative;
+    float: left;
+    height: auto;
+    width: calc(40% - 10px);
+    background-color: rgb(240, 240, 240);
+    margin-right: 10px;
+    padding-bottom: 10px;
+}
+
+#info-sv div{
+    position: relative;
+    width: auto;
+    margin-left: 10px;
+    font-size: 14px;
+}
+#info-sv div:first-child{
+    margin-top: 10px;
+    margin-left: 10px;
+    color: rgb(49, 105, 209);
+    font-size: large;
+    margin-bottom: 10px;
+}
+
+
+
+#info-doan{
+    position: relative;
+    float: left;
+    height: auto;
+    width: calc(40% - 10px);
+    background-color: rgb(240, 240, 240);
+    margin-right: 10px;
+    padding-bottom: 10px;
+}
+#info-doan div{
+    position: relative;
+    width: auto;
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+
+#info-doan span:nth-child(even){
+    position: relative;
+    float: left;
+
+    width: 50%;
+    margin-left: 10px;
+
+    font-size: 14px;
+}
+
+#info-doan span:nth-child(odd){
+    position: relative;
+    float: right;
+ 
+
+    width: 40%;
+    margin-left: 10px;
+    font-size: 14px;
+
+}
+/* 
+p:nth-child(odd) {
+    background: red;
+  } */
+
+#info-doan div:first-child{
+    margin-top: 10px;
+    margin-left: 10px;
+    color: rgb(255, 149, 11);
+    font-size: large;
+    margin-bottom: 10px;
+}
+
+#diem-doan{
+    position: relative;
+    float: left;
+    height: auto;
+    width: calc(20% - 0px);
+    background-color: rgb(235, 235, 235);
+}
+
+#diem-label{
+    position: relative;
+    float: left;
+    margin-top: 14px;
+    margin-left: 10px;
+    font-size: 20px;
+}
+
+
+#number-diem{
+    position: relative;
+    float: left;
+    font-size: 40px;
+    margin-left: 10px;
+    color: tomato;
+}
+
+#btn-update-diem{
+    float: right;
+    background-color: chocolate;
+    font-size: small;
+    position: relative;
+    padding: 4px;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#info-diem-label{
+    float: left;
+    position: relative;
+    width: 100%;
+}
+
+.Form-input-diem{
+    display: none;
+    position: absolute;
+    z-index: 10;
+    left: calc(50% - 150px);
+    transform: translateX(calc(-50% - 150px));
+    top: 50%;
+    transform: translateY(-50%);
+    height: 160px;
+    width: 300px;
+    background-color: rgb(252, 252, 252);
+    box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.329);
+    border-radius: 4px;
+}
+
+.Form-input-diem div:only-child{
+    position: relative;
+    float: left;
+    margin-top: 30px;
+    margin-left: 25px;
+    width: auto;
+
+    width: 250px;
+}
+
+.Form-input-diem div div:first-child{
+    position: relative;
+    float: left;
+    left: 50%;
+    transform: translateX(-50%);
+
+}
+
+.Form-input-diem div div:first-child span:first-child{
+    position: relative;
+    float: left;
+
+    font-size: 18px;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: cornflowerblue;
+    font-weight: bolder;
+    margin-top: 3px;
+}
+
+.Form-input-diem div:only-child div:last-child{
+    position: relative;
+
+    float: left;
+    width: 100%;
+    left: 50%;
+    width: 200px;
+    transform: translateX(-50%);
+    margin-top: 35px
+}
+
+
+
+#btn-nhap-diem , #btn-thoat-diem{
+    position: relative;
+    float: left;
+    background-color: tomato;
+    padding: 5px 10px;
+    margin-left: 17px;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+}
+
+#btn-thoat-diem{
+    background-color: seagreen;
+}
+
+
+.Form-input-diem div input{
+    position: relative;
+    float: left;
+    padding: 4px 5px;
+    width: 70px;
+    margin-left: 10px;
+}
+
+.shadow-input-diem{
+    display: none;
+    position: absolute;
+    z-index: 9;
+    background-color: rgba(0, 0, 0, 0.493);
+    width: 100%;
+    height: 100%;
+}

@@ -1,0 +1,166 @@
+<script>
+    $('title').append("Giảng viên - Phụ trách hướng dẫn");
+ 
+    window.onload = function(){
+        $('<script />', { type : 'text/javascript', src : "/qldean/js/TeacherJS/TeacherxHuongdan.js"}).appendTo('head');
+        
+        $('<script />', { type : 'text/javascript', src : "/qldean/js/Responsive.js"}).appendTo('head');
+        $('<script />', { type : 'text/javascript', src : "/qldean/js/SupportTool.js"}).appendTo('head');
+        $('<script />', { type : 'text/javascript', src : "/qldean/js/EventClick.js"}).appendTo('head');
+
+
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+
+    }
+</script>
+
+<div class="top-bar">
+    <div id="name-user">
+        GV: Ngoc thanh
+    </div>
+
+    <div id="logout">
+        Đăng xuất
+    </div>
+</div> 
+
+
+<div class="left-bar">
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+
+
+        <ul class="list-unstyled components">
+
+            <li class="active">
+                <a href="/giangvien/phancong">Tất cả đề tài</a>
+            </li>
+
+            <li>
+                <a id="click-toggle-phancong" href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Đề tài phụ trách</a>
+                <ul class="collapse list-unstyled" id="pageSubmenu">
+                    <li>
+                        <a href="/giangvien/huongdan">Hướng dẫn</a>
+                    </li>
+                    <li>
+                        <a href="">Phản biện</a>
+                    </li>
+                    <li>
+                        <a href="">TIểu ban</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="/giangvien/taikhoan">Tài khoản</a>
+            </li>
+        </ul>
+
+    </nav>
+
+</div>
+
+
+<div class="content">
+
+    <div id="button-bar">
+
+    </div>
+
+    <div class="chose-bar">
+
+    </div>
+ 
+    <table id="table_data">
+
+    </table>  
+
+     <div id="no-color-btn-follow-row" class="btn-follow-row">
+
+    </div>
+
+    <div class="Add-New-Row">
+
+    </div>
+
+
+    <div class="nav-page">
+
+    </div>
+
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
+
+
+    <div class="Detail-project">
+        <span id="info-sv">
+            <div>Thông tin sinh viên:</div>
+            <div>Mã: N18DCCN189</div>
+            <div>Tên: Nguyễn Thanh Ngọc</div>
+            <div>Lớp: D19CQCN02N</div>
+            <div>Email: N18CCN@.ptithcm.GAMIL.COM</div>
+            <div>GPA: 7</div>
+
+        </span>
+        <span id="info-doan">
+
+            <div>Thông tin đồ án:</div>
+            <div>Mã: DA03</div>
+            <div>Tên: Lập trình AI</div>
+
+            <span>GVHD: Lê Thị Thu Hương</span>  <span>Điểm: 10</span>
+            <span>GVPB: Đàm thị ngọc linh</span>  <span>Điểm: 9</span>
+            <span>Tiểu ban: TB19</span>  <span>Điểm trung bình: 8/3</span>
+
+        </span>
+        <span id="diem-doan">
+            <div id="btn-update-diem">cập nhật</div>
+            <div id="info-diem-label"><span id="diem-label">Điểm: </span><span id="number-diem"> 8.34</span></div>
+
+          
+        </span>
+        <span id="detail-doan">
+            <div>Chi tiết đồ án:</div>
+            <div id="editor" contenteditable="true">
+                
+            </div>
+            <div id="btn-update-detail-doan">cập nhật</div>
+        </div>
+
+
+
+    </div>
+
+</div>
+
+
+<script>
+    ClassicEditor
+     .create( document.querySelector( '#editor' ) )
+     .catch( error => {
+         console.error( error );
+     } );
+     </script>
+
+
+
+
+
+<div class="shadow-input-diem"></div>
+
+<div class="Form-input-diem">
+    <div>
+        <div>
+            <span>Nhập điểm:</span><input type="text"  value="">
+        </div>
+
+        <div>
+            <span id="btn-nhap-diem">Xác nhận</span>
+            <span id="btn-thoat-diem">Thoát</span>
+        </div>
+
+
+</div>
+</div>

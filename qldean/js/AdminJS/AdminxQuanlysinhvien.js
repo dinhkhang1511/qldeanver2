@@ -49,20 +49,7 @@ var xhttp = new XMLHttpRequest();
                     else loadListSinhvien();
                 }
 
-                // if(String(this.responseURL).includes('api/xoasv')){
-                //     if(String(this.responseText) == '"that bai"')
-                //         alert('Email hoặc field rỗng')
-                //     else loadListSinhvien();
-                // }
 
-                // if(String(this.responseURL).includes('/api/timmasv')){
-                //     if(String(this.responseText) == '"that bai"'){
-                //         alert('rỗng')
-                //     }else{
-                //         LoadListSinhvien(JSON.parse(this.responseText));
-                //         $('.nav-page').hide();
-                //     }
-                // }
         }
     };
 
