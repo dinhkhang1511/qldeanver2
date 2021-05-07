@@ -8,6 +8,14 @@ var maTB;
 var ngaytemp;
 var giotemp;
 
+var listkhoa = [];
+
+$(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
+    $( "#act-tieuban" ).addClass( "active" )
+});
+
+
+
 var data = [{TieuBan:"TB12" , Ngay:'23/12/1212', Gio: '12:10', trangthai:"dang phan cong"},
             {TieuBan:"TB12" , Ngay:'23/12/1212', Gio: '12:10', trangthai:"dang phan cong"},
             {TieuBan:"TB12" , Ngay:'23/12/1212', Gio: '12:10', trangthai:"dang phan cong"},
@@ -72,17 +80,6 @@ var xhttp = new XMLHttpRequest();
                         alert('Fail')
                     else loadListTieuban();
                 }
-
-                
-
-                // if(String(this.responseURL).includes('/api/timmatb')){
-                //     if(String(this.responseText) == '"that bai"'){
-                //         alert('rỗng')
-                //     }else{
-                //         LoadListTieuban(JSON.parse(this.responseText));
-                //         $('.nav-page').hide();
-                //     }
-                // }
         }
     };
 
@@ -97,6 +94,10 @@ function loadAddListTieuban() {
     xhttp.send();
 }
 
+function loadSearchTieuban(){
+    xhttp.open("GET", "/api/searchtieuban", false);
+    xhttp.send();
+}
 
 function addTieuban() {
 
@@ -166,10 +167,12 @@ function LoadListTieuban(data) {
     $('#table_data').show();
     $('.btn-follow-row').show();
     $('.nav-page').show();
+    $('#head-bar').show();
 
     $('.Add-New-Row').hide();
 
     //làm rỗng các phần
+    $('#head-bar').empty();
     $('#button-bar').empty();
     $('.chose-bar').empty();
     $('#table_data').empty();
@@ -177,6 +180,7 @@ function LoadListTieuban(data) {
     $('.nav-page').empty();
 
     //thêm chi tiết vào
+    $('#head-bar').append(returnFormListKhoa([2015,2016],2015));
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý tiểu ban') +  returnAddBtn());
     $('.chose-bar').append(returnSearchForm('Nhập mã tiểu ban','Tìm kiếm') );
     $('#table_data').append(returnTable( ['Tiểu ban','Ngày','Giờ','Trạng thái'],data));
@@ -296,6 +300,9 @@ function EventAdminClick(event) {
         loadListTieuban();
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
+    }else if(x.id == 'search-index'){
+
+        console.log(document.getElementById('input-search').value);
     }else{
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
@@ -308,31 +315,8 @@ function EventAdminClick(event) {
         loadListTieuban();
     }
 
-    // if(x.className == "add_new_btn" || x.parentNode.className == "add_new_btn" || x.parentNode.parentNode.className == "add_new_btn" ||  x.parentNode.parentNode.parentNode.className == "add_new_btn"){
-    //     loadAddListTieuban();
-    // }
-    // if(x.className == "add_row_tb_btn"){
-    //     addTieuban();
-    // }
 
 
-    // if(x.className == "edit-co-btn" ){
-    //     $.getJSON("/api/dieukienthemtb", function (data) {
-    //         LoadUpdateListTieuban(data, listinfoitem[Number(String(x.id).replace('row-', ''))] )
-    //     });
-    // }
-    // if(x.className == "update_row_tb_btn"){
-    //     updateListTieuban();
-    // }
-
-    // if(x.id == "search-index"){
-    //     xhttp.open("GET", "/api/timmatb?matieuban="+document.getElementById("input-search").value , false);
-    //     xhttp.send();
-    // }
-    // if(x.id == "refresh-index"){
-    //     page_num = 1;
-    //     loadListTieuban();
-    // }
 }
 
 //FIRST------------------------------------------

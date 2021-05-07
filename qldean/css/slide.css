@@ -91,13 +91,25 @@ display: block;
 }
 
 #sidebar ul li a:hover {
-color:rgba(37, 53, 88, 0.74);
+color:black;
 background: #fff;
+}
+
+.icon-slide{
+    fill: white;
+}
+
+#sidebar ul li a:hover > .icon-slide{
+    fill: black;
 }
 
 #sidebar ul li.active>a {
 color: white;
 background: rgba(23, 141, 78, 0.842);
+}
+
+#sidebar ul li.active:hover> a svg{
+    fill: white;
 }
 /* a[aria-expanded="true"]  */
 
@@ -109,9 +121,14 @@ position: relative;
 .dropdown-toggle::after {
 display: block;
 position: absolute;
-top: 50%;
+top: 48%;
 right: 20px;
 transform: translateY(-50%);
+transform: rotate(00deg);
+}
+
+.collapsed::after{
+    transform: rotate(-90deg);
 }
 
 ul ul a {

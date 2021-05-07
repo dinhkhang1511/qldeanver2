@@ -14,6 +14,21 @@ var listIdBtn = ['them', 'thoa'];
 var maSV;
 var EmailSV;
 
+var listkhoa = [];
+var khoacur;
+
+
+const bubbleSort = (array) => {
+    for (let i = 0; i < array.length; i++) {
+      for (let x = 0; x < array.length - 1 - i; x++) {
+        if (array[x] > array[x + 1]) {
+          [array[x], array[x + 1]] = [array[x + 1], array[x]];
+        }
+      }
+    }
+    return array;
+  }
+
 
 var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -21,13 +36,11 @@ var xhttp = new XMLHttpRequest();
                 if(String(this.responseURL).includes('api/danhsachsinhvien')){
                     var data = JSON.parse(this.responseText);
                     tol_page =  Math.ceil(data[1][0]['count( maSV)'] / 10); 
-                    // tol_page =   Math.ceil( Number(data[1]) / 2 );
-                    // LoadListSinhvien(data[0]);
-                    // LoadNavPage();
-                    console.log(data)
-                    console.log(tol_page)
-                    listinfoitem = data[0];
-                    LoadListSinhvien(data[0]);
+                    console.log(data[3]);
+                    listkhoa = data[3];
+                    khoacur = data[2];
+                    listinfoitem = data[0][0];
+                    LoadListSinhvien(data[0][0],data[3],data[2]);
                 }
 
                 if(String(this.responseURL).includes('api/dieukienthemsv')){
@@ -48,8 +61,6 @@ var xhttp = new XMLHttpRequest();
                         alert('Fail')
                     else loadListSinhvien();
                 }
-
-
         }
     };
 
@@ -99,10 +110,8 @@ function updateListSinhvien() {
     }
 }
 
-///ELEMENT-----------------------------------------------------
-
 //ELEMENT-----------------------------------------------------
-function LoadListSinhvien(data) {
+function LoadListSinhvien(data,dskhoa,khoa) {
     $('#button-bar').show();
     $('.chose-bar').show();
     $('#table_data').show();
@@ -110,19 +119,26 @@ function LoadListSinhvien(data) {
     $('.nav-page').show();
 
     $('.Add-New-Row').hide();
+    $('#head-bar').show();
 
-
+    $('#head-bar').empty();
     $('#button-bar').empty();
     $('.chose-bar').empty();
     $('#table_data').empty();
     $('.btn-follow-row').empty();
     $('.nav-page').empty();
 
-    $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên') + returnInputTextTitle("Nhập khóa") +  returnAddBtn());
+
+    $('#head-bar').append(returnFormKhoa(dskhoa,khoa));
+    $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên')  +  returnAddBtn());
     $('.chose-bar').append(returnSearchForm('Nhập mã sinh viên','Tìm kiếm') );
     $('#table_data').append(returnTable(listSVTitle,data));
     $('.btn-follow-row').append(returnButtonTable(listButtonpk,listIdBtnTable));
     $('.nav-page').append(returNavForm(tol_page+1, page_num));
+
+    // returnInputTextTitle("Nhập khóa")
+
+    document.getElementById('input-text-title').value = khoa;
 }
 
 function LoadAddFormSinhvien(Email,Id) {
@@ -143,10 +159,10 @@ function LoadAddFormSinhvien(Email,Id) {
     $('.Add-New-Row').append(returnFormLabelInfo('Mã sinh viên',Id));
     $('.Add-New-Row').append(returnFormInputTextLength('Tên','' ));
     $('.Add-New-Row').append(returnFormInputTime('Ngày sinh',2,''));
-    // $('.Add-New-Row').append(returnFormInputText('Lớp', ''));
+
     $('.Add-New-Row').append(returnFormLabelInfo('Email',Email));
     $('.Add-New-Row').append(returnFormInputSelect('Lớp', ['CNTT','ATTT','Marketing','KeToan'], 'CNTT'));
-    // $('.Add-New-Row').append(returnFormInputTextRight('Email', '@ptithcm.edu.vn'));
+
     $('.Add-New-Row').append(returnFormInputText('GPA', ''));
     $('.Add-New-Row').append(returnFormBtn(listBtnpk,listColorpk,listIdBtn));
 }
@@ -166,14 +182,6 @@ function LoadSuaFormSinhvien(listData) {
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên') + returnNameIndex('Sửa') +  returnReturnBtn());
     $('.Add-New-Row').append(returnFormLabel('Sửa sinh viên'));
-    // $('.Add-New-Row').append(returnFormLabelInfo('Mã sinh viên','TB12'));
-    // $('.Add-New-Row').append(returnFormInputTextLength('Tên','LeTuan' ));
-    // $('.Add-New-Row').append(returnFormInputTime('Ngày sinh',2,'2012-23-12'));
-    // $('.Add-New-Row').append(returnFormInputText('Lớp', 'CNTT'));
-    // $('.Add-New-Row').append(returnFormInputSelect('Khóa', [2018,2019,2020,2021], 2019));
-    // // $('.Add-New-Row').append(returnFormInputTextLength('Email', 'letan@ptithcm.edu.vn'));
-    // $('.Add-New-Row').append(returnFormInputText('GPA', '3'));
-
 
     $('.Add-New-Row').append(returnFormLabelInfo('Mã sinh viên',listData.MaSV));
     $('.Add-New-Row').append(returnFormInputTextLength('Tên',listData.TenSV ));
@@ -212,51 +220,48 @@ function EventAdminClick(event) {
         loadListSinhvien();
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
+    }else if(x.parentNode.className == "nav-page" ){
+        page_num = Number(x.innerHTML)
+        loadListSinhvien();
+    }else if(x.id == 'themkhoa'){
+        $('#dskhoa').show();
+        $('#themkhoa').hide();
+        $('#input-khoa').show();
+        $('#select-khoa').hide();
+        $('#xacnhan-them-khoa').show();
+    }else if(x.id == 'dskhoa'){
+        $('#dskhoa').hide();
+        $('#themkhoa').show();
+        $('#input-khoa').hide();
+        $('#select-khoa').show();
+        $('#xacnhan-them-khoa').hide();
+    }else if(x.id == 'xacnhan-them-khoa'){
+        console.log(Number(document.getElementById('input-khoa').value))
+        if(Number(document.getElementById('input-khoa').value) !== 0)
+        if(listkhoa.indexOf(Number(document.getElementById('input-khoa').value)) !== -1){
+            alert("Value exists!")
+        } else{
+
+        khoacur = Number(document.getElementById('input-khoa').value);
+        listkhoa.push(Number(document.getElementById('input-khoa').value))
+        listkhoa = bubbleSort(listkhoa);
+
+        console.log(listkhoa)
+
+        $('#head-bar').empty();
+        $('#head-bar').append(returnFormKhoa(listkhoa,khoacur));
+
+        $('#xacnhan-them-khoa').hide();
+        $('#dskhoa').hide();
+        $('#themkhoa').show();
+        $('#input-khoa').hide();
+        $('#select-khoa').show();
+
+        }
     }else{
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
-    }if(x.parentNode.className == "nav-page" ){
-        page_num = Number(x.innerHTML)
-        loadListSinhvien();
     }
-    
-    // if(x.className == "return_btn" || x.parentNode.className == "return_btn" || x.parentNode.parentNode.className == "return_btn"  ||  x.parentNode.parentNode.parentNode.className == "return_btn" || x.className == "exit-btn"){
-    //     loadListSinhvien();
-    // }
-    // if(x.parentNode.className == "nav-page" ){
-    //     page_num = Number(x.innerHTML)
-    //     loadListSinhvien();
-    // }   
-
-    // if(x.className == "add_new_btn" || x.parentNode.className == "add_new_btn" || x.parentNode.parentNode.className == "add_new_btn" ||  x.parentNode.parentNode.parentNode.className == "add_new_btn"){
-    //     loadAddListSinhvien();
-    // }
-    // if(x.className == "add_row_sv_btn"){
-    //     addSinhvien();
-    // }
-
-    // if(x.className == "edit-co-btn" ){
-    //     $.getJSON("/api/dieukienthemsv", function (data) {
-    //         LoadUpdateListSinhvien(data[0] , data[1] , listinfoitem[Number(String(x.id).replace('row-', ''))] )
-    //     });
-    // }
-    // if(x.className == "update_row_sv_btn"){
-    //     updateListSinhvien();
-    // }
-
-    // if(x.className == "delete-co-btn"){
-    //     xhttp.open("GET", "/api/xoasv?masv="+listinfoitem[Number(String(x.id).replace('row_', ''))].maSV, false);
-    //     xhttp.send();
-    // }
-
-    // if(x.id == "search-index"){
-    //     xhttp.open("GET", "/api/timmasv?masv="+document.getElementById("input-search").value , false);
-    //     xhttp.send();
-    // }
-    // if(x.id == "refresh-index"){
-    //     page_num = 1;
-    //     loadListSinhvien();
-    // }
 }
 
 //FIRST---------------------------------------------------------

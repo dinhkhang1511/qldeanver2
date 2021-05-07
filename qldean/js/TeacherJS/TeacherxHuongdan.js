@@ -47,25 +47,6 @@ function loadListDoan(){
 }
 
 //ELEMENT-----------------------------------------------------
-// function LoadListDoan() {
-//     $('#button-bar').show();
-//     $('.chose-bar').show();
-//     $('#table_data').show();
-//     $('.btn-follow-row').show();
-//     $('.nav-page').show();
-
-//     $('.Add-New-Row').hide();
-
-
-//     $('#button-bar').empty();
-
-
-//     $('#button-bar').append(returnIconHome());
-//     // + returnNameIndex('Phân công') +  returnSwitchBtn('Tất cả', 'Phụ trách')
-//     //  page_num = 1;
-//     //  tol_page = 0;
-//     // loadListTatcadoan();
-// }
 
 function LoadTatcadoan(data) {
 
@@ -91,10 +72,6 @@ function LoadTatcadoan(data) {
     $('#table_data').append(returnTable(listPhutrachTitle,data));
     $('.btn-follow-row').append(returnButtonTable(['Xem chi tiết'],['chitiet']));
     $('.nav-page').append(returNavForm(tol_page+1, page_num));
-
-
-
-
 }
 
 

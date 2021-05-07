@@ -1,3 +1,6 @@
+const fs = require('fs');
+const readline = require('readline');
+
 module.exports = async (callback, scanner) => {
     let index = scanner.req_bundle.index;
     let Model = scanner.inleModel;
@@ -10,14 +13,16 @@ module.exports = async (callback, scanner) => {
         let count = await Model.InleSQL("select count(*) from tieuban;");
         let result = await Model.InleSQL("select maTB, ngay, gio, sum(total) sum from ( select maTB, ngay, gio, count(maTB) as total from (SELECT tb.MaTB, tb.ngay, tb.gio FROM tieuban tb INNER JOIN phanconggvtb pc ON tb.MaTB = pc.MaTB) as ListTB group by maTB union select maTB, ngay, gio,0 from tieuban group by maTB ) tmp group by (tmp.maTB) limit "+limit+" offset "+page*limit+";");
         let data = [];
-        data.push(result)
-        data.push(count)
+        data.push(result);
+        data.push(count);
         callback(JSON.stringify(data), 'application/json');
     }
+
     if (index === 'dieukienthemtb'){
         let result = await Model.InleSQL("select AUTO_IDTB();");
         callback(JSON.stringify(result), 'application/json');
     }
+
     if (index === 'themtb'){
         let gio = head_params.get('gio');
         let ngay = head_params.get('ngay');
@@ -64,7 +69,6 @@ module.exports = async (callback, scanner) => {
     }
     
     if(index === 'danhsachGVphancongTB'){
-
         let ngay = String(head_params.get('ngay')).replace('T17:00:00.000Z','');
         let gio = head_params.get('gio');
         console.log(ngay,gio)
@@ -103,22 +107,50 @@ module.exports = async (callback, scanner) => {
 
 
 
+    
 
 
 
 
 
     if (index === 'danhsachsinhvien'){
-        let limit = 10;
-        let page = Number(head_params.get('page')) - 1;
-        let count = await Model.InleSQL("select count( maSV) from sinhvien;");
-        let result = await Model.InleSQL("select MaSV, TenSV, NgaySinh, Lop, Email, GPA from sinhvien limit " +limit+ " OFFSET " + page*limit);
-        console.log("select MaSV, TenSV, NgaySinh, Lop, Email, GPA from sinhvien limit " +limit+ " OFFSET " + page*limit)
-        let data = [];
-        data.push(result)
-        data.push(count)
+        let khoa = 0;
+        let GPA = 0;
+        let listkhoa = [];
+        var lineReader = readline.createInterface({
+            input: fs.createReadStream('controller/qldean/Text/khoa.txt')
+        });
+          
+        lineReader.on('line', function (line) {
+            let curbig = Number(line.split(',')[0]);
+            listkhoa.push(curbig);
+            if(curbig > khoa){
+                khoa = curbig;
+                GPA = Number(line.split(',')[1]);
 
-        callback(JSON.stringify(data), 'application/json');
+            }
+
+        });
+
+        lineReader.on('close', async function () {
+            console.log(khoa,GPA)
+            let limit = 10;
+            let page = Number(head_params.get('page')) - 1;
+            let count = await Model.InleSQL("select count( maSV) from SinhVien where SUBSTRING(MaSV, 2,2)=right("+khoa+", 2);");
+            let result = await Model.InleSQL("call ShowList_SV("+khoa+","+page*limit+")");
+        // console.log("select MaSV, TenSV, NgaySinh, Lop, Email, GPA from sinhvien limit " +limit+ " OFFSET " + page*limit)
+            let data = [];
+            data.push(result)
+            data.push(count)
+            data.push(khoa)
+            data.push(bubbleSort(listkhoa))
+            console.log(data)
+
+            callback(JSON.stringify(data), 'application/json');
+        });
+
+
+    
     }
 
     if (index === 'dieukienthemsv'){
@@ -400,8 +432,16 @@ module.exports = async (callback, scanner) => {
                 callback(JSON.stringify(result1), 'application/json');
             }
     }
-
-
-
-
 }
+
+
+const bubbleSort = (array) => {
+    for (let i = 0; i < array.length; i++) {
+      for (let x = 0; x < array.length - 1 - i; x++) {
+        if (array[x] > array[x + 1]) {
+          [array[x], array[x + 1]] = [array[x + 1], array[x]];
+        }
+      }
+    }
+    return array;
+  }

@@ -46,26 +46,6 @@ var xhttp = new XMLHttpRequest();
                         loadListHuongdan()
                 }
 
-//                 if(String(this.responseURL).includes('api/suagv')){
-//                     if(String(this.responseText) == '"that bai"')
-//                         alert('Email hoặc field rỗng')
-//                     else loadListGiangvien();
-//                 }
-
-//                 if(String(this.responseURL).includes('api/xoagv')){
-//                     if(String(this.responseText) == '"that bai"')
-//                         alert('Email hoặc field rỗng')
-//                     else loadListGiangvien();
-//                 }
-
-//                 if(String(this.responseURL).includes('/api/timmagv')){
-//                     if(String(this.responseText) == '"that bai"'){
-//                         alert('rỗng')
-//                     }else{
-//                         LoadListGiangvien(JSON.parse(this.responseText));
-//                         $('.nav-page').hide();
-//                     }
-            // }
         }
     };
 

@@ -152,3 +152,34 @@ function returNavForm(le, num) {
 function returnSwitchBtn(str,str_) {
     return '<div  class="switchbtn"><span class="loadswitch1" id="activeswitchbar">'+str+'</span><span class="loadswitch2">'+str_+'</span></div>';
 }
+
+
+///Ngoại 
+function returnFormKhoa(dskhoa,khoa) {
+    var element = '<select name="cars" id="select-khoa">'
+    for(var i = 0; i < dskhoa.length; i++){
+        if(Number(dskhoa[i]) == Number(khoa))
+        element = element + '<option selected value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
+        else
+        element = element + '<option value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
+    }
+    element = element + '</select>';
+
+    element = element + '<input style="display: none;" type="text" name="" id="input-khoa"><button style="display: none;" id="xacnhan-them-khoa">Xác nhận</button><button id="themkhoa" type="submit">Thêm Khóa</button><button style="display: none;" id="dskhoa" type="submit">Danh sách</button>';
+
+    return element
+}
+
+
+function returnFormListKhoa(dskhoa,khoa) {
+    var element = '<span class="title-chon-khoa">Chọn khóa </span><select name="cars" id="select-khoa">'
+    for(var i = 0; i < dskhoa.length; i++){
+        if(Number(dskhoa[i]) == Number(khoa))
+        element = element + '<option selected value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
+        else
+        element = element + '<option value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
+    }
+    element = element + '</select>';
+
+    return element
+}
