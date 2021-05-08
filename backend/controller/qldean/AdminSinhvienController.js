@@ -75,7 +75,6 @@ module.exports = async (callback, scanner) => {
 
 
     if (index === 'danhsachsinhvien'){
-
       let khoa = Number(head_params.get('khoa'));
       console.log(khoa)
       if(khoa == 0){ 
@@ -151,8 +150,6 @@ module.exports = async (callback, scanner) => {
       let GPA = head_params.get('GPA');
       // let Email = head_params.get('Email');
       console.log(MaSV,TenSV,NgaySinh,Lop,GPA)
-
-
       let result1 = await Model.InleSQL("UPDATE `SinhVien` SET `TenSV` = '"+TenSV+"' ,  `NgaySinh` = '"+NgaySinh+"', `Lop` = '"+Lop+"' , `GPA` = '"+GPA+"'  WHERE `MaSV` = '"+MaSV+"'");
       // console.log("UPDATE `SinhVien` SET `TenSV` = '"+TenSV+"' ,  `NgaySinh` = '"+NgaySinh+"', `Lop` = '"+Lop+"' , `GPA` = '"+GPA+"'  WHERE `MaSV` = "+MaSV)
           if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
@@ -161,7 +158,6 @@ module.exports = async (callback, scanner) => {
               callback(JSON.stringify(result1), 'application/json');
           }
     }
-
 
     if (index === 'xoasv'){
       let MaSV = head_params.get('MaSV');

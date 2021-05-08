@@ -160,7 +160,6 @@ module.exports = async (callback, scanner) => {
 
 
     if (index === 'danhsachgiangvien'){
-
         let limit = 10;
         let page = Number(head_params.get('page')) - 1;
         console.log(page)
@@ -172,12 +171,10 @@ module.exports = async (callback, scanner) => {
         data.push(count)
         console.log(data)
         callback(JSON.stringify(data), 'application/json');
-
     }
 
     if (index === 'dieukienthemgv'){  
         let Id = await Model.InleSQL("select AUTO_IDGV();");
-
         callback(JSON.stringify(Id), 'application/json');
     }
 
@@ -200,7 +197,6 @@ module.exports = async (callback, scanner) => {
                 
                 callback(JSON.stringify(result1), 'application/json');
             }
-
     }
 
     if (index === 'suagv'){
@@ -228,8 +224,6 @@ module.exports = async (callback, scanner) => {
             }else{
                 callback(JSON.stringify(result1), 'application/json');
             }
-
-
     }
 
     if (index === 'timmagv'){

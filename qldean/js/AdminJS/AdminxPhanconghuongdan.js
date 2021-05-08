@@ -16,8 +16,10 @@ var listIdBtn = ['phancong', 'thoat'];
 
 let MaGVtemp;
 let MaDAtemp;
-let GPAtemp = 0;
 
+let khoacurrent = 0;
+let GPAtemp = 0;
+var listkhoa = [];
 
 $(".left-bar").load("/qldean/Admin/SlideBarCollapse.html",function () {
     $( "#act-phanconghuongdan" ).addClass( "active" );
@@ -28,12 +30,17 @@ var xhttp = new XMLHttpRequest();
         if (this.readyState == 4 && this.status == 200) {
                 if(String(this.responseURL).includes('api/danhsachphancongHD')){
                     var data = JSON.parse(this.responseText);
-                    tol_page =  Math.ceil(data[1][0]['count(*)'] / 10); 
-
                     console.log(data)
-                    // console.log(tol_page)
+                    // tol_page =  Math.ceil(data[1][0]['count(*)'] / 10); 
+                    tol_page = 0;
                     listinfoitem = data[0];
-                    LoadListHuongdan(data[0]);
+
+                    GPAtemp = data[4];
+                    khoacurrent = data[3];
+                    listkhoa = data[2]
+                    // console.log(tol_page)
+                    
+                    LoadListHuongdan(listinfoitem);
                 }
 
                 if(String(this.responseURL).includes('api/danhsachGVHDphancong')){
@@ -55,7 +62,7 @@ var xhttp = new XMLHttpRequest();
 
 
 function loadListHuongdan(){
-    xhttp.open("GET", "/api/danhsachphancongHD?page="+page_num+"&GPA="+GPAtemp, false);
+    xhttp.open("GET", "/api/danhsachphancongHD?page="+page_num+"&GPA="+GPAtemp+"&khoa="+khoacurrent, false);
     xhttp.send();
 }
 
@@ -72,6 +79,14 @@ function loadAddPhancongHuongdan(){
     xhttp.send();
 }
 
+function changeKhoa(){
+    var e = document.getElementById("select-khoa");
+    khoacurrent = e.options[e.selectedIndex].text;
+    console.log(khoacurrent)
+    xhttp.open("GET", "/api/danhsachphancongHD?page="+page_num+"&GPA="+-1+"&khoa="+khoacurrent, false);
+    xhttp.send();
+}
+
 function LoadListHuongdan(data) {
   
     $('#button-bar').show();
@@ -79,19 +94,21 @@ function LoadListHuongdan(data) {
     $('#table_data').show();
     $('.btn-follow-row').show();
     $('.nav-page').show();
+    $('#head-bar').show();
 
     $('.Add-New-Row').hide();
 
-
+    $('#head-bar').empty();
     $('#button-bar').empty();
     $('.chose-bar').empty();
     $('#table_data').empty();
     $('.btn-follow-row').empty();
     $('.nav-page').empty();
 
+    $('#head-bar').append(returnFormListKhoa(listkhoa,khoacurrent));
     $('#button-bar').append(returnIconHome() + returnNameIndex('Phụ trách')  + returnNameIndex('Hướng dẫn') );
     $('.chose-bar').append(returnSearchForm('Nhập GPA tối thiểu','Lọc') );
-    if(Number(GPAtemp) !== 0) document.getElementById('input-search').value = GPAtemp;
+    document.getElementById('input-search').value = GPAtemp;
 
 
     if(tol_page > 0){
@@ -215,4 +232,4 @@ function EventAdminClick(event) {
 
 //FIRST------------------------------------------
 
-LoadListHuongdan();
+loadListHuongdan();

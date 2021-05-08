@@ -18,6 +18,9 @@ let MaDAtemp;
 let MaSVtemp;
 // let GPAtemp = 0;
 
+let khoacurrent = 0;
+var listkhoa = [];
+
 
 $(".left-bar").load("/qldean/Admin/SlideBarCollapse.html",function () {
     $( "#act-phancongphanbien" ).addClass( "active" );
@@ -29,9 +32,11 @@ var xhttp = new XMLHttpRequest();
         if (this.readyState == 4 && this.status == 200) {
                 if(String(this.responseURL).includes('api/danhsachphancongPB')){
                     var data = JSON.parse(this.responseText);
-                    tol_page =  Math.ceil(data[1][0]['count(*)'] / 10); 
-
+                    // tol_page =  Math.ceil(data[1][0]['count(*)'] / 10); 
+                    tol_page = data[1];
                     console.log(data)
+                    listkhoa = data[2]
+                    khoacurrent = data[3]
                     // console.log(tol_page)
                     listinfoitem = data[0];
                     LoadListPhanbien(data[0]);
@@ -59,7 +64,7 @@ var xhttp = new XMLHttpRequest();
 
 
 function loadListPhanbien(){
-    xhttp.open("GET", "/api/danhsachphancongPB?page="+page_num, false);
+    xhttp.open("GET", "/api/danhsachphancongPB?page="+page_num+"&khoa="+khoacurrent, false);
     xhttp.send();
 }
 
@@ -76,6 +81,16 @@ function loadAddPhancongPhanbien(){
     xhttp.send();
 }
 
+function changeKhoa(){
+    var e = document.getElementById("select-khoa");
+    khoacurrent = e.options[e.selectedIndex].text;
+    console.log(khoacurrent)
+    xhttp.open("GET", "/api/danhsachphancongPB?page="+page_num+"&khoa="+khoacurrent, false);
+    xhttp.send();
+}
+
+
+
 function LoadListPhanbien(data) {
   
     $('#button-bar').show();
@@ -83,16 +98,18 @@ function LoadListPhanbien(data) {
     $('#table_data').show();
     $('.btn-follow-row').show();
     $('.nav-page').show();
+    $('#head-bar').show();
 
     $('.Add-New-Row').hide();
 
-
+    $('#head-bar').empty();
     $('#button-bar').empty();
     $('.chose-bar').empty();
     $('#table_data').empty();
     $('.btn-follow-row').empty();
     $('.nav-page').empty();
 
+    $('#head-bar').append(returnFormListKhoa(listkhoa,khoacurrent));
     $('#button-bar').append(returnIconHome() + returnNameIndex('Phụ trách')  + returnNameIndex('Phản biện') );
     // $('.chose-bar').append(returnSearchForm('Nhập GPA tối thiểu','Lọc') );
     $('#table_data').append(returnTable(listLabelpk,data));

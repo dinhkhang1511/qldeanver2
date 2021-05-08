@@ -43,10 +43,6 @@ var xhttp = new XMLHttpRequest();
                     else
                     loadListTieuban()
                 }
-
-
-
-
         }
     };
 

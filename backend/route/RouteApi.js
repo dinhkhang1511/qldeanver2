@@ -16,7 +16,7 @@ module.exports = (setroute = require("./Setroute")) => {
     setroute.pushRoute(root_1,"GET","api/themtb", "qldean/AdminTieubanController@themtb");
     setroute.pushRoute(root_1,"GET","api/suatb", "qldean/AdminTieubanController@suatb");
     setroute.pushRoute(root_1,"GET","api/xoatb", "qldean/AdminTieubanController@xoatb");
-    setroute.pushRoute(root_1,"GET","api/timmatb", "qldean/AdminTieubanController@timmatb");
+    // setroute.pushRoute(root_1,"GET","api/timmatb", "qldean/AdminTieubanController@timmatb");
 
     setroute.pushRoute(root_1,"GET","api/themkhoasv", "qldean/AdminSinhvienController@themkhoasv");
     setroute.pushRoute(root_1,"GET","api/danhsachsinhvien", "qldean/AdminSinhvienController@danhsachsinhvien");
@@ -24,22 +24,22 @@ module.exports = (setroute = require("./Setroute")) => {
     setroute.pushRoute(root_1,"GET","api/themsv", "qldean/AdminSinhvienController@themsv");
     setroute.pushRoute(root_1,"GET","api/suasv", "qldean/AdminSinhvienController@suasv");
     setroute.pushRoute(root_1,"GET","api/xoasv", "qldean/AdminSinhvienController@xoasv");
-    setroute.pushRoute(root_1,"GET","api/timmasv", "qldean/AdminController@timmasv");
+    // setroute.pushRoute(root_1,"GET","api/timmasv", "qldean/AdminController@timmasv");
 
-    setroute.pushRoute(root_1,"GET","api/danhsachgiangvien", "qldean/AdminController@danhsachgiangvien");
-    setroute.pushRoute(root_1,"GET","api/dieukienthemgv", "qldean/AdminController@dieukienthemgv");
-    setroute.pushRoute(root_1,"GET","api/themgv", "qldean/AdminController@themgv");
-    setroute.pushRoute(root_1,"GET","api/suagv", "qldean/AdminController@suagv");
-    setroute.pushRoute(root_1,"GET","api/xoagv", "qldean/AdminController@xoagv");
-    setroute.pushRoute(root_1,"GET","api/timmagv", "qldean/AdminController@timmagv");
+    setroute.pushRoute(root_1,"GET","api/danhsachgiangvien", "qldean/AdminGiangvienController@danhsachgiangvien");
+    setroute.pushRoute(root_1,"GET","api/dieukienthemgv", "qldean/AdminGiangvienController@dieukienthemgv");
+    setroute.pushRoute(root_1,"GET","api/themgv", "qldean/AdminGiangvienController@themgv");
+    setroute.pushRoute(root_1,"GET","api/suagv", "qldean/AdminGiangvienController@suagv");
+    setroute.pushRoute(root_1,"GET","api/xoagv", "qldean/AdminGiangvienController@xoagv");
+    // setroute.pushRoute(root_1,"GET","api/timmagv", "qldean/AdminGiangvienController@timmagv");
 
-    setroute.pushRoute(root_1,"GET","api/danhsachphancongHD", "qldean/AdminController@danhsachphancongHD");
-    setroute.pushRoute(root_1,"GET","api/danhsachGVHDphancong", "qldean/AdminController@danhsachGVHDphancong");
-    setroute.pushRoute(root_1,"GET","api/addGVHDphancong", "qldean/AdminController@addGVHDphancong");
+    setroute.pushRoute(root_1,"GET","api/danhsachphancongHD", "qldean/AdminPhancongHuongdanController@danhsachphancongHD");
+    setroute.pushRoute(root_1,"GET","api/danhsachGVHDphancong", "qldean/AdminPhancongHuongdanController@danhsachGVHDphancong");
+    setroute.pushRoute(root_1,"GET","api/addGVHDphancong", "qldean/AdminPhancongHuongdanController@addGVHDphancong");
 
-    setroute.pushRoute(root_1,"GET","api/danhsachphancongPB", "qldean/AdminController@danhsachphancongPB");
-    setroute.pushRoute(root_1,"GET","api/danhsachGVPBphancong", "qldean/AdminController@danhsachGVPBphancong");
-    setroute.pushRoute(root_1,"GET","api/addGVPBphancong", "qldean/AdminController@addGVPBphancong");
+    setroute.pushRoute(root_1,"GET","api/danhsachphancongPB", "qldean/AdminPhancongPhanbienController@danhsachphancongPB");
+    setroute.pushRoute(root_1,"GET","api/danhsachGVPBphancong", "qldean/AdminPhancongPhanbienController@danhsachGVPBphancong");
+    setroute.pushRoute(root_1,"GET","api/addGVPBphancong", "qldean/AdminPhancongPhanbienController@addGVPBphancong");
 
 
     setroute.pushRoute(root_1,"GET","api/danhsachphancongTB", "qldean/AdminController@danhsachphancongTB");
