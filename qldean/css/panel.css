@@ -703,7 +703,7 @@ table tr:first-child td{
     background-color: rgb(212, 212, 212);
     width: auto;
     float: left;
-    padding: 2px 7px;
+    padding: 2px 7px 3px 7px;
     border-radius: 4px;
     clear: both;
     overflow: hidden;
@@ -715,27 +715,30 @@ table tr:first-child td{
 .detail-doan div span:nth-child(2){
     float: left;
     background-color: rgb(212, 212, 212);
-    margin-left: 7px;
-    height: 23px;
-    padding: 5px;
+    margin-left: 5px;
+    padding: 0px 5px;
 }
 
 .detail-doan div span:nth-child(2) svg{
     fill: rgb(53, 53, 53);
+    width: 10px;
+    height: 10px;
 }
 
 
 .detail-doan div span:nth-child(3){
     float: left;
     background-color: rgb(212, 212, 212);
-    margin-left: 7px;
-    height: 23px;
-    padding: 5px;
+    margin-left: 5px;
+    padding: 0px 5px;
 }
 
 .detail-doan div span:nth-child(3) svg{
     fill: rgb(53, 53, 53);
+    width: 10px;
+    height: 10px;
 }
+
 
 
 .detail-doan div:first-child{

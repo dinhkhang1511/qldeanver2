@@ -156,10 +156,10 @@ function returnSwitchBtn(str,str_) {
 
 ///Ngoại 
 function returnFormKhoa(dskhoa,khoa) {
-    var element = '<select name="cars" id="select-khoa">'
+    var element = '<select name="cars" id="select-khoa"  onchange="changeKhoa();">'
     for(var i = 0; i < dskhoa.length; i++){
         if(Number(dskhoa[i]) == Number(khoa))
-        element = element + '<option selected value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
+        element = element + '<option selected  value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
         else
         element = element + '<option value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
     }
@@ -172,7 +172,7 @@ function returnFormKhoa(dskhoa,khoa) {
 
 
 function returnFormListKhoa(dskhoa,khoa) {
-    var element = '<span class="title-chon-khoa">Chọn khóa </span><select name="cars" id="select-khoa">'
+    var element = '<span class="title-chon-khoa">Chọn khóa </span><select name="cars" id="select-khoa" onchange="changeKhoa();">'
     for(var i = 0; i < dskhoa.length; i++){
         if(Number(dskhoa[i]) == Number(khoa))
         element = element + '<option selected value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';

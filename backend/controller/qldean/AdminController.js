@@ -105,54 +105,7 @@ module.exports = async (callback, scanner) => {
     }
 
 
-
-
     
-
-
-
-
-
-    if (index === 'danhsachsinhvien'){
-        let khoa = 0;
-        let GPA = 0;
-        let listkhoa = [];
-        var lineReader = readline.createInterface({
-            input: fs.createReadStream('controller/qldean/Text/khoa.txt')
-        });
-          
-        lineReader.on('line', function (line) {
-            let curbig = Number(line.split(',')[0]);
-            listkhoa.push(curbig);
-            if(curbig > khoa){
-                khoa = curbig;
-                GPA = Number(line.split(',')[1]);
-
-            }
-
-        });
-
-        lineReader.on('close', async function () {
-            console.log(khoa,GPA)
-            let limit = 10;
-            let page = Number(head_params.get('page')) - 1;
-            let count = await Model.InleSQL("select count( maSV) from SinhVien where SUBSTRING(MaSV, 2,2)=right("+khoa+", 2);");
-            let result = await Model.InleSQL("call ShowList_SV("+khoa+","+page*limit+")");
-        // console.log("select MaSV, TenSV, NgaySinh, Lop, Email, GPA from sinhvien limit " +limit+ " OFFSET " + page*limit)
-            let data = [];
-            data.push(result)
-            data.push(count)
-            data.push(khoa)
-            data.push(bubbleSort(listkhoa))
-            console.log(data)
-
-            callback(JSON.stringify(data), 'application/json');
-        });
-
-
-    
-    }
-
     if (index === 'dieukienthemsv'){
         let khoa = head_params.get('khoa');  
         let Id = await Model.InleSQL("select Auto_IDSV("+khoa+")");
@@ -161,27 +114,7 @@ module.exports = async (callback, scanner) => {
         callback(JSON.stringify({Email,Id,khoa}), 'application/json');
     }
 
-    if (index === 'themsv'){
-        let MaSV = head_params.get('MaSV');
-        let TenSV = head_params.get('TenSV');
-        let NgaySinh = head_params.get('NgaySinh');
-        let Lop = head_params.get('Lop');
-        let GPA = head_params.get('GPA');
-        let Email = head_params.get('Email');
-        console.log(MaSV,TenSV,NgaySinh,Lop,GPA,Email)
 
-
-        console.log("INSERT INTO `sinhvien` (`MaSV`, `TenSV`, `NgaySinh`, `Lop`, `GPA`, `Email`) "+
-        "VALUES ('"+MaSV+"','"+TenSV+"','"+NgaySinh+"', '"+Lop+"', "+GPA+", '"+Email+"')")
-
-        let  result1 = await Model.InleSQL("INSERT INTO `sinhvien` (`MaSV`, `TenSV`, `NgaySinh`, `Lop`, `GPA`, `Email`) "+
-            "VALUES ('"+MaSV+"','"+TenSV+"','"+NgaySinh+"', '"+Lop+"', "+GPA+", '"+Email+"')");
-            if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
-                callback(JSON.stringify("that bai"), 'application/json');
-            }else{
-                callback(JSON.stringify(result1), 'application/json');
-            }
-    }
 
     if (index === 'suasv'){
         let masv = head_params.get('masv');

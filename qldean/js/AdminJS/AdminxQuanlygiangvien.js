@@ -14,6 +14,10 @@ var listIdBtn = ['them', 'thoat'];
 
 let IdGV;
 
+$(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
+    $( "#act-giangvien" ).addClass( "active" )
+});
+
 var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {

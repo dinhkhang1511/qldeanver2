@@ -19,6 +19,10 @@ let MaSVtemp;
 // let GPAtemp = 0;
 
 
+$(".left-bar").load("/qldean/Admin/SlideBarCollapse.html",function () {
+    $( "#act-phancongphanbien" ).addClass( "active" );
+});
+
 
 var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {

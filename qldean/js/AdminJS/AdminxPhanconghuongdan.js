@@ -19,6 +19,10 @@ let MaDAtemp;
 let GPAtemp = 0;
 
 
+$(".left-bar").load("/qldean/Admin/SlideBarCollapse.html",function () {
+    $( "#act-phanconghuongdan" ).addClass( "active" );
+});
+
 var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {

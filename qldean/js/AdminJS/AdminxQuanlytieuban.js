@@ -7,6 +7,7 @@ var currentrowtable = -1;
 var maTB;
 var ngaytemp;
 var giotemp;
+var khoacurrent = 0;
 
 var listkhoa = [];
 
@@ -14,16 +15,8 @@ $(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
     $( "#act-tieuban" ).addClass( "active" )
 });
 
-
-
-var data = [{TieuBan:"TB12" , Ngay:'23/12/1212', Gio: '12:10', trangthai:"dang phan cong"},
-            {TieuBan:"TB12" , Ngay:'23/12/1212', Gio: '12:10', trangthai:"dang phan cong"},
-            {TieuBan:"TB12" , Ngay:'23/12/1212', Gio: '12:10', trangthai:"dang phan cong"},
-            {TieuBan:"TB12" , Ngay:'23/12/1212', Gio: '12:10', trangthai:"dang phan cong"},
-            {TieuBan:"TB12" , Ngay:'23/12/1212', Gio: '12:10', trangthai:"dang phan cong"}]
 var listButtonpk = ['Phân công','Sửa','Xóa'];
 var listIdBtnTable = ['phancongx', 'suax' , 'xoax'];
-
 
 var listBtnpk =  ['Thêm','Thoát'];
 var listColorpk = ['tomato', 'green'];
@@ -35,8 +28,6 @@ var listSuaIdBtn = ['sua', 'thoa'];
 
 var listphancongbtn =  ['Phân công','Thoát'];
 
-var listGV = ['01 - Nguyen van tay', '01 - Nguyen van thong' , '01 - Nguyen van tu' , '01 - Nguyen van ut']
-
 var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -44,13 +35,14 @@ var xhttp = new XMLHttpRequest();
                     var data = JSON.parse(this.responseText);
                     tol_page =  Math.ceil(data[1][0]['count(*)'] / 10); 
                     console.log(tol_page)
-                    listinfoitem = data[0];
-                    LoadListTieuban(data[0]);
+                    listinfoitem = data[0][0];
+                    listkhoa = data[2];
+                    khoacurrent = data[3] 
+                    LoadListTieuban(listinfoitem);
                 }
                 if(String(this.responseURL).includes('api/dieukienthemtb')){
                     var data = JSON.parse(this.responseText);
-                    LoadAddFormTieuban(data[0]['AUTO_IDTB()'])
- 
+                    LoadAddFormTieuban(data[0]['AUTO_IDTB('+khoacurrent+')'])
                 }
                 if(String(this.responseURL).includes('api/themtb')){
                     if(String(this.responseText) == '"that bai"')
@@ -85,12 +77,12 @@ var xhttp = new XMLHttpRequest();
 
 // ///LOAD----------------------------------------------------
 function loadListTieuban(){
-    xhttp.open("GET", "/api/danhsachtieuban?page="+page_num, false);
+    xhttp.open("GET", "/api/danhsachtieuban?page="+page_num+"&khoa="+khoacurrent, false);
     xhttp.send();
 }
 
 function loadAddListTieuban() {
-    xhttp.open("GET", "/api/dieukienthemtb", false);
+    xhttp.open("GET", "/api/dieukienthemtb?khoa="+khoacurrent, false);
     xhttp.send();
 }
 
@@ -100,16 +92,14 @@ function loadSearchTieuban(){
 }
 
 function addTieuban() {
-
     var thoigiantieuban = document.getElementsByClassName('thoigianform').item(0).value;
-    
     thoigiantieuban = String(thoigiantieuban).split('T')
-
     var ngay = thoigiantieuban[0];
     var gio = thoigiantieuban[1];
     console.log(ngay)
+
     if(String(ngay) !== ''){
-        xhttp.open("GET", "/api/themtb?ngay="+ngay+"&gio="+gio, false);
+        xhttp.open("GET", "/api/themtb?ngay="+ngay+"&gio="+gio+"&maTB="+ $(".label-item-add").text(), false);
         xhttp.send();
     }else{
         alert("Nhập ngày giờ")
@@ -119,9 +109,7 @@ function addTieuban() {
 
 function updateListTieuban() {
     var thoigiantieuban = document.getElementsByClassName('thoigianform').item(0).value;
-    
     thoigiantieuban = String(thoigiantieuban).split('T')
-
     var ngay = thoigiantieuban[0];
     var gio = thoigiantieuban[1];
 
@@ -158,9 +146,26 @@ function addphancongtieuban(){
     // xhttp.send();
 }
 
+
+function changeKhoa(){
+    var e = document.getElementById("select-khoa");
+    khoacurrent = e.options[e.selectedIndex].text;
+    console.log(khoacurrent)
+    xhttp.open("GET", "/api/danhsachtieuban?page="+page_num+"&khoa="+khoacurrent, false);
+    xhttp.send();
+}
+
 //ELEMENT-----------------------------------------------------
 function LoadListTieuban(data) {
   
+    let listTB = [];
+    let dk;
+    for(let i = 0; i< data.length;i++){
+        if(Number(data[i].sum)<5) dk = 'Đang phân công';
+        else if(Number(data[i].sum)==5) dk = 'Hoàn thành';
+        listTB.push({maTB: data[i].maTB, ngay: data[i].ngay, gio: data[i].gio, sum: dk})
+    }
+
     //xác định ẩn hiện
     $('#button-bar').show();
     $('.chose-bar').show();
@@ -180,10 +185,10 @@ function LoadListTieuban(data) {
     $('.nav-page').empty();
 
     //thêm chi tiết vào
-    $('#head-bar').append(returnFormListKhoa([2015,2016],2015));
+    $('#head-bar').append(returnFormListKhoa(listkhoa,khoacurrent));
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý tiểu ban') +  returnAddBtn());
     $('.chose-bar').append(returnSearchForm('Nhập mã tiểu ban','Tìm kiếm') );
-    $('#table_data').append(returnTable( ['Tiểu ban','Ngày','Giờ','Trạng thái'],data));
+    $('#table_data').append(returnTable( ['Tiểu ban','Ngày','Giờ','Trạng thái'],listTB));
     $('.btn-follow-row').append(returnButtonTable(listButtonpk,listIdBtnTable));
     $('.nav-page').append(returNavForm(tol_page+1, page_num));
 }

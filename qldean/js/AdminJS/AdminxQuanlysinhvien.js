@@ -15,8 +15,12 @@ var maSV;
 var EmailSV;
 
 var listkhoa = [];
-var khoacur;
+var khoacurrent = 0;
 
+
+$(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
+    $( "#act-sinhvien" ).addClass( "active" )
+});
 
 const bubbleSort = (array) => {
     for (let i = 0; i < array.length; i++) {
@@ -45,6 +49,7 @@ var xhttp = new XMLHttpRequest();
 
                 if(String(this.responseURL).includes('api/dieukienthemsv')){
                     var data = JSON.parse(this.responseText)
+                    console.log(data)
                     maSV =  data.Id[0]['Auto_IDSV('+Number(data.khoa)+')'];
                     EmailSV = data.Email[0]["Auto_EmailSV('"+maSV+"')"]
                     LoadAddFormSinhvien(EmailSV, maSV)
@@ -61,25 +66,54 @@ var xhttp = new XMLHttpRequest();
                         alert('Fail')
                     else loadListSinhvien();
                 }
+                if(String(this.responseURL).includes('api/xoasv')){
+                    if(String(this.responseText) == '"that bai"')
+                        alert('Fail')
+                    else loadListSinhvien();
+                }
+                if(String(this.responseURL).includes('/api/themkhoasv')){
+                    if(String(this.responseText) == '"that bai"')
+                        alert('Fail')
+                    else{
+                        khoacurrent = Number(document.getElementById('input-khoa').value);
+                        listkhoa.push(Number(document.getElementById('input-khoa').value))
+                        listkhoa = bubbleSort(listkhoa);
+            
+                        console.log(listkhoa)
+            
+                        $('#head-bar').empty();
+                        $('#head-bar').append(returnFormKhoa(listkhoa,khoacur));
+            
+                        $('#xacnhan-them-khoa').hide();
+                        $('#dskhoa').hide();
+                        $('#themkhoa').show();
+                        $('#input-khoa').hide();
+                        $('#select-khoa').show();
+
+                        loadListSinhvien();
+                    } 
+                }
+
+                
         }
     };
 
 ///LOAD----------------------------------------------------
 function loadListSinhvien(){
-    xhttp.open("GET", "/api/danhsachsinhvien?page="+page_num, false);
+    xhttp.open("GET", "/api/danhsachsinhvien?page="+page_num+"&khoa="+khoacurrent, false);
     xhttp.send();
 }
 
 function loadAddListSinhvien() {
-    console.log(String(document.getElementById('input-text-title').value))
-    xhttp.open("GET", "/api/dieukienthemsv?khoa="+String(document.getElementById('input-text-title').value), false);
+    var e = document.getElementById("select-khoa");
+    khoacurrent = e.options[e.selectedIndex].text;
+    console.log(khoacurrent)
+    xhttp.open("GET", "/api/dieukienthemsv?khoa="+khoacurrent, false);
     xhttp.send();
 }
 
 function addSinhvien() {
-
     var tensv = document.getElementsByClassName('input-new-row-long').item(0).value;
-
     var GPA = document.getElementsByClassName('input-new-row-short').item(0).value;
 
     var e = document.getElementsByClassName('combo-box-add-long').item(0);
@@ -96,19 +130,31 @@ function addSinhvien() {
 }
 
 function updateListSinhvien() {
-    var masv = document.getElementsByClassName('label-item-add').item(0).innerHTML;
-    var tensv = document.getElementById('tensv').value;
-    var emailsv = document.getElementById('emailsv').value;
-    var matk = document.getElementById('matk').value;
-    var makhoa = document.getElementById('makhoa').value;
-    var mksv = document.getElementById('mksv').value;
-    if(isNumeric(masv)){
-        xhttp.open("GET", "/api/suasv?masv="+masv+"&tensv="+tensv+"&emailsv="+emailsv+"&matk="+matk+"&makhoa="+makhoa+"&mksv="+mksv, false);
-        xhttp.send();
-    }else{
-        alert("Mã sinh viên phải là số")
-    }
+    var MaSV = document.getElementsByClassName('label-item-add').item(0).innerHTML;
+    var TenSV = document.getElementsByClassName('input-new-row-long').item(0).value;
+    var NgaySinh = document.getElementsByClassName('thoigianform').item(0).value;
+    NgaySinh = String(NgaySinh).split('T')
+    NgaySinh = NgaySinh[0];
+    // var EmailSV = document.getElementsByClassName('label-item-add').item(1).innerHTML;
+    var e = document.getElementsByClassName('combo-box-add-long').item(0);
+    var Lop = e.options[e.selectedIndex].text;
+    var GPA = document.getElementsByClassName('input-new-row-short').item(0).value;
+
+    // console.log(masv,tensv,ngaysinh,emailsv,lop,GPA)
+
+    xhttp.open("GET", "/api/suasv?MaSV="+MaSV+"&TenSV="+TenSV+"&NgaySinh="+NgaySinh+"&Lop="+Lop+"&GPA="+GPA, false);
+    xhttp.send();
+
 }
+
+function changeKhoa(){
+    var e = document.getElementById("select-khoa");
+    khoacurrent = e.options[e.selectedIndex].text;
+    console.log(khoacurrent)
+    xhttp.open("GET", "/api/danhsachsinhvien?page="+page_num+"&khoa="+khoacurrent, false);
+    xhttp.send();
+}
+
 
 //ELEMENT-----------------------------------------------------
 function LoadListSinhvien(data,dskhoa,khoa) {
@@ -138,7 +184,7 @@ function LoadListSinhvien(data,dskhoa,khoa) {
 
     // returnInputTextTitle("Nhập khóa")
 
-    document.getElementById('input-text-title').value = khoa;
+    // document.getElementById('input-text-title').value = khoa;
 }
 
 function LoadAddFormSinhvien(Email,Id) {
@@ -208,14 +254,17 @@ function EventAdminClick(event) {
             console.log(currentrowtable)
             LoadSuaFormSinhvien(listinfoitem[currentrowtable])
         }
+        if(x.id == 'xoax'){
+            console.log(listinfoitem[currentrowtable].MaSV)
+            xhttp.open("GET", "/api/xoasv?MaSV="+listinfoitem[currentrowtable].MaSV, false);
+            xhttp.send();
+        }
+
     }else if(x.id == 'them'){
         addSinhvien();
     }else if(x.className == "add_new_btn" || x.parentNode.className == "add_new_btn" || x.parentNode.parentNode.className == "add_new_btn" ||  x.parentNode.parentNode.parentNode.className == "add_new_btn"){
         // LoadAddFormSinhvien()
-        
-        if(String(document.getElementById('input-text-title').value) !== ''){
             loadAddListSinhvien();
-        }
     }else if(x.className == "return_btn" || x.parentNode.className == "return_btn" || x.parentNode.parentNode.className == "return_btn" ||  x.parentNode.parentNode.parentNode.className == "return_btn"){
         loadListSinhvien();
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
@@ -241,23 +290,11 @@ function EventAdminClick(event) {
         if(listkhoa.indexOf(Number(document.getElementById('input-khoa').value)) !== -1){
             alert("Value exists!")
         } else{
-
-        khoacur = Number(document.getElementById('input-khoa').value);
-        listkhoa.push(Number(document.getElementById('input-khoa').value))
-        listkhoa = bubbleSort(listkhoa);
-
-        console.log(listkhoa)
-
-        $('#head-bar').empty();
-        $('#head-bar').append(returnFormKhoa(listkhoa,khoacur));
-
-        $('#xacnhan-them-khoa').hide();
-        $('#dskhoa').hide();
-        $('#themkhoa').show();
-        $('#input-khoa').hide();
-        $('#select-khoa').show();
-
+            xhttp.open("GET", "/api/themkhoasv?khoa="+Number(document.getElementById('input-khoa').value), false);
+            xhttp.send();
         }
+    }else if(x.id == 'sua'){
+        updateListSinhvien();
     }else{
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");

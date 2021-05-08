@@ -17,6 +17,11 @@ var listIdBtn = ['phancong', 'thoat'];
 var TBtemp;
 var MaDAtemp;
 
+
+$(".left-bar").load("/qldean/Admin/SlideBarCollapse.html",function () {
+    $( "#act-phancongtieuban" ).addClass( "active" );
+});
+
 var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
