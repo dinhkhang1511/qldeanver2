@@ -22,7 +22,7 @@ var listIdBtn = ['them', 'thoa'];
 
 
 $(".left-bar").load("/qldean/Teacher/SlideBarCollapse.html",function () {
-    $( "#act-huongdan" ).addClass( "active" );
+    $( "#act-phanbien" ).addClass( "active" );
 });
 
 
@@ -67,7 +67,7 @@ function LoadTatcadoan(data) {
     $('.nav-page').empty();
     $('.Add-New-Row').hide();
     
-    $('#button-bar').append(returnIconHome() + returnNameIndex('Đồ án hướng dẫn'));
+    $('#button-bar').append(returnIconHome() + returnNameIndex('Đồ án phản biện'));
     $('.chose-bar').append(returnSearchForm('Nhập mã đồ án','Tìm kiếm'));
     $('#table_data').append(returnTable(listPhutrachTitle,data));
     $('.btn-follow-row').append(returnButtonTable(['Xem chi tiết'],['chitiet']));

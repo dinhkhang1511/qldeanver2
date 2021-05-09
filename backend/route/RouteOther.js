@@ -20,6 +20,9 @@ module.exports = (setroute = require("./Setroute")) => {
 
     setroute.pushRoute(root_1,"GET","giangvien/huongdan", "qldean/Teacher/TeacherxHuongdan.html");
     
+    setroute.pushRoute(root_1,"GET","giangvien/tatcadoan", "qldean/Teacher/TeacherxTatcadoan.html");
+    setroute.pushRoute(root_1,"GET","giangvien/phanbien", "qldean/Teacher/TeacherxPhanbien.html");
+    setroute.pushRoute(root_1,"GET","giangvien/tieuban", "qldean/Teacher/TeacherxTieuban.html");
 
     return setroute.getRoute();
 }

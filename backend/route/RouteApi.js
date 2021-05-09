@@ -42,9 +42,9 @@ module.exports = (setroute = require("./Setroute")) => {
     setroute.pushRoute(root_1,"GET","api/addGVPBphancong", "qldean/AdminPhancongPhanbienController@addGVPBphancong");
 
 
-    setroute.pushRoute(root_1,"GET","api/danhsachphancongTB", "qldean/AdminController@danhsachphancongTB");
-    setroute.pushRoute(root_1,"GET","api/danhsachTBphancong", "qldean/AdminController@danhsachTBphancong");
-    setroute.pushRoute(root_1,"GET","api/addTBphancong", "qldean/AdminController@addTBphancong");
+    setroute.pushRoute(root_1,"GET","api/danhsachphancongTB", "qldean/AdminPhancongTieubanController@danhsachphancongTB");
+    setroute.pushRoute(root_1,"GET","api/danhsachTBphancong", "qldean/AdminPhancongTieubanController@danhsachTBphancong");
+    setroute.pushRoute(root_1,"GET","api/addTBphancong", "qldean/AdminPhancongTieubanController@addTBphancong");
 
     
     
