@@ -2,10 +2,10 @@ var listinfoitem;
 var page_num = 1;
 var tol_page = 0;
 
-var listLabelpk = ['Mã sinh viên','Tên sinh viên','Lớp','Mã đồ án','GPA','Mã GVPB','Điểm GVPB'];
+var listLabelpk = ['Mã sinh viên','Tên sinh viên','Lớp','Mã đồ án','Tên đồ án','Điểm Hướng dẫn','Mã GVPB'];
 // var data = [{MaSV:'SV02', Ten:'Thanh Tam', Lop:'CNTT', Ma:'023', GPA:'3.4', GVHD:'GV01'},{MaSV:'SV02', Ten:'Thanh Tam', Lop:'CNTT', Ma:'023', GPA:'3.4', GVHD:'GV01'}]
-var listButtonpk = ['Phân công','Chi tiết'];
-var listIdBtnTable = ['phancongx', 'chitietx'];
+var listButtonpk = ['Phân công'];
+var listIdBtnTable = ['phancongx'];
 var listInfoPhanbien1 = ['Mã sinh viên: SV21','Tên sinh viên: Le Tấn']
 var listInfoPhanbien2 = ['Mã đồ án: DA21' ,'Tên đồ án: 21']
 
@@ -33,22 +33,21 @@ var xhttp = new XMLHttpRequest();
                 if(String(this.responseURL).includes('api/danhsachphancongPB')){
                     var data = JSON.parse(this.responseText);
                     // tol_page =  Math.ceil(data[1][0]['count(*)'] / 10); 
-                    tol_page = data[1];
+                    tol_page =   Math.ceil(data[1][0]['CountList_SVDAPB('+khoacurrent+')'] / 10); 
                     console.log(data)
                     listkhoa = data[2]
                     khoacurrent = data[3]
                     // console.log(tol_page)
-                    listinfoitem = data[0];
-                    LoadListPhanbien(data[0]);
+                    listinfoitem = data[0][0];
+                    LoadListPhanbien(listinfoitem);
                 }
 
                 if(String(this.responseURL).includes('api/danhsachGVPBphancong')){
                     var data = JSON.parse(this.responseText)
-                    // console.log(data,listinfoitem[currentrowtable])
+
                     console.log('xxxx')
                     LoadPhancongPhanbien(data);
-                    // LoadPhancongHuongdan(data);
-                    // LoadAddFormGiangvien(data[0]['AUTO_IDGV()']);
+
                 }
                 if(String(this.responseURL).includes('api/addGVPBphancong')){
                     if(String(this.responseText) == '"that bai"')
@@ -121,7 +120,7 @@ function LoadListPhanbien(data) {
 function LoadPhancongPhanbien(data) {
 
     
-    var InfoSV = data[0][0];
+    var InfoSV = data[0][0][0];
     var listgvpb = data[1];
 
     console.log(InfoSV,listgvpb)
@@ -142,14 +141,25 @@ function LoadPhancongPhanbien(data) {
     $('#button-bar').append(returnIconHome() + returnNameIndex('Phụ trách')  + returnNameIndex('Phản biện') + returnNameIndex('Phân công')  + returnReturnBtn());
     $('.Add-New-Row').append(returnLormInfo( ['Mã sinh viên: '+InfoSV.MaSV,'Tên sinh viên: '+InfoSV.TenSV]));
 
+    $('.Add-New-Row').append(returnLormInfo( ['Lớp: '+InfoSV.Lop,'GPA: '+InfoSV.GPA]));
+    $('.Add-New-Row').append(returnLormOneInfo('Email: '+InfoSV.Email));
+
     if(String(InfoSV.TenDA) != 'null')
     $('.Add-New-Row').append(returnLormInfo(['Mã đồ án: '+InfoSV.MaDA ,'Tên đồ án: '+InfoSV.TenDA]));
     else
     $('.Add-New-Row').append(returnLormInfo(['Mã đồ án: '+InfoSV.MaDA ,'Tên đồ án: Chưa đặt tên']));
 
-    $('.Add-New-Row').append(returnLormOneInfo('Giảng viên hướng dẫn: ' +InfoSV.MaGVHD));
+    $('.Add-New-Row').append(returnLormOneInfo('Giảng viên hướng dẫn: ' +InfoSV.MaGVHD + ' - '+InfoSV.TenGVHD));
 
+    if(String(InfoSV.DiemHD) != 'null')
+    $('.Add-New-Row').append(returnLormOneInfo('Điểm hướng dẫn: '+InfoSV.DiemHD));
+    else
+    $('.Add-New-Row').append(returnLormOneInfo('Điểm hướng dẫn: Chưa chấm'));
 
+    if(String(InfoSV.DiemPB) != '')
+    $('.Add-New-Row').append(returnLormOneInfo('Điểm hướng dẫn: '+InfoSV.DiemPB));
+    else
+    $('.Add-New-Row').append(returnLormOneInfo('Điểm phản biện: Chưa chấm'));
 
     MaDAtemp = InfoSV.MaDA;
 
@@ -224,7 +234,7 @@ function EventAdminClick(event) {
     }else if(x.className == "add_new_btn" || x.parentNode.className == "add_new_btn" || x.parentNode.parentNode.className == "add_new_btn" ||  x.parentNode.parentNode.parentNode.className == "add_new_btn"){
         LoadAddFormPhanbien();
     }else if(x.className == "return_btn" || x.parentNode.className == "return_btn" || x.parentNode.parentNode.className == "return_btn" ||  x.parentNode.parentNode.parentNode.className == "return_btn"){
-        LoadListPhanbien();
+        loadListPhanbien();
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
     }else if(x.id == 'phancong'){

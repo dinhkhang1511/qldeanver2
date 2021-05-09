@@ -32,7 +32,9 @@ var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
                 if(String(this.responseURL).includes('api/danhsachtieuban')){
+                    
                     var data = JSON.parse(this.responseText);
+                    console.log(data)
                     tol_page =  Math.ceil(data[1][0]['count(*)'] / 10); 
                     console.log(tol_page)
                     listinfoitem = data[0][0];

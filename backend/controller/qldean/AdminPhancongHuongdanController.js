@@ -130,8 +130,11 @@ module.exports = async (callback, scanner) => {
                 let limit = 10;
                 let page = Number(head_params.get('page')) - 1;
       
+                console.log(khoa,GPA+"XXXXXXXXXX")
+
                 let count = await Model.InleSQL('select CountList_SVDAHD('+khoa+', '+GPA+')');
                 let result = await Model.InleSQL('call ShowList_SvDAHD('+khoa+', '+GPA+','+page*limit+')');
+                console.log('call ShowList_SvDAHD('+khoa+', '+GPA+','+page*limit+')')
                 let data = [];
                 data.push(result)
                 data.push(count)
@@ -144,5 +147,31 @@ module.exports = async (callback, scanner) => {
         }
     }
 
+
+    if(index === 'danhsachGVHDphancong'){
+        let MaSV = String(head_params.get('MaSV'));
+        console.log(MaSV)
+        let result = await Model.InleSQL("call ShowInfor_SVHD('"+MaSV+"')");
+        let result1 =  await Model.InleSQL("select MaGV, TenGV from giangvien where MaTK is not null");
+        let data = [];
+        data.push(result)
+        data.push(result1)
+        console.log(data)
+        callback(JSON.stringify(data), 'application/json');
+    }
+
+    if(index === 'addGVHDphancong'){
+        let MaGVHD = String(head_params.get('MaGVHD'));
+        let MaSV = String(head_params.get('MaSV'));
+        let NgaySinh = String(head_params.get('NgaySinh'));
+        console.log(MaGVHD,MaSV,NgaySinh)
+        let  result1 = await Model.InleSQL('call Add_DA("'+MaSV+'","'+NgaySinh+'", "'+MaGVHD+'");');
+              
+            if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
+                callback(JSON.stringify("that bai"), 'application/json');
+            }else{
+                callback(JSON.stringify(result1), 'application/json');
+            }
+    }
 
 }

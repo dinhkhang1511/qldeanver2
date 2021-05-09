@@ -1,6 +1,6 @@
 var listinfoitem;
 var page_num = 1;
-var tol_page = 0;
+var tol_page = 1;
 
 var MaGV = "Gv/n-003";
 
@@ -34,18 +34,8 @@ var xhttp = new XMLHttpRequest();
                     console.log(data)
                     LoadTatcadoan(data[0]);
                 }
-
-                if(String(this.responseURL).includes('api/danhsachphutrachdoan')){
-                    var data = JSON.parse(this.responseText);
-                    tol_page =  Math.ceil(data[1][0]['FOUND_ROWS()'] / 10); 
-                    console.log(data)
-                    LoadPhutrachdoan(data[0]);
-                }
-
         }
     };
-
-
 
 
 
@@ -54,13 +44,9 @@ function loadListTatcadoan(){
     xhttp.send();
 }
 
-function loadListPhutrachdoan(){
-    xhttp.open("GET", "/api/danhsachphutrachdoan?page="+page_num+"&MaGV="+MaGV, false);
-    xhttp.send();
-}
 
 //ELEMENT-----------------------------------------------------
-function LoadListPhancong() {
+function LoadListTatcadoan(){
     $('#button-bar').show();
     $('.chose-bar').show();
     $('#table_data').show();
@@ -68,96 +54,38 @@ function LoadListPhancong() {
     $('.nav-page').show();
 
     $('.Add-New-Row').hide();
-
+    $('.Detail-project').hide();
 
     $('#button-bar').empty();
-
-
-    $('#button-bar').append(returnIconHome());
-    // + returnNameIndex('Phân công') +  returnSwitchBtn('Tất cả', 'Phụ trách')
-    //  page_num = 1;
-    //  tol_page = 0;
-    // loadListTatcadoan();
-}
-
-function LoadTatcadoan(data) {
     $('.chose-bar').empty();
     $('#table_data').empty();
     $('.btn-follow-row').empty();
     $('.nav-page').empty();
-    $('.Add-New-Row').hide();
-    
+  
     $('#button-bar').append(returnIconHome() + returnNameIndex('Tất cả đồ án'));
     $('.chose-bar').append(returnSearchForm('Nhập mã đồ án','Tìm kiếm'));
-    $('#table_data').append(returnTable(listTacaTitle,data));
+    $('#table_data').append(returnTable(listTacaTitle,[{MaDA:'D019',Ten:'Làm web',GVHD:'GV02'},{MaDA:'D013',Ten:'Làm app',GVHD:'GV02'}]));
     $('.btn-follow-row').append(returnButtonTable(['Xem chi tiết'],['chitiet']));
-    $('.nav-page').append(returNavForm(tol_page+1, page_num));
-
+    $('.nav-page').append(returNavForm(tol_page+1, 1));
 }
 
-function LoadPhutrachdoan(data) {
+
+function LoadXemchitiet(){
+    $('#button-bar').show();
+    $('.chose-bar').hide();
+    $('#table_data').hide();
+    $('.btn-follow-row').hide();
+    $('.nav-page').hide();
+
+    $('.Add-New-Row').hide();
+    $('.Detail-project').show();
+
+    $('#button-bar').empty();
     $('.chose-bar').empty();
-    $('#table_data').empty();
-    $('.btn-follow-row').empty();
-    $('.nav-page').empty();
-    
-    $('.chose-bar').append(returnSearchForm('Nhập mã sinh viên','Tìm kiếm'));
-    $('#table_data').append(returnTable(listPhutrachTitle,data));
-    $('.btn-follow-row').append(returnButtonTable(['Xem chi tiết', 'Phân công'],['chitiet', 'phancong']));
-    $('.nav-page').append(returNavForm(tol_page+1, page_num));
+
+
+    $('#button-bar').append(returnIconHome() + returnNameIndex('Tất cả đồ án') + returnNameIndex('Chi tiết') +  returnReturnBtn());
 }
-
-
-function LoadAddFormPhancong() {
-
-    $('#button-bar').show();
-    $('.chose-bar').hide();
-    $('#table_data').hide();
-    $('.btn-follow-row').hide();
-    $('.nav-page').hide();
-
-    $('.Add-New-Row').show();
-
-    $('#button-bar').empty();
-    $('.Add-New-Row').empty();
-
-    $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên') + returnNameIndex('Thêm mới') +  returnReturnBtn());
-    $('.Add-New-Row').append(returnFormLabel('Thêm mới sinh viên'));
-    $('.Add-New-Row').append(returnFormLabelInfo('Mã sinh viên','TB12'));
-    $('.Add-New-Row').append(returnFormInputTextLength('Tên','' ));
-    $('.Add-New-Row').append(returnFormInputTime('Ngày sinh',2,''));
-    $('.Add-New-Row').append(returnFormInputText('Lớp', ''));
-    $('.Add-New-Row').append(returnFormInputSelect('Khóa', [2018,2019,2020,2021], 2021));
-    // $('.Add-New-Row').append(returnFormInputTextRight('Email', '@ptithcm.edu.vn'));
-    $('.Add-New-Row').append(returnFormInputText('GPA', ''));
-    $('.Add-New-Row').append(returnFormBtn(listBtnpk,listColorpk,listIdBtn));
-}
-
-
-function LoadSuaFormPhancong() {
-    $('#button-bar').show();
-    $('.chose-bar').hide();
-    $('#table_data').hide();
-    $('.btn-follow-row').hide();
-    $('.nav-page').hide();
-
-    $('.Add-New-Row').show();
-    $('#button-bar').empty();
-    $('.Add-New-Row').empty();
-
-    $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên') + returnNameIndex('Sửa') +  returnReturnBtn());
-    $('.Add-New-Row').append(returnFormLabel('Sửa sinh viên'));
-    $('.Add-New-Row').append(returnFormLabelInfo('Mã sinh viên','TB12'));
-    $('.Add-New-Row').append(returnFormInputTextLength('Tên','LeTuan' ));
-    $('.Add-New-Row').append(returnFormInputTime('Ngày sinh',2,'2012-23-12'));
-    $('.Add-New-Row').append(returnFormInputText('Lớp', 'CNTT'));
-    $('.Add-New-Row').append(returnFormInputSelect('Khóa', [2018,2019,2020,2021], 2019));
-    // $('.Add-New-Row').append(returnFormInputTextLength('Email', 'letan@ptithcm.edu.vn'));
-    $('.Add-New-Row').append(returnFormInputText('GPA', '3'));
-    $('.Add-New-Row').append(returnFormBtn(listBtnpk,listColorpk,listIdBtn));
-}
-
-
 
 //CLICK-----------------------------------------------
 function EventTeacherClick(event) {
@@ -167,27 +95,15 @@ function EventTeacherClick(event) {
         $('#no-color-btn-follow-row').attr("id", "yes-color-btn-follow-row");
         x.parentNode.className = 'yes-color-lum-table';
     }else if(x.parentNode.className == 'btn-follow-row'){
-        if(x.id == "suax"){
-            LoadSuaFormPhancong()
+        if(x.id == "chitiet"){
+            LoadXemchitiet();
         }
     }else if(x.className == "add_new_btn" || x.parentNode.className == "add_new_btn" || x.parentNode.parentNode.className == "add_new_btn" ||  x.parentNode.parentNode.parentNode.className == "add_new_btn"){
         LoadAddFormPhancong()
     }else if(x.className == "return_btn" || x.parentNode.className == "return_btn" || x.parentNode.parentNode.className == "return_btn" ||  x.parentNode.parentNode.parentNode.className == "return_btn"){
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
-        LoadListPhancong();
-    }else if(x.className == "loadswitch1"){
-        loadListTatcadoan();
-        $('#activeswitchbar').removeAttr('id');
-        x.id = 'activeswitchbar';
-        $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
-        $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
-    }else if(x.className == "loadswitch2"){
-        loadListPhutrachdoan();
-        $('#activeswitchbar').removeAttr('id');
-        x.id = 'activeswitchbar';
-        $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
-        $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
+        LoadListTatcadoan();
     }else{
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
@@ -197,4 +113,4 @@ function EventTeacherClick(event) {
 
 //FIRST---------------------------------------------------------
 // LoadListPhancong() 
-loadListTatcadoan()
+LoadListTatcadoan()

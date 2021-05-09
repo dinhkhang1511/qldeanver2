@@ -37,8 +37,9 @@ module.exports = async (callback, scanner) => {
                     let page = Number(head_params.get('page')) - 1;
                     if(khoa == 0) khoa = listkhoa[0];
                     console.log(khoa)
-                    let count = 0;
-                    let result = []
+                    let count = await Model.InleSQL('select CountList_SVDAPB('+khoa+')');
+                    let result = await Model.InleSQL('call ShowList_SvDAPB('+khoa+','+page*limit+')');
+                    console.log('call ShowList_SvDAPB('+khoa+','+page*limit+')')
                     let data = [];
                     data.push(result)
                     data.push(count)
@@ -73,8 +74,8 @@ module.exports = async (callback, scanner) => {
                 let limit = 10;
                 let page = Number(head_params.get('page')) - 1;
                 console.log(khoa)
-                let count = 0;
-                let result = [];
+                let count = await Model.InleSQL('select CountList_SVDAPB('+khoa+')');
+                let result = await Model.InleSQL('call ShowList_SvDAPB('+khoa+','+page*limit+')');
                 let data = [];
                 data.push(result)
                 data.push(count)
@@ -84,6 +85,55 @@ module.exports = async (callback, scanner) => {
                 callback(JSON.stringify(data), 'application/json');
             });
         }
+    }
+
+
+    if(index === 'danhsachGVPBphancong'){
+        let MaSV = String(head_params.get('MaSV'));
+        let MaDA = String(head_params.get('MaDA'));
+        console.log("Xxx");
+        // console.log(MaSV,MaDA);
+        let result = await Model.InleSQL("call ShowInfor_SVPB('"+MaSV+"')");
+        let result1 = await Model.InleSQL("select MaGV, TenGV from giangvien where MaGV <> (select MaGVHD from doan where MaDA='"+MaDA+"') and MaTK is not null");
+        console.log("select MaGV, TenGV from giangvien where MaGV <> (select MaGVHD from doan where MaDA='"+MaDA+"') and MaTK is not null")
+        let data = [];
+        data.push(result)
+        data.push(result1)
+        console.log(data)
+        callback(JSON.stringify(data), 'application/json');
+    }
+
+
+    if(index === 'addGVPBphancong'){
+        let MaGVPB = String(head_params.get('MaGVPB'));
+        let MaDA = String(head_params.get('MaDA'));
+
+        console.log(MaGVPB , MaDA)
+
+        let  result1 = await Model.InleSQL('call PhanCong_GVPB("'+MaDA+'","'+MaGVPB+'")');
+
+        let count = await Model.InleSQL('select count(*)  from `chamdiemhd-pb` where MaDA="'+MaDA+'"')
+        console.log(count[0]['count(*)'])
+
+        let temp = await Model.InleSQL('select MaGVPB from doan where MaDA="'+MaDA+'";')
+        console.log(temp[0]['MaGVPB']);
+
+        let result;
+        if(count == 2){
+            result =  await Model.InleSQL('UPDATE `chamdiemhd-pb` SET MaGV="'+MaGVPB+'", diem=null where MaDA="'+MaDA+'" and MaGV="'+temp+'";')
+        }else{
+            result = await Model.InleSQL('insert into `chamdiemhd-pb`(MaDA, MaGV) values ("'+MaDA+'", "'+MaGVPB+'");')
+        }
+        console.log(result)
+        result = await Model.InleSQL('UPDATE doan SET MaGVPB="'+MaGVPB+'" where MaDA="'+MaDA+'";')
+        console.log(result)
+
+        // console.log('call PhanCong_GVPB("'+MaDA+'","'+MaGVPB+'")')
+            if(String(result).includes('Duplicate entry') || String(result).includes('fail')){
+                callback(JSON.stringify("that bai"), 'application/json');
+            }else{
+                callback(JSON.stringify(result1), 'application/json');
+            }
     }
 
 
