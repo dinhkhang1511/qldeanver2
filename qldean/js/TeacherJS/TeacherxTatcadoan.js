@@ -108,7 +108,6 @@ function EventTeacherClick(event) {
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
     }
-
 }
 
 //FIRST---------------------------------------------------------

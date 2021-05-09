@@ -48,33 +48,48 @@ function loadListDoan(){
 
 //ELEMENT-----------------------------------------------------
 
-function LoadTatcadoan(data) {
+
+function LoadListDoan() {
 
     $('#button-bar').show();
     $('.chose-bar').show();
     $('#table_data').show();
-    $('.btn-follow-row').hide();
-    $('.nav-page').hide();
+    $('.btn-follow-row').show();
+    $('.nav-page').show();
 
     $('.Add-New-Row').hide();
-
+    $('.Detail-project').hide();
 
     $('#button-bar').empty();
-
     $('.chose-bar').empty();
     $('#table_data').empty();
     $('.btn-follow-row').empty();
     $('.nav-page').empty();
-    $('.Add-New-Row').hide();
-    
-    $('#button-bar').append(returnIconHome() + returnNameIndex('Đồ án tiểu ban'));
+  
+    $('#button-bar').append(returnIconHome() + returnNameIndex('Phụ trách') + returnNameIndex('Tiểu ban'));
     $('.chose-bar').append(returnSearchForm('Nhập mã đồ án','Tìm kiếm'));
-    $('#table_data').append(returnTable(listPhutrachTitle,data));
+    $('#table_data').append(returnTable(listPhutrachTitle,[{Masv:'D19CD2',Ten:'tAN',lOP:'cn2',Email:"letan@gamil.com",Mada:'DA21',tEN:'dAN'},{Masv:'D19CD2',Ten:'tAN',lOP:'cn2',Email:"letan@gamil.com",Mada:'DA21',tEN:'dAN'}]));
     $('.btn-follow-row').append(returnButtonTable(['Xem chi tiết'],['chitiet']));
-    $('.nav-page').append(returNavForm(tol_page+1, page_num));
+    $('.nav-page').append(returNavForm(tol_page+1, 1));
+
 }
 
+function LoadXemchitiet(){
+    $('#button-bar').show();
+    $('.chose-bar').hide();
+    $('#table_data').hide();
+    $('.btn-follow-row').hide();
+    $('.nav-page').hide();
 
+    $('.Add-New-Row').hide();
+    $('.Detail-project').show();
+
+    $('#button-bar').empty();
+    $('.chose-bar').empty();
+
+
+    $('#button-bar').append(returnIconHome() + returnNameIndex('Phụ trách') + returnNameIndex('Tiểu ban') + returnNameIndex('Chi tiết') +  returnReturnBtn());
+}
 
 
 
@@ -86,27 +101,15 @@ function EventTeacherClick(event) {
         $('#no-color-btn-follow-row').attr("id", "yes-color-btn-follow-row");
         x.parentNode.className = 'yes-color-lum-table';
     }else if(x.parentNode.className == 'btn-follow-row'){
-        if(x.id == "suax"){
-            LoadSuaFormPhancong()
+        if(x.id == "chitiet"){
+            LoadXemchitiet()
         }
     }else if(x.className == "add_new_btn" || x.parentNode.className == "add_new_btn" || x.parentNode.parentNode.className == "add_new_btn" ||  x.parentNode.parentNode.parentNode.className == "add_new_btn"){
         LoadAddFormPhancong()
     }else if(x.className == "return_btn" || x.parentNode.className == "return_btn" || x.parentNode.parentNode.className == "return_btn" ||  x.parentNode.parentNode.parentNode.className == "return_btn"){
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
-        LoadListPhancong();
-    }else if(x.className == "loadswitch1"){
-        loadListTatcadoan();
-        $('#activeswitchbar').removeAttr('id');
-        x.id = 'activeswitchbar';
-        $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
-        $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
-    }else if(x.className == "loadswitch2"){
-        loadListPhutrachdoan();
-        $('#activeswitchbar').removeAttr('id');
-        x.id = 'activeswitchbar';
-        $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
-        $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
+        LoadListDoan();
     }else if(x.id == "btn-update-diem"){
         $('.Form-input-diem').show();
         $('.shadow-input-diem').show();
@@ -125,4 +128,4 @@ function EventTeacherClick(event) {
 
 //FIRST---------------------------------------------------------
 // LoadListPhancong() 
-loadListDoan()
+LoadListDoan()
