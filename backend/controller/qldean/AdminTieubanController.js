@@ -131,14 +131,25 @@ module.exports = async (callback, scanner) => {
             }
     }
     if (index === 'timmatb'){
+        let khoa = head_params.get('khoa');
+        let textsearch = head_params.get('textsearch');
+        let limit = 10;
+        let page = Number(head_params.get('page')) - 1;
 
+        let count = await Model.InleSQL('select CountList_FindTB("'+khoa+'", "'+textsearch+'");');
+        let result = await Model.InleSQL("call ShowList_FindTB('"+khoa+"', '"+textsearch+"',"+page*limit+")");
+        let data = []
+        data.push(result)
+        data.push(count)
+        console.log(data)
+        callback(JSON.stringify(data), 'application/json');
     }
     
     if(index === 'danhsachGVphancongTB'){
         let ngay = String(head_params.get('ngay')).replace('T17:00:00.000Z','');
         let gio = head_params.get('gio');
         console.log(ngay,gio)
-        let  result1 = await Model.InleSQL("select MaGV, TenGv from giangvien where MaGV not in (SELECT gv.MaGV  FROM tieuban tb, giangvien gv, phanconggvtb pc where tb.MaTB = pc.MaTB and pc.MaGV= gv.MaGV and ngay='"+ngay+"' and gio = '"+gio+"');");
+        let  result1 = await Model.InleSQL("call ComboBox_PhanCongGVTB('"+ngay+"', '"+gio+"')");
         console.log(result1)    
         if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
                 callback(JSON.stringify("that bai"), 'application/json');

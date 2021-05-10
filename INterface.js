@@ -29,7 +29,13 @@ function returnReturnBtn() {
 }
 
 function returnSearchForm(str,str_) {
-    return '<input id="input-search" type="text" src="" alt="" placeholder="'+str+'">'+
+    return '<input id="input-search" type="text" oninput="changesearch(this.value)" src="" alt="" placeholder="'+str+'">'+
+        //    '<button id="search-index" style="background-color: tomato;" type="submit">'+str_+'</button>'+
+           '<button  id="refresh-index"  style="background-color: tomato;" type="submit">Làm mới</button>'
+}
+
+function returnSearchForm_(str,str_,va) {
+    return '<input id="input-search" type="text" oninput="changesearch(this.value)" value="'+va+'" src="" alt="" placeholder="'+str+'">'+
            '<button id="search-index" style="background-color: tomato;" type="submit">'+str_+'</button>'+
            '<button  id="refresh-index"  style="background-color: slateblue;" type="submit">Làm mới</button>'
 }

@@ -1,4 +1,6 @@
 var listinfoitem;
+var currentlist = true;
+var textsearch = '';
 var page_num = 1;
 var tol_page = 0;
 
@@ -67,18 +69,31 @@ var xhttp = new XMLHttpRequest();
                 if(String(this.responseURL).includes('api/danhsachGVphancongTB')){
                     if(String(this.responseText) == '"that bai"')
                         alert('Fail')
-                    else LoadPhancongTieuban(JSON.parse(this.responseText))
+                    else LoadPhancongTieuban(JSON.parse(this.responseText)[0])
                 }
                 if(String(this.responseURL).includes('api/addGVintoTieuban')){
                     if(String(this.responseText) == '"that bai"')
                         alert('Fail')
                     else loadListTieuban();
                 }
+                if(String(this.responseURL).includes('api/timmatb')){
+                    var data = JSON.parse(this.responseText);
+                    console.log(data)
+                    // tol_page = 1;
+                    tol_page =  Math.ceil(data[1][0]['CountList_FindTB("'+khoacurrent+'", "'+textsearch+'")'] / 10); 
+
+                    console.log(tol_page)
+                    listinfoitem = data[0][0];
+               
+                    LoadListDataTieuban(listinfoitem);
+                }
         }
     };
 
 // ///LOAD----------------------------------------------------
 function loadListTieuban(){
+    currentlist = true;
+    textsearch = '';
     xhttp.open("GET", "/api/danhsachtieuban?page="+page_num+"&khoa="+khoacurrent, false);
     xhttp.send();
 }
@@ -157,6 +172,15 @@ function changeKhoa(){
     xhttp.send();
 }
 
+
+function changesearch(s){
+    currentlist = false;
+    textsearch = s;
+    page_num = 1;
+    xhttp.open("GET", "/api/timmatb?page="+page_num+"&khoa="+khoacurrent+"&textsearch="+textsearch, true);
+    xhttp.send();
+}
+
 //ELEMENT-----------------------------------------------------
 function LoadListTieuban(data) {
   
@@ -190,6 +214,25 @@ function LoadListTieuban(data) {
     $('#head-bar').append(returnFormListKhoa(listkhoa,khoacurrent));
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý tiểu ban') +  returnAddBtn());
     $('.chose-bar').append(returnSearchForm('Nhập mã tiểu ban','Tìm kiếm') );
+    $('#table_data').append(returnTable( ['Tiểu ban','Ngày','Giờ','Trạng thái'],listTB));
+    $('.btn-follow-row').append(returnButtonTable(listButtonpk,listIdBtnTable));
+    $('.nav-page').append(returNavForm(tol_page+1, page_num));
+}
+
+
+function LoadListDataTieuban(data){
+    let listTB = [];
+    let dk;
+    for(let i = 0; i< data.length;i++){
+        if(Number(data[i].sum)<5) dk = 'Đang phân công';
+        else if(Number(data[i].sum)==5) dk = 'Hoàn thành';
+        listTB.push({maTB: data[i].maTB, ngay: data[i].ngay, gio: data[i].gio, sum: dk})
+    }
+
+    $('#table_data').empty();
+    $('.btn-follow-row').empty();
+    $('.nav-page').empty();
+
     $('#table_data').append(returnTable( ['Tiểu ban','Ngày','Giờ','Trạng thái'],listTB));
     $('.btn-follow-row').append(returnButtonTable(listButtonpk,listIdBtnTable));
     $('.nav-page').append(returNavForm(tol_page+1, page_num));
@@ -256,17 +299,17 @@ function LoadPhancongTieuban(data) {
 
     let listdataGV = [];
     for(let i = 0; i < data.length; i++){
-        listdataGV.push(data[i].MaGV + ' - '+ data[i].TenGv)
+        listdataGV.push(data[i].MaGV + ' - '+ data[i].TenGV)
     }
 
     $('.Add-New-Row').append(returnFormLabel('Phân công tiểu ban'));
     $('.Add-New-Row').append(returnFormLabelInfo('Mã tiểu ban',maTB));
     $('.Add-New-Row').append(returnFormLabelInfo('Thời gian',ngaytemp.replace('T17:00:00.000Z','')+' '+giotemp));
-    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 1',listdataGV,data[0].MaGV + ' - '+ data[0].TenGv) );
-    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 2',listdataGV,data[1].MaGV + ' - '+ data[1].TenGv) );
-    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 3',listdataGV,data[2].MaGV + ' - '+ data[2].TenGv) );
-    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 4',listdataGV,data[3].MaGV + ' - '+ data[3].TenGv) );
-    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 5',listdataGV,data[4].MaGV + ' - '+ data[4].TenGv) );
+    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 1',listdataGV,data[0].MaGV + ' - '+ data[0].TenGV) );
+    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 2',listdataGV,data[1].MaGV + ' - '+ data[1].TenGV) );
+    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 3',listdataGV,data[2].MaGV + ' - '+ data[2].TenGV) );
+    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 4',listdataGV,data[3].MaGV + ' - '+ data[3].TenGV) );
+    $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 5',listdataGV,data[4].MaGV + ' - '+ data[4].TenGV) );
 
     $('.Add-New-Row').append(returnFormBtn(['Xác nhận','Thoát'],['tomato','green'],['phancong','thoat']));
 
@@ -318,12 +361,16 @@ function EventAdminClick(event) {
         addphancongtieuban();
     }
     if(x.parentNode.className == "nav-page" ){
-        page_num = Number(x.innerHTML)
-        loadListTieuban();
+        if(currentlist == true){
+            page_num = Number(x.innerHTML)
+            loadListTieuban();
+        }else{
+            page_num = Number(x.innerHTML)
+            xhttp.open("GET", "/api/timmatb?page="+page_num+"&khoa="+khoacurrent+"&textsearch="+textsearch, true);
+            xhttp.send();
+        }
+
     }
-
-
-
 }
 
 //FIRST------------------------------------------

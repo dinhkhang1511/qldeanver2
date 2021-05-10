@@ -116,10 +116,7 @@ function EventTeacherClick(event) {
     }else if(x.id == "btn-thoat-diem"){
         $('.Form-input-diem').hide();
         $('.shadow-input-diem').hide();
-    }
-    
-    
-    else{
+    }else{
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
     }
