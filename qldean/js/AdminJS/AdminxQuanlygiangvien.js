@@ -133,7 +133,7 @@ function LoadListGiangvien(data) {
     $('.nav-page').empty();
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý giảng viên') +  returnAddBtn());
-    $('.chose-bar').append(returnSearchForm('Nhập mã giảng viên','Tìm kiếm') );
+    $('.chose-bar').append(returnSearchForm('Nhập mã giảng viên','Làm mới') );
     $('#table_data').append(returnTable(listGVTitle,data));
     $('.btn-follow-row').append(returnButtonTable(listButtonpk,listIdBtnTable));
     $('.nav-page').append(returNavForm(tol_page+1, page_num));

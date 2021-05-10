@@ -33,10 +33,12 @@ var xhttp = new XMLHttpRequest();
                 if(String(this.responseURL).includes('api/danhsachphancongPB')){
                     var data = JSON.parse(this.responseText);
                     // tol_page =  Math.ceil(data[1][0]['count(*)'] / 10); 
-                    tol_page =   Math.ceil(data[1][0]['CountList_SVDAPB('+khoacurrent+')'] / 10); 
+                   
                     console.log(data)
                     listkhoa = data[2]
                     khoacurrent = data[3]
+
+                    tol_page =   Math.ceil(data[1][0]['CountList_SVDAPB('+khoacurrent+')'] / 10); 
                     // console.log(tol_page)
                     listinfoitem = data[0][0];
                     LoadListPhanbien(listinfoitem);
@@ -157,7 +159,7 @@ function LoadPhancongPhanbien(data) {
     $('.Add-New-Row').append(returnLormOneInfo('Điểm hướng dẫn: Chưa chấm'));
 
     if(String(InfoSV.DiemPB) != '')
-    $('.Add-New-Row').append(returnLormOneInfo('Điểm hướng dẫn: '+InfoSV.DiemPB));
+    $('.Add-New-Row').append(returnLormOneInfo('Điểm phản biện: '+InfoSV.DiemPB));
     else
     $('.Add-New-Row').append(returnLormOneInfo('Điểm phản biện: Chưa chấm'));
 
@@ -176,14 +178,6 @@ function LoadPhancongPhanbien(data) {
     else
     $('.Add-New-Row').append(returnLormInputSelect('Phân công giáo viên phản biện: ',listGVPB ,choseGV));
     $('.Add-New-Row').append(returnLormBtn(listBtnpk,listColorpk,listIdBtn));
-
-    // $('.Add-New-Row').append(returnLormInfo(listInfoPhanbien1));
-    // $('.Add-New-Row').append(returnLormInfo(listInfoPhanbien2));
-    // $('.Add-New-Row').append(returnLormOneInfo('Giảng viên hướng dẫn: GV02 - Trần Minh Chiến'));
-    // $('.Add-New-Row').append(returnLormOneInfo('Tiểu ban: TB02'));
-
-    // $('.Add-New-Row').append(returnLormInputSelect('Phân công giáo viên phản biện: ',['GV92 - Nguyen thanh tung', 'GV92 - Vo thanh huy'] , ''));
-    // $('.Add-New-Row').append(returnLormBtn(listBtnpk,listColorpk,listIdBtn));
 
 }
 

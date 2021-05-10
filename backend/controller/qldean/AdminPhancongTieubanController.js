@@ -37,8 +37,8 @@ module.exports = async (callback, scanner) => {
                     let page = Number(head_params.get('page')) - 1;
                     if(khoa == 0) khoa = listkhoa[0];
                     console.log(khoa)
-                    let count = 0;
-                    let result = []
+                    let count = await Model.InleSQL('select CountList_SVDATB('+khoa+')');
+                    let result = await Model.InleSQL('call ShowList_SvDATB('+khoa+','+page*limit+')');
                     let data = [];
                     data.push(result)
                     data.push(count)
@@ -73,8 +73,8 @@ module.exports = async (callback, scanner) => {
                 let limit = 10;
                 let page = Number(head_params.get('page')) - 1;
                 console.log(khoa)
-                let count = 0;
-                let result = [];
+                let count = await Model.InleSQL('select CountList_SVDATB('+khoa+')');
+                let result = await Model.InleSQL('call ShowList_SvDATB('+khoa+','+page*limit+')');
                 let data = [];
                 data.push(result)
                 data.push(count)
@@ -86,5 +86,35 @@ module.exports = async (callback, scanner) => {
         }
     }
 
+
+    if(index === 'danhsachTBphancong'){
+        let MaSV = String(head_params.get('MaSV'));
+        let khoa = String(head_params.get('khoa'));
+        // let MaDA = String(head_params.get('MaDA'));
+        console.log("Xxx")
+        // console.log(MaSV,MaDA)
+        console.log(MaSV)
+        let result = await Model.InleSQL("call ShowInfor_SVTB('"+MaSV+"')");
+        let result1 =  await Model.InleSQL("call ComboBox_PhancongDATB('"+khoa+"')");
+        let data = [];
+        data.push(result)
+        data.push(result1)
+        console.log(data)
+        callback(JSON.stringify(data), 'application/json');
+    }
+
+
+    if(index === 'addTBphancong'){
+        let MaTB = String(head_params.get('MaTB'));
+        let MaDA = String(head_params.get('MaDA'));
+
+        let  result1 = await Model.InleSQL("call PhanCong_DATB('"+MaDA+"','"+MaTB+"')");
+                        // await Model.InleSQL("insert into `chamdiemhd-pb`(MaDA, MaGV) values ('"+MaDA+"', '"+MaGVPB+"')")
+            if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
+                callback(JSON.stringify("that bai"), 'application/json');
+            }else{
+                callback(JSON.stringify(result1), 'application/json');
+            }
+    }
 
 }

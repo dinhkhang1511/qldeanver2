@@ -166,7 +166,7 @@ module.exports = async (callback, scanner) => {
         let NgaySinh = String(head_params.get('NgaySinh'));
         console.log(MaGVHD,MaSV,NgaySinh)
         let  result1 = await Model.InleSQL('call Add_DA("'+MaSV+'","'+NgaySinh+'", "'+MaGVHD+'");');
-              
+              console.log(result1)
             if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
                 callback(JSON.stringify("that bai"), 'application/json');
             }else{

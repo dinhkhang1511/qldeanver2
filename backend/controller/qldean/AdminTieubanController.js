@@ -158,6 +158,13 @@ module.exports = async (callback, scanner) => {
             }
     }
 
+    if(index === 'checkaddGVintoTieuban'){
+        let MaTB = head_params.get('TB');
+        let result = await Model.InleSQL('select count(*) from `phanconggvtb` where MaTB="'+MaTB+'";')
+        callback(JSON.stringify(result), 'application/json');
+
+    }
+
     if(index === 'addGVintoTieuban'){
         let TB = head_params.get('TB');
         let GV1 = head_params.get('GV1');

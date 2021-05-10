@@ -1,6 +1,7 @@
 var listinfoitem;
 var page_num = 1;
 var tol_page = 0;
+var rangeKhoa = [2010,2017];
 
 var listSVTitle = ['Mã' , 'Tên' , 'Ngày sinh' , 'Lớp' , 'Email' , 'GPA'] 
 var listSVdata = [{Ma:'SV021', Ten:'le tuan', Ngaysinh: '21/12/2222', Lop:'12', Email:'LEtan@prox.com', GPA:'3'},{Ma:'SV021', Ten:'le tuan', Ngaysinh: '21/12/2222', Lop:'12', Email:'LEtan@prox.com', GPA:'3'}]
@@ -177,7 +178,7 @@ function LoadListSinhvien(data,dskhoa,khoa) {
 
     $('#head-bar').append(returnFormKhoa(dskhoa,khoa));
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên')  +  returnAddBtn());
-    $('.chose-bar').append(returnSearchForm('Nhập mã sinh viên','Tìm kiếm') );
+    $('.chose-bar').append(returnSearchForm('Nhập mã sinh viên','Làm mới') );
     $('#table_data').append(returnTable(listSVTitle,data));
     $('.btn-follow-row').append(returnButtonTable(listButtonpk,listIdBtnTable));
     $('.nav-page').append(returNavForm(tol_page+1, page_num));
@@ -288,10 +289,15 @@ function EventAdminClick(event) {
         console.log(Number(document.getElementById('input-khoa').value))
         if(Number(document.getElementById('input-khoa').value) !== 0)
         if(listkhoa.indexOf(Number(document.getElementById('input-khoa').value)) !== -1){
-            alert("Value exists!")
+            alert("Khóa đã tồn tại!")
         } else{
-            xhttp.open("GET", "/api/themkhoasv?khoa="+Number(document.getElementById('input-khoa').value), false);
-            xhttp.send();
+            if(Number(document.getElementById('input-khoa').value) >= rangeKhoa[0] && Number(document.getElementById('input-khoa').value) <= rangeKhoa[1]){
+                xhttp.open("GET", "/api/themkhoasv?khoa="+Number(document.getElementById('input-khoa').value), false);
+                xhttp.send();
+            }else{
+                alert("Vượt quá năm quy định!")
+            }
+
         }
     }else if(x.id == 'sua'){
         updateListSinhvien();

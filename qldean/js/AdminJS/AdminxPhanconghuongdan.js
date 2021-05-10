@@ -234,7 +234,7 @@ function EventAdminClick(event) {
         loadListHuongdan();
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
-    }else if(x.id == 'search-index'){
+    }else if(x.id == 'refresh-index'){
         GPAtemp = Number(document.getElementById('input-search').value);
         loadListHuongdan();
     }else if(x.id == 'phancong'){

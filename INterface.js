@@ -31,7 +31,7 @@ function returnReturnBtn() {
 function returnSearchForm(str,str_) {
     return '<input id="input-search" type="text" oninput="changesearch(this.value)" src="" alt="" placeholder="'+str+'">'+
         //    '<button id="search-index" style="background-color: tomato;" type="submit">'+str_+'</button>'+
-           '<button  id="refresh-index"  style="background-color: tomato;" type="submit">Làm mới</button>'
+           '<button  id="refresh-index"  style="background-color: tomato;" type="submit">'+str_+'</button>'
 }
 
 function returnSearchForm_(str,str_,va) {
@@ -188,4 +188,9 @@ function returnFormListKhoa(dskhoa,khoa) {
     element = element + '</select>';
 
     return element
+}
+
+
+function returnListbr(){
+    return '<br><br><br><br><br><br><br><br><br>'
 }
