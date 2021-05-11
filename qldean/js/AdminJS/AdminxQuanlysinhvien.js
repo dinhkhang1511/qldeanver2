@@ -175,7 +175,7 @@ function LoadListSinhvien(data,dskhoa,khoa) {
     $('.btn-follow-row').empty();
     $('.nav-page').empty();
 
-
+    $('#head-bar').append(returnFormComboxHeadBar('Nghành',['Công nghệ thông tin', 'An toàn thông tin', 'Đa phương tiện'], 'An toàn thông tin', 'chonnghanh',200,0));
     $('#head-bar').append(returnFormKhoa(dskhoa,khoa));
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên')  +  returnAddBtn());
     $('.chose-bar').append(returnSearchForm('Nhập mã sinh viên','Làm mới') );

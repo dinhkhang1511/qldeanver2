@@ -268,7 +268,11 @@ function LoadListTieuban(data) {
     $('.nav-page').empty();
 
     //thêm chi tiết vào
-    $('#head-bar').append(returnFormListKhoa(listkhoa,khoacurrent));
+    // $('#head-bar').append(returnFormListKhoa(listkhoa,khoacurrent));
+    $('#head-bar').append(returnFormComboxHeadBar('Nghành',['Công nghệ thông tin', 'An toàn thông tin', 'Đa phương tiện'], 'An toàn thông tin', 'chonnghanh',200,0));
+    $('#head-bar').append(returnFormComboxHeadBar('Khóa',listkhoa, khoacurrent, 'chonkhoa',100,20));
+
+
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý tiểu ban') +  returnAddBtn());
     $('.chose-bar').append(returnSearchForm('Nhập mã tiểu ban','Làm mới') );
     $('#table_data').append(returnTable( ['Tiểu ban','Ngày','Giờ','Trạng thái'],listTB));

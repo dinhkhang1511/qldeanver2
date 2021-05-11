@@ -172,7 +172,7 @@ function returnFormKhoa(dskhoa,khoa) {
     }
     element = element + '</select>';
 
-    element = element + '<input style="display: none;" type="text" name="" id="input-khoa"><button style="display: none;" id="xacnhan-them-khoa">Xác nhận</button><button id="themkhoa" type="submit">Thêm Khóa</button><button style="display: none;" id="dskhoa" type="submit">Danh sách</button>';
+    element = element + '<input style="display: none;" type="text" name="" class="form-control" placeholder="Nhập khóa" id="input-khoa"><button style="display: none;" id="xacnhan-them-khoa">Xác nhận</button><button id="themkhoa" type="submit">Thêm Khóa</button><button style="display: none;" id="dskhoa" type="submit">Danh sách</button>';
 
     return element
 }
@@ -188,10 +188,29 @@ function returnFormListKhoa(dskhoa,khoa) {
     }
     element = element + '</select>';
 
-    return element
+    return element;
+}
+
+function returnFormListNganh(dskhoa,khoa) {
+    var element = '<span class="title-chon-khoa">Chọn tie </span><select name="cars" id="select-khoa"  class="browser-default custom-select" onchange="changeKhoa();">'
+    for(var i = 0; i < dskhoa.length; i++){
+        if(Number(dskhoa[i]) == Number(khoa))
+        element = element + '<option selected value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
+        else
+        element = element + '<option value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
+    }
+    element = element + '</select>';
+    return element;
 }
 
 
-function returnListbr(){
-    return '<br><br><br><br><br><br><br><br><br>'
+function returnFormComboxHeadBar(tieude,danhsach, chon, hamchon,width,left){
+    var element = '<span style="margin-left:'+left+'px" class="title-combox-headbar">'+tieude+'</span><select style="width:'+width+'px;" class="browser-default custom-select  select-combox-headbar" onchange="'+hamchon+'();">'
+    for(var i = 0; i < danhsach.length; i++){
+        if(String(danhsach[i]) === String(chon))
+        element = element + '<option selected value="'+danhsach[i]+'">'+danhsach[i]+'</option>';
+        else
+        element = element + '<option value="'+danhsach[i]+'">'+danhsach[i]+'</option>';
+    }
+    return element + '</select>';
 }
