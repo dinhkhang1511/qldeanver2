@@ -29,7 +29,7 @@ function returnReturnBtn() {
 }
 
 function returnSearchForm(str,str_) {
-    return '<input id="input-search" type="text" oninput="changesearch(this.value)" src="" alt="" placeholder="'+str+'">'+
+    return '<input  style="width: 300px; float:left"  class="form-control" id="input-search" type="text" oninput="changesearch(this.value)" src="" alt="" placeholder="'+str+'">'+
         //    '<button id="search-index" style="background-color: tomato;" type="submit">'+str_+'</button>'+
            '<button  id="refresh-index"  style="background-color: tomato;" type="submit">'+str_+'</button>'
 }
@@ -41,13 +41,13 @@ function returnSearchForm_(str,str_,va) {
 }
 
 function returnTable(listLabel, data) {
-    var element = '<tr>';
+    var element = ' <thead class="thead-dark"><tr>';
     for(var i = 0; i < listLabel.length; i++){
-        element = element + '<td>'+listLabel[i]+'</td>';
+        element = element + '<th scope="col">'+listLabel[i]+'</th>';
     }
-    element = element + '</tr>';
+    element = element + '</tr></thead><tbody>';
     for(var i = 0; i < data.length; i++){
-        element = element + '<tr id="collumtalbe-'+i+'" class="no-color-lum-table">';
+        element = element + '<tr  id="collumtalbe-'+i+'" class="no-color-lum-table">';
         Object.keys(data[i]).forEach(key => {
             if(String(data[i][key]) != 'null')
             element = element + '<td>'+String(data[i][key]).replace('T17:00:00.000Z','')+'</td>';
@@ -56,7 +56,7 @@ function returnTable(listLabel, data) {
         });
         element = element + '</tr>';
     }
-    return element;
+    return element+'</tbody>';
 }
 
 function returnButtonTable(listButton, listId ) {
@@ -69,7 +69,8 @@ function returnButtonTable(listButton, listId ) {
 
 
 function returnFormLabel(str) {
-    return '<div id="label-Add-New">'+str+'</div>';
+    // return '<div id="label-Add-New">'+str+'</div>';
+    return ''
 }
 function returnFormLabelInfo(str,str_) {
     return '<div><span>'+str+': </span><span><span class="label-item-add">'+str_+'</span></span></div>';
@@ -83,7 +84,7 @@ function returnFormInputTime(str,time,va) {
     return '<div><span>'+str+': </span><span>  <input  value="'+va+'" type="time" class="thoigianform">  </span></div>';
 }
 function returnFormInputSelect(str,sle,va) {
-    var element = '<div><span>'+str+': </span><span><select class="combo-box-add-long">'
+    var element = '<div><span>'+str+': </span><span><select style="width:200px" class="combo-box-add-long browser-default custom-select">'
     for(var i = 0; i < sle.length; i++){
         if(String(va) === String(sle[i]))
         element = element + '<option selected value="'+sle[i]+'">'+sle[i]+'</option>';
@@ -94,13 +95,13 @@ function returnFormInputSelect(str,sle,va) {
     return element
 }
 function returnFormInputText(str, str_){
-    return '<div><span>'+str+':  </span><span><input   class="input-new-row-short" value="'+str_+'" type="text" ></span></div>'
+    return '<div><span>'+str+':  </span><span><input style="width:150px"   class="input-new-row-short form-control" value="'+str_+'" type="text" ></span></div>'
 }
 function returnFormInputTextLength(str, str_){
-    return '<div><span>'+str+':  </span><span><input   class="input-new-row-long" value="'+str_+'" type="text" ></span></div>'
+    return '<div><span>'+str+':  </span><span><input  style="width:300px"  class="input-new-row-long form-control" value="'+str_+'" type="text" ></span></div>'
 }
 function returnFormInputTextRight(str, str_){
-    return '<div><span>'+str+':  </span><span><input style="text-align: right;" class="input-new-row-long" value="'+str_+'" type="text" ></span></div>'
+    return '<div><span>'+str+':  </span><span><input style="text-align:right;width:300px;" class="input-new-row-long form-control" value="'+str_+'" type="text" ></span></div>'
 }
 
 function returnFormBtn(listBtn,listColor,listIdBtn) {
@@ -135,7 +136,7 @@ function returnLormBtn(listBtn,listColor,listIdBtn) {
 
 
 function returnLormInputSelect(str,sle,va) {
-    var element = '<div><div class="one-row-item-add" style="color:rgb(38, 77, 0);">' + str + '<select class="slide-select-lorm">';
+    var element = '<div><div  class="one-row-item-add" style="color:rgb(38, 77, 0);">' + str + '<select class="slide-select-lorm">';
     for(var i = 0; i < sle.length; i++){
         if(String(va) === String(sle[i]))
         element = element + '<option selected value="'+sle[i]+'">'+sle[i]+'</option>';
@@ -162,7 +163,7 @@ function returnSwitchBtn(str,str_) {
 
 ///Ngoại 
 function returnFormKhoa(dskhoa,khoa) {
-    var element = '<select name="cars" id="select-khoa"  onchange="changeKhoa();">'
+    var element = '<select id="select-khoa"  class="browser-default custom-select" onchange="changeKhoa();">'
     for(var i = 0; i < dskhoa.length; i++){
         if(Number(dskhoa[i]) == Number(khoa))
         element = element + '<option selected  value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
@@ -178,7 +179,7 @@ function returnFormKhoa(dskhoa,khoa) {
 
 
 function returnFormListKhoa(dskhoa,khoa) {
-    var element = '<span class="title-chon-khoa">Chọn khóa </span><select name="cars" id="select-khoa" onchange="changeKhoa();">'
+    var element = '<span class="title-chon-khoa">Chọn khóa </span><select name="cars" id="select-khoa"  class="browser-default custom-select" onchange="changeKhoa();">'
     for(var i = 0; i < dskhoa.length; i++){
         if(Number(dskhoa[i]) == Number(khoa))
         element = element + '<option selected value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';

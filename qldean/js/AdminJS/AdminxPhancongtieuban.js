@@ -32,7 +32,7 @@ var xhttp = new XMLHttpRequest();
                     var data = JSON.parse(this.responseText);
                     listkhoa = data[2]
                     khoacurrent = data[3]
-                    console.log(data[1][0]['CountList_SVDATB('+khoacurrent+')'])
+                    console.log(data)
                     tol_page =   Math.ceil(data[1][0]['CountList_SVDATB('+khoacurrent+')'] / 10); 
                     listinfoitem = data[0][0];
                     LoadListTieuban(listinfoitem);

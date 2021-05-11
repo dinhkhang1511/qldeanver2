@@ -6,7 +6,7 @@ DEMO STYLE
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 body {
 font-family: 'Poppins', sans-serif;
-background: #fafafa;
+background: #cccccc;
 }
 
 p {
@@ -60,7 +60,7 @@ align-items: stretch;
 #sidebar {
 min-width: 200px;
 max-width: 500px;
-background:rgba(37, 53, 88, 0.74);
+background:rgb(73, 73, 73);
 color: #fff;
 transition: all 0.1s;
 }
@@ -71,7 +71,7 @@ margin-left: -250px;
 
 #sidebar .sidebar-header {
 padding: 20px;
-background: rgba(37, 53, 88, 0.74);
+background: rgba(45, 61, 95, 0.74)
 }
 
 #sidebar ul.components {
@@ -105,7 +105,7 @@ background: #fff;
 
 #sidebar ul li.active>a {
 color: white;
-background: rgba(23, 141, 78, 0.842);
+background: rgba(15, 15, 15, 0.842);
 }
 
 #sidebar ul li.active:hover> a svg{
@@ -134,7 +134,7 @@ transform: rotate(00deg);
 ul ul a {
 font-size: 0.9em !important;
 padding-left: 30px !important;
-background:rgba(37, 53, 88, 0.74);
+background:rgba(63, 63, 63, 0.74)
 }
 
 ul.CTAs {
@@ -151,7 +151,7 @@ margin-bottom: 5px;
 
 a.download {
 background: #fff;
-color: rgb(42, 57, 124);
+color: rgba(50, 70, 114, 0.74)
 }
 
 a.article,

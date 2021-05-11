@@ -1,9 +1,11 @@
+
+
 .top-bar{
     position: fixed;
     float: left;
     width: 100%;
     height: 35px;
-    background-color: rgb(83, 104, 148);
+    background-color: rgb(112, 112, 112);
     z-index: 1;
 }
 
@@ -36,7 +38,7 @@
     position: fixed;
     float: left;
     width: auto;
-    background-color:rgb(72, 91, 128);
+    background-color: rgb(112, 112, 112);
     color: white;
     height: calc(100% - 35px);
     margin-top: 35px;
@@ -142,19 +144,25 @@
     position: relative;
     float: left;
     width: 100px;
-    padding: 2px;
+    padding: 6px;
+    border-radius: 3px;
+    outline: none;
+    border: 0px;
+    margin-top: 2px;
 }
 #head-bar button{
     position: relative;
     float: left;
     margin-left: 10px;
+    margin-top: 5px;
     padding: 3px 7px;
     outline: none;
     border: none;
     color: white;
     border-radius: 1px;
     cursor: pointer;
-
+    font-weight: bold;
+    border-radius: 2px;
 }
 
 #dskhoa , #themkhoa{
@@ -185,39 +193,43 @@
 #head-bar{
     position: relative;
     float: left;
-    background-color: rgb(230, 230, 230);
+    background-color:rgb(255, 255, 255);
     width: 100%;
     margin-top: 10px;
     padding: 5px;
     padding-left: 10px;
     padding-right: 0px;
+    border-radius: 3px;
 }
 
 
 #button-bar{
     position: relative;
     float: left;
-    background-color: rgb(230, 230, 230);
+    background-color:rgb(255, 255, 255);
     width: 100%;
     padding: 5px;
     padding-left: 10px;
     padding-right: 0px;
-    margin-top: 10px;
-
-
+    margin-top: 1px;
+    border-radius: 3px;
+    color: white;
+    font-weight: bold;
 }
 
 #button-bar svg{
     float: left;
-    fill: rgba(0, 0, 0, 0.753);
+    fill: rgb(0, 0, 0);
     margin-top: 7px;
 }
-
+#button-bar div:not(#button-bar div:last-child){
+    color: rgb(78, 78, 78);
+}
 #button-bar i{
     margin-top: 11px;
     margin-left: 10px;
     float: left;
-
+    color: black;
 }
 
 #name-item{
@@ -229,8 +241,8 @@
 #button-item{
     float: left;
     position: relative;
-    color: white;
-    background-color: rgb(55, 136, 81);
+    color: rgb(255, 255, 255);
+    background-color: rgb(19, 161, 83);
     margin-left: 20px;
     padding: 7px 8px;
     border-radius: 3%;
@@ -251,7 +263,7 @@
     float: left;
     position: relative;
     color: white;
-    background-color: rgb(136, 128, 55);
+    background-color: cornflowerblue;
     margin-left: 20px;
     padding: 7px 8px;
     border-radius: 3%;
@@ -275,11 +287,11 @@
 .chose-bar{
     position: relative;
     float: left;
-    background-color: rgb(230, 230, 230);
+    background-color: transparent;
     width: 100%;
     margin-top: 10px;
     padding: 5px;
-    padding-left: 10px;
+    padding-left: 0px;
     padding-right: 0px;
 }
 
@@ -301,7 +313,7 @@
 }
 
 .chose-bar button{
-    height: 30px;
+    height: 28px;
     padding: 0px 10px;
     outline: none;
     margin-left: 5px;
@@ -309,6 +321,7 @@
     cursor:pointer;
     outline: none;
     border: none;
+    border-radius: 5px;
 }
 
 table{
@@ -316,9 +329,10 @@ table{
     float: left;
     margin-top: 10px;
     width: calc(100%);
-    background-color: rgb(247, 247, 247);
-    border-collapse: collapse;
-    border-radius: 5px;
+    background-color: rgb(255, 255, 255);
+    /* border-collapse: collapse; */
+    border-radius: 3px;
+    font-size: 14px;
 }
 
 
@@ -327,20 +341,35 @@ table, th, td {
     cursor: pointer;
 }
 
+.thead-dark{
+    background-color: transparent;
+    color: black;
+}
 
 .yes-color-lum-table{
-    background-color: rgb(184, 184, 184);
+    background-color: rgb(143, 143, 143);
+    color: rgb(255, 255, 255);
+    border: 0px;
 }
 
   th, td {
-      padding: 8px 5px;
+      padding: 13px 5px;
   }
 
+  table tr:first-child td{
+    background-color: transparent;
+    font-weight: 300; 
+    border: 1px solid rgba(0, 0, 0, 0.63);
+
+}
+/* .thead-dark{
+    background-color: black;
+} */
+
 table tr:first-child td{
-    color: black;
-    font-weight: bold;
-    border: 1px solid rgba(0, 0, 0, 0.034);
-    background-color: rgb(214, 214, 214);
+    background-color: transparent;
+    font-weight: 300; 
+    border: 1px solid rgba(0, 0, 0, 0.144);
 }
 
 .edit-co-btn{
@@ -374,13 +403,21 @@ table tr:first-child td{
     color: white;
     cursor: pointer;
     border: none;
+    font-weight: 500;
     outline: none;
 }
-
-
-#yes-color-btn-follow-row div{
-    background-color: rgb(71, 127, 233);
+#yes-color-btn-follow-row div:first-child{
+    background-color: rgb(70, 100, 145);
 }
+#yes-color-btn-follow-row div:nth-child(2){
+    background-color: rgb(202, 107, 72);
+}
+#yes-color-btn-follow-row div:nth-child(3){
+    background-color: rgb(89, 104, 74);
+}
+/* #yes-color-btn-follow-row div{
+    background-color: rgb(71, 127, 233);
+} */
 
 .delete-co-btn{
     background-color: steelblue;
@@ -446,7 +483,7 @@ table tr:first-child td{
     padding: 6px  10px 4px 10px;
     border-radius: 2px;
     margin-right: 5px;
-    background-color: rgb(231, 231, 231);
+    background-color: rgb(255, 255, 255);
     cursor: pointer;
 }
 
@@ -454,14 +491,14 @@ table tr:first-child td{
     background-color: rgb(168, 168, 168);
 }
 
-
 .Add-New-Row{
     margin-top: 10px;
     position: relative;
     float: left;
-    border: 5px solid rgba(0, 0, 0, 0.096);
     height: auto;
     width: 100%;
+    border-radius: 7px;
+    background-color: rgb(255, 255, 255);
 }
 
 
@@ -583,11 +620,14 @@ table tr:first-child td{
 #label-Add-New{
     position: relative;
     width: calc(100% + 1px);
-    background-color:rgba(0, 0, 0, 0.096);
+    background-color:rgb(124, 124, 124);
     padding: 5px 0px;
     padding-left: 5px;
     margin: 0px;
     margin-left: -1px;
+    color: white;
+    border-top-left-radius: 3px;
+    border-top-right-radius:3px;
 }
 
 .combo-box-add{
@@ -603,6 +643,7 @@ table tr:first-child td{
     float: left;
     text-align: left;
     background-color: rgb(224, 224, 224);
+    border-radius: 3px;
 }
 
 .show-item-info{
@@ -629,6 +670,12 @@ table tr:first-child td{
     padding: 5px;
     float: left;
     text-align: center;
+    outline: none;
+    border-radius: 4px;
+    border: 1pt solid rgb(48, 48, 48);
+}
+
+.form-control:focus{
     outline: none;
 }
 
@@ -701,7 +748,7 @@ table tr:first-child td{
 }
 
 .detail-doan div span:first-child{
-    background-color: rgb(212, 212, 212);
+    background-color: rgb(255, 255, 255);
     width: auto;
     float: left;
     padding: 2px 7px 3px 7px;
@@ -715,7 +762,7 @@ table tr:first-child td{
 
 .detail-doan div span:nth-child(2){
     float: left;
-    background-color: rgb(212, 212, 212);
+    background-color: rgb(255, 255, 255);
     margin-left: 5px;
     padding: 0px 5px;
 }
@@ -729,7 +776,7 @@ table tr:first-child td{
 
 .detail-doan div span:nth-child(3){
     float: left;
-    background-color: rgb(212, 212, 212);
+    background-color: rgb(255, 255, 255);
     margin-left: 5px;
     padding: 0px 5px;
 }
@@ -745,15 +792,17 @@ table tr:first-child td{
 .detail-doan div:first-child{
     float: left;
     background-color: none;
-    color: rgb(69, 69, 233);
+    color: blueviolet;
     margin-top: 6px;
     margin-right: 10px;
     margin-bottom: 10px;
+
 }
 
 
 
 #btn-update-detail-doan{
+    cursor: pointer;
     position: relative;
     float: left;
     background-color: tomato;
@@ -772,7 +821,7 @@ table tr:first-child td{
     float: left;
     height: auto;
     width: calc(40% - 10px);
-    background-color: rgb(240, 240, 240);
+    background-color: rgb(255, 255, 255);
     margin-right: 10px;
     padding-bottom: 10px;
 }
@@ -786,7 +835,7 @@ table tr:first-child td{
 #info-sv div:first-child{
     margin-top: 10px;
     margin-left: 10px;
-    color: rgb(49, 105, 209);
+    color: rgb(0, 89, 255);
     font-size: large;
     margin-bottom: 10px;
 }
@@ -798,7 +847,7 @@ table tr:first-child td{
     float: left;
     height: auto;
     width: calc(40% - 10px);
-    background-color: rgb(240, 240, 240);
+    background-color: rgb(255, 255, 255);
     margin-right: 10px;
     padding-bottom: 10px;
 }
@@ -848,7 +897,7 @@ p:nth-child(odd) {
     float: left;
     height: auto;
     width: calc(20% - 0px);
-    background-color: rgb(235, 235, 235);
+    background-color: rgb(255, 255, 255);
 }
 
 #diem-label{
@@ -967,7 +1016,7 @@ p:nth-child(odd) {
 }
 
 .shadow-input-diem{
-    /* display: none; */
+    display: none;
     position: absolute;
     z-index: 9;
     background-color: rgba(0, 0, 0, 0.493);
@@ -977,12 +1026,15 @@ p:nth-child(odd) {
 
 .title-chon-khoa{
     float: left;
-    margin-top: 5px;
+    margin-top: 8px;
     margin-right: 7px;
+    color: rgb(85, 85, 85);
+    font-weight: bold;
 }
 
 
 .Form-upload-file{
+    display: none;
     position: absolute;
     z-index: 10;
     left: calc(50% - 150px);
@@ -994,4 +1046,136 @@ p:nth-child(odd) {
     background-color: rgb(252, 252, 252);
     box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.329);
     border-radius: 4px;
+}
+
+#contain-form-group{
+    width: 70%;
+    margin-left: 15%;
+    margin-top: 10%;
+}
+
+#btn-upload-file{
+    position: relative;
+    cursor: pointer;
+    float: left;
+    background-color: cornflowerblue;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+
+
+
+
+
+
+.LoadingVideo_Content{
+    position: absolute; 
+    height: 50px;            /*change*/
+    width: 50px;             /*change*/
+    left: calc(50% - 25px);  /*change*/
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;  
+    margin-top: 25px;
+    display: none;
+}
+.LoadingVideo{
+    position: absolute; 
+    height: 50px;            /*change*/
+    width: 50px;             /*change*/
+    left: calc(50% - 25px);  /*change*/
+    top: 70px;
+    z-index: 1;
+
+ }
+.Wrap_loading{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    animation: rotate_spin_loading 0.9s linear infinite;
+    opacity: 0.8;
+
+}
+@keyframes rotate_spin_loading {
+      0% { transform: (0deg) }
+      100% { transform: rotate(360deg) }
+    } 
+.Loading{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: -00%;              /*change*/
+    left: -00%;             /*change*/
+    border: 10px solid;    /*change*/
+    border-color: rgb(46, 46, 46) transparent rgb(46, 46, 46)  transparent;
+    border-radius: 50%;
+    transform: rotate(45deg);
+
+}
+
+#cor_one:before{
+    content: "";
+    position: absolute;
+    left:  50%;
+    transform: translateX(-50%);
+    top: 0.5%;/*change*/
+    width: 19%;/*change*/
+    height: 19%;/*change*/
+    border-radius: 50%;
+    background-color: rgb(46, 46, 46);
+}
+
+#cor_one:after{
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0.5%;/*change*/
+    width: 19%;/*change*/
+    height: 19%;/*change*/
+    border-radius: 50%;
+    background-color: rgb(46, 46, 46) ;
+}
+
+#cor_two:before{
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0.5%;/*change*/
+    width: 19%;/*change*/
+    height: 19%;/*change*/
+    border-radius: 50%;
+    background-color: rgb(46, 46, 46) ;
+}
+
+#cor_two:after{
+    content: "";
+    position: absolute;
+    left:50%;
+    transform: translateX(-50%);
+    bottom: 0.5%;/*change*/
+    width: 19%;/*change*/
+    height: 19%;/*change*/
+    border-radius: 50%;
+    background-color: rgb(46, 46, 46) ;
+}
+
+#customiframe{
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+}
+iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }

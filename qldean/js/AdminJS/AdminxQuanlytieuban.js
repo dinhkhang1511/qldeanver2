@@ -310,7 +310,7 @@ function LoadAddFormTieuban(maTB) {
     $('.Add-New-Row').empty();
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý tiểu ban') + returnNameIndex('Thêm mới') +  returnReturnBtn());
-    $('.Add-New-Row').append(returnFormLabel('Thêm mới tiểu ban'));
+    // $('.Add-New-Row').append(returnFormLabel('Thêm mới tiểu ban'));
     $('.Add-New-Row').append(returnFormLabelInfo('Mã tiểu ban',maTB));
     $('.Add-New-Row').append(returnFormInputTime('Thời gian',1,''));
     $('.Add-New-Row').append(returnFormBtn(['Xác nhận', 'Thoát'],['tomato','green'],['them','thoat']));
@@ -331,7 +331,7 @@ function LoadSuaTieuban(listData) {
     $('.Add-New-Row').empty();
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý tiểu ban') + returnNameIndex('Sửa') +  returnReturnBtn());
-    $('.Add-New-Row').append(returnFormLabel('Sửa tiểu ban'));
+    // $('.Add-New-Row').append(returnFormLabel('Sửa tiểu ban'));
     $('.Add-New-Row').append(returnFormLabelInfo('Mã tiểu ban', listData.maTB));
     maTB = listData.maTB;
     var ngaygio = listData.ngay.replace('T17:00:00.000Z', '')+'T'+listData.gio;
@@ -360,7 +360,7 @@ function LoadPhancongTieuban(data) {
         listdataGV.push(data[i].MaGV + ' - '+ data[i].TenGV)
     }
 
-    $('.Add-New-Row').append(returnFormLabel('Phân công tiểu ban'));
+    // $('.Add-New-Row').append(returnFormLabel('Phân công tiểu ban'));
     $('.Add-New-Row').append(returnFormLabelInfo('Mã tiểu ban',maTB));
     $('.Add-New-Row').append(returnFormLabelInfo('Thời gian',ngaytemp.replace('T17:00:00.000Z','')+' '+giotemp));
     $('.Add-New-Row').append(returnFormInputSelect('Giảng viên 1',listdataGV,data[0].MaGV + ' - '+ data[0].TenGV) );
