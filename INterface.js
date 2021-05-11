@@ -94,6 +94,19 @@ function returnFormInputSelect(str,sle,va) {
     element = element + '</select></span></div>';
     return element
 }
+
+function returnFormInputSelectHaveBtn(str,sle,va,idbtn,namebtn) {
+    var element = '<div><span>'+str+': </span><span style="width:200px"><select style="width:200px" class="combo-box-add-long browser-default custom-select">'
+    for(var i = 0; i < sle.length; i++){
+        if(String(va) === String(sle[i]))
+        element = element + '<option selected value="'+sle[i]+'">'+sle[i]+'</option>';
+        else
+        element = element + '<option value="'+sle[i]+'">'+sle[i]+'</option>';
+    }
+    element = element + '</select></span><button id="'+idbtn+'" class="select-have-btn" type="submit">'+namebtn+'</button></div>';
+    return element
+}
+
 function returnFormInputText(str, str_){
     return '<div><span>'+str+':  </span><span><input style="width:150px"   class="input-new-row-short form-control" value="'+str_+'" type="text" ></span></div>'
 }
@@ -171,9 +184,7 @@ function returnFormKhoa(dskhoa,khoa) {
         element = element + '<option value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
     }
     element = element + '</select>';
-
     element = element + '<input style="display: none;" type="text" name="" class="form-control" placeholder="Nhập khóa" id="input-khoa"><button style="display: none;" id="xacnhan-them-khoa">Xác nhận</button><button id="themkhoa" type="submit">Thêm Khóa</button><button style="display: none;" id="dskhoa" type="submit">Danh sách</button>';
-
     return element
 }
 
@@ -191,17 +202,7 @@ function returnFormListKhoa(dskhoa,khoa) {
     return element;
 }
 
-function returnFormListNganh(dskhoa,khoa) {
-    var element = '<span class="title-chon-khoa">Chọn tie </span><select name="cars" id="select-khoa"  class="browser-default custom-select" onchange="changeKhoa();">'
-    for(var i = 0; i < dskhoa.length; i++){
-        if(Number(dskhoa[i]) == Number(khoa))
-        element = element + '<option selected value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
-        else
-        element = element + '<option value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
-    }
-    element = element + '</select>';
-    return element;
-}
+
 
 
 function returnFormComboxHeadBar(tieude,danhsach, chon, hamchon,width,left){
@@ -213,4 +214,17 @@ function returnFormComboxHeadBar(tieude,danhsach, chon, hamchon,width,left){
         element = element + '<option value="'+danhsach[i]+'">'+danhsach[i]+'</option>';
     }
     return element + '</select>';
+}
+
+function returnFormAddComboxBar(idselect,danhsach,chon,hamchon,width,left,nameinput,idinput,namebtn,idbtn,color){
+    var element = '<select  style="margin-left:'+left+'px; width:'+width+'px;" id="'+idselect+'" class="browser-default custom-select select-combox-headbar" onchange="'+hamchon+'();">'
+    for(var i = 0; i < danhsach.length; i++){
+        if(String(danhsach[i]) == String(chon))
+        element = element + '<option selected  value="'+danhsach[i]+'">'+danhsach[i]+'</option>';
+        else
+        element = element + '<option value="'+danhsach[i]+'">'+danhsach[i]+'</option>';
+    }
+    element = element + '</select>';
+    element = element + '<input style="margin-left:'+left+'px; width:'+width+'px;display: none;" type="text" class="form-control" placeholder="'+nameinput+'" id="'+idinput+'"><button  style="background-color:'+color[0]+';"  id="'+idbtn[0]+'">'+namebtn[0]+'</button><button style="display: none; background-color:'+color[1]+';" id="'+idbtn[1]+'">'+namebtn[1]+'</button><button style="display: none;background-color:'+color[2]+';" id="'+idbtn[2]+'">'+namebtn[2]+'</button>';
+    return element
 }

@@ -118,14 +118,16 @@ function updateListGiangvien() {
 
 function LoadListGiangvien(data) {
     $('#button-bar').show();
+    $('#head-bar').show();
     $('.chose-bar').show();
     $('#table_data').show();
     $('.btn-follow-row').show();
     $('.nav-page').show();
 
+
     $('.Add-New-Row').hide();
 
-
+    $('#head-bar').empty();
     $('#button-bar').empty();
     $('.chose-bar').empty();
     $('#table_data').empty();
@@ -133,6 +135,7 @@ function LoadListGiangvien(data) {
     $('.nav-page').empty();
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý giảng viên') +  returnAddBtn());
+    $('#head-bar').append(returnFormComboxHeadBar('Nghành',['Công nghệ thông tin', 'An toàn thông tin', 'Đa phương tiện'], 'An toàn thông tin', 'chonnghanh',200,0));
     $('.chose-bar').append(returnSearchForm('Nhập mã giảng viên','Làm mới') );
     $('#table_data').append(returnTable(listGVTitle,data));
     $('.btn-follow-row').append(returnButtonTable(listButtonpk,listIdBtnTable));

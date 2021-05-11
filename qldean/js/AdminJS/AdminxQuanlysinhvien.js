@@ -176,7 +176,10 @@ function LoadListSinhvien(data,dskhoa,khoa) {
     $('.nav-page').empty();
 
     $('#head-bar').append(returnFormComboxHeadBar('Nghành',['Công nghệ thông tin', 'An toàn thông tin', 'Đa phương tiện'], 'An toàn thông tin', 'chonnghanh',200,0));
-    $('#head-bar').append(returnFormKhoa(dskhoa,khoa));
+    // $('#head-bar').append(returnFormKhoa(dskhoa,khoa));
+
+    $('#head-bar').append(returnFormAddComboxBar('select-khoa',dskhoa,khoacurrent,'themkhoa',100,25,'Nhập khóa','input-khoa',['Thêm khóa','Xác nhận','Danh sách'],['them-khoa-btn','xacnhan-khoa-btn','ds-khoa-btn'],['cornflowerblue','tomato','cornflowerblue']))
+
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên')  +  returnAddBtn());
     $('.chose-bar').append(returnSearchForm('Nhập mã sinh viên','Làm mới') );
     $('#table_data').append(returnTable(listSVTitle,data));
@@ -208,7 +211,8 @@ function LoadAddFormSinhvien(Email,Id) {
     $('.Add-New-Row').append(returnFormInputTime('Ngày sinh',2,''));
 
     $('.Add-New-Row').append(returnFormLabelInfo('Email',Email));
-    $('.Add-New-Row').append(returnFormInputSelect('Lớp', ['CNTT','ATTT','Marketing','KeToan'], 'CNTT'));
+    $('.Add-New-Row').append(returnFormInputSelect('Chuyên nghành', ['Hệ thống thông tin','Mạng máy tính','Công nghệ phần mềm'], 'Hệ thống thông ,tin'));
+    $('.Add-New-Row').append(returnFormInputSelectHaveBtn('Lớp', ['D18CCN012','D18CCN012','D18CCN012','D18CCN012'], 'D18CCN012','themlopbtn','Thêm mới'));
 
     $('.Add-New-Row').append(returnFormInputText('GPA', ''));
     $('.Add-New-Row').append(returnFormBtn(listBtnpk,listColorpk,listIdBtn));
@@ -273,18 +277,18 @@ function EventAdminClick(event) {
     }else if(x.parentNode.className == "nav-page" ){
         page_num = Number(x.innerHTML)
         loadListSinhvien();
-    }else if(x.id == 'themkhoa'){
-        $('#dskhoa').show();
-        $('#themkhoa').hide();
-        $('#input-khoa').show();
+    }else if(x.id == 'them-khoa-btn'){
         $('#select-khoa').hide();
-        $('#xacnhan-them-khoa').show();
-    }else if(x.id == 'dskhoa'){
-        $('#dskhoa').hide();
-        $('#themkhoa').show();
-        $('#input-khoa').hide();
+        $('#them-khoa-btn').hide();
+        $('#input-khoa').show();
+        $('#ds-khoa-btn').show();
+        $('#xacnhan-khoa-btn').show();
+    }else if(x.id == 'ds-khoa-btn'){
         $('#select-khoa').show();
-        $('#xacnhan-them-khoa').hide();
+        $('#them-khoa-btn').show();
+        $('#input-khoa').hide();
+        $('#ds-khoa-btn').hide();
+        $('#xacnhan-khoa-btn').hide();
     }else if(x.id == 'xacnhan-them-khoa'){
         console.log(Number(document.getElementById('input-khoa').value))
         if(Number(document.getElementById('input-khoa').value) !== 0)
