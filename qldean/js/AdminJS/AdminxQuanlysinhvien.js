@@ -33,6 +33,8 @@ var nghanhcurrent = '';
 var chuyennghanhcurrent = '';
 var lopcurrent = '';
 
+var khoacurrenttemp = 0;
+
 var listnghanh = [];
     var listmanganh = [];
     var listtennghanh = [];
@@ -87,13 +89,16 @@ var xhttp = new XMLHttpRequest();
                     for(let i = 0; i < data[1].length; i++){
                         listkhoa.push(data[1][i].namBD);
                     }
+                    listkhoatemp = listkhoa;
                     listniemkhoa = [];
                     for(let i = 0; i < data[1].length; i++){
                         listniemkhoa.push(data[1][i].namBD + '-' + Math.ceil(data[1][i].namBD + data[1][i].SoNam));
                     }
+                    listniemkhoatemp = listniemkhoa;
 
                     nghanhcurrent = data[2];
                     khoacurrent = data[3];
+                    khoacurrenttemp = data[3];
 
                     tol_page =  1;
                     listinfoitem = [];
@@ -116,6 +121,7 @@ var xhttp = new XMLHttpRequest();
                     for(let i = 0; i < listchuyenganh.length; i++){
                         listtenchuyennganh.push(listchuyenganh[i].TenCN)
                     }
+                    listlop = []
                     for(let i = 0; i < data[3].length; i++){
                         listlop.push(data[3][i].MaLop)
                     }
@@ -277,6 +283,18 @@ function createLopmoi(){
     xhttp.send();
 }
 
+
+function changeKhoaandNghanh(){
+    var e = document.getElementsByClassName("select-combox-headbar").item(0);
+    nghanhcurrent = String(e.options[e.selectedIndex].value);
+
+    var e = document.getElementsByClassName("select-combox-headbar").item(1);
+    khoacurrent = Number(e.options[e.selectedIndex].value);
+
+    console.log(khoacurrent,nghanhcurrent)
+    loadAddListSinhvien();
+}
+
 //ELEMENT-----------------------------------------------------
 function LoadListSinhvien(data) {
     
@@ -307,6 +325,7 @@ function LoadListSinhvien(data) {
 
 function LoadAddFormSinhvien() {
 
+
     $('#button-bar').show();
     $('#head-bar').show();
     $('.chose-bar').hide();
@@ -321,7 +340,7 @@ function LoadAddFormSinhvien() {
     $('.Add-New-Row').empty();
 
     $('#head-bar').append(returnFormComboxHeadBar('Nghành',listmanganh, listtennghanh, nghanhcurrent, 'changeKhoaandNghanh',250,0));
-    $('#head-bar').append(returnFormAddComboxBar('chon-list-khoa-add' ,listkhoa , listniemkhoa, khoacurrent, 'changeKhoaandNghanh',120,20,'Thêm khóa','them-khoa-input',['Thêm mới','Xác nhận','Danh sách'],['them-khoa-btn','xacnhan-khoa-btn','ds-khoa-btn'],['cornflowerblue','tomato','cornflowerblue']));
+    $('#head-bar').append(returnFormAddComboxBar('chon-list-khoa-add' ,listkhoatemp , listniemkhoatemp, khoacurrenttemp, 'changeKhoaandNghanh',120,20,'Thêm khóa','them-khoa-input',['Thêm mới','Xác nhận','Danh sách'],['them-khoa-btn','xacnhan-khoa-btn','ds-khoa-btn'],['cornflowerblue','tomato','cornflowerblue']));
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên') + returnNameIndex('Thêm mới') +  returnReturnBtn());
     $('.Add-New-Row').append(returnFormLabel('Thêm mới sinh viên'));
@@ -485,7 +504,7 @@ function EventAdminClick(event) {
                     $('#them-khoa-input').hide();
                     $('#ds-khoa-btn').hide();
                     $('#xacnhan-khoa-btn').hide();
-          
+                    khoacurrenttemp = Number(document.getElementById('them-khoa-input').value);
                 });
 
             }else{
