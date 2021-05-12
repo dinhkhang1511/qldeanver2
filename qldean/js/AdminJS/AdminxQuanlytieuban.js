@@ -89,20 +89,17 @@ var xhttp = new XMLHttpRequest();
                     var data = JSON.parse(this.responseText);
                     LoadAddFormTieuban(data[0]['AUTO_IDTB('+khoacurrent+')'])
                 }
-
                 if(String(this.responseURL).includes('api/themtb')){
                     if(String(this.responseText) == '"that bai"')
                         alert('Fail')
                     else
                         loadListTieuban();
                 }
-
                 if(String(this.responseURL).includes('api/suatb')){
                     if(String(this.responseText) == '"that bai"')
                         alert('Fail')
                     else loadListTieuban();
                 }
-
                 if(String(this.responseURL).includes('api/xoatb')){
                     if(String(this.responseText) == '"that bai"')
                         alert('Fail')
@@ -114,6 +111,8 @@ var xhttp = new XMLHttpRequest();
                         }
                     } 
                 }
+
+
                 if(String(this.responseURL).includes('api/danhsachGVphancongTB')){
                     if(String(this.responseText) == '"that bai"')
                         alert('Fail')
@@ -124,7 +123,6 @@ var xhttp = new XMLHttpRequest();
                         alert('Fail')
                     else loadListTieuban();
                 }
-
                 if(String(this.responseURL).includes('api/checkaddGVintoTieuban')){
                     var data = JSON.parse(this.responseText);
                     // console.log()
@@ -165,10 +163,6 @@ function loadAddListTieuban() {
     xhttp.send();
 }
 
-// function loadSearchTieuban(){
-//     xhttp.open("GET", "/api/searchtieuban", false);
-//     xhttp.send();
-// }
 
 function addTieuban() {
     var thoigiantieuban = document.getElementsByClassName('thoigianform').item(0).value;

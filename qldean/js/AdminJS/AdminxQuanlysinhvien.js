@@ -21,7 +21,7 @@ var khoacurrent = 0;
 
 $(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
     $( "#act-sinhvien" ).addClass( "active" )
-    $('#logo-title').append('<img src="/Asset 4.png" alt="" srcset="">')
+    // $('#logo-title').append('<img src="/Asset 4.png" alt="" srcset="">')
 });
 
 const bubbleSort = (array) => {
@@ -48,14 +48,15 @@ var xhttp = new XMLHttpRequest();
                     listinfoitem = data[0][0];
                     LoadListSinhvien(data[0][0],data[3],data[2]);
                 }
-
                 if(String(this.responseURL).includes('api/dieukienthemsv')){
                     var data = JSON.parse(this.responseText)
                     console.log(data)
-                    maSV =  data.Id[0]['Auto_IDSV('+Number(data.khoa)+')'];
-                    EmailSV = data.Email[0]["Auto_EmailSV('"+maSV+"')"]
-                    LoadAddFormSinhvien(EmailSV, maSV)
+                    // maSV =  data.Id[0]['Auto_IDSV('+Number(data.khoa)+')'];
+                    // EmailSV = data.Email[0]["Auto_EmailSV('"+maSV+"')"]
+                    // LoadAddFormSinhvien(EmailSV, maSV)
                 }
+
+
                 if(String(this.responseURL).includes('api/themsv')){
                     if(String(this.responseText) == '"that bai"')
                         alert('Fail')
@@ -95,8 +96,6 @@ var xhttp = new XMLHttpRequest();
                         loadListSinhvien();
                     } 
                 }
-
-                
         }
     };
 

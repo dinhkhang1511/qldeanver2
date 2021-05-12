@@ -17,39 +17,89 @@ module.exports = async (callback, scanner) => {
     let head_params = scanner.head_params;
 
     if (index === 'themkhoasv'){
-        let khoa = Number(head_params.get('khoa'));
-        fs.appendFileSync('controller/qldean/Text/khoa.txt', '\n'+khoa+',0');
-        let oskhoa;
+    //     let khoa = Number(head_params.get('khoa'));
+    //     fs.appendFileSync('controller/qldean/Text/khoa.txt', '\n'+khoa+',0');
+    //     let oskhoa;
 
-        lineReader = readline.createInterface({
-          input: fs.createReadStream('controller/qldean/Text/khoa.txt')
-      });
-      lineReader.on('line', function (line) {
-          if(String(line).includes('currentkhoa:')) {
-            oskhoa = String(line);
-          }
-      });
-      lineReader.on('close', async function () {
-        fs.readFile("controller/qldean/Text/khoa.txt", 'utf8', function (err,data) {
-          var formatted = data.replace(oskhoa, 'currentkhoa:'+khoa);
-          fs.writeFile("controller/qldean/Text/khoa.txt", formatted, 'utf8', function (err) {
-              if (err) return console.log(err);
-              });
-          });
-          callback(JSON.stringify('done'), 'application/json');
-      });
-
-        
+    //     lineReader = readline.createInterface({
+    //       input: fs.createReadStream('controller/qldean/Text/khoa.txt')
+    //   });
+    //   lineReader.on('line', function (line) {
+    //       if(String(line).includes('currentkhoa:')) {
+    //         oskhoa = String(line);
+    //       }
+    //   });
+    //   lineReader.on('close', async function () {
+    //     fs.readFile("controller/qldean/Text/khoa.txt", 'utf8', function (err,data) {
+    //       var formatted = data.replace(oskhoa, 'currentkhoa:'+khoa);
+    //       fs.writeFile("controller/qldean/Text/khoa.txt", formatted, 'utf8', function (err) {
+    //           if (err) return console.log(err);
+    //           });
+    //       });
+    //       callback(JSON.stringify('done'), 'application/json');
+    //   });
     }
 
     if (index === 'dieukienthemsv'){
-      let khoa = head_params.get('khoa');  
-      console.log(khoa)
-      let Id = await Model.InleSQL("select Auto_IDSV("+khoa+")");
-      let Email = await Model.InleSQL("select Auto_EmailSV('"+Id[0]['Auto_IDSV('+khoa+')']+"')");
-      console.log({Email,Id,khoa})
-      callback(JSON.stringify({Email,Id,khoa}), 'application/json');
+        let MaNghanh = head_params.get('MaNghanh');
+        let Khoa = head_params.get('Khoa');
+        let MaSV = await Model.InleSQL("select AUTO_IDSV('"+Khoa+"','"+MaNghanh+"') as MaSV"); MaSV = MaSV[0]['MaSV']
+        let EmailSV = MaSV + '@student.ptithcm.edu.vn';
+        let listchuyenganh = await Model.InleSQL("call ComboBox_CN('"+MaNghanh+"')");listchuyenganh = listchuyenganh[0];
+        let listlop;
+        let Lop;
+        if(listchuyenganh.length > 0){
+            listlop = await Model.InleSQL("call ComboBox_Lop('"+Khoa+"','"+listchuyenganh[0].MaCN+"')"); listlop = listlop[0]
+            Lop = await Model.InleSQL("SELECT Auto_IDLop('"+Khoa+"','"+listchuyenganh[0].MaCN+"') AS Lop"); Lop = Lop[0]['Lop'];
+        }else{
+            listlop = [];
+            Lop = '';
+        }
+        let data = [];
+        data.push(MaSV);
+        data.push(EmailSV)
+        data.push(listchuyenganh)
+        data.push(listlop);
+        data.push(Lop);
+        callback(JSON.stringify(data), 'application/json');
     }
+
+    if(index === 'danhsach-theo-nghanh'){
+        let MaNghanh = head_params.get('MaNghanh');
+        let listchuyenganh = await Model.InleSQL("call ComboBox_CN('"+MaNghanh+"')");
+        let data = [];
+        data.push(listchuyenganh[0]);
+        callback(JSON.stringify(data), 'application/json');
+    }
+    if(index === 'danhsach-theo-nganhvakhoa'){
+        let Khoa = head_params.get('Khoa');
+        let MaNghanh = head_params.get('MaNghanh');
+        let MaSV = await Model.InleSQL("select AUTO_IDSV('"+Khoa+"','"+MaNghanh+"') as MaSV");
+        MaSV = MaSV[0]['MaSV']
+        let EmailSV = MaSV + '@student.ptithcm.edu.vn';
+        let data = [];
+        data.push({MaSV:MaSV,EmailSV:EmailSV});
+        callback(JSON.stringify(data), 'application/json');
+    }
+    if(index === 'danhsach-theo-chuyennganhvakhoa'){
+        let Khoa = head_params.get('Khoa');
+        let MaChuyenNghanh = head_params.get('MaChuyenNghanh');
+        let data = [];
+        let listlop = await Model.InleSQL("call ComboBox_Lop('"+Khoa+"','"+MaChuyenNghanh+"')");
+        console.log(listlop)
+        data.push(listlop[0]);
+        callback(JSON.stringify(data), 'application/json');
+    }
+    if(index === 'taomoilop'){
+        let Khoa = head_params.get('Khoa');
+        let MaChuyenNghanh = head_params.get('MaChuyenNghanh');
+        let data = [];
+        let Lop = await Model.InleSQL("SELECT Auto_IDLop('"+Khoa+"','"+MaChuyenNghanh+"') AS Lop");
+        data.push(Lop[0]['Lop']);
+        callback(JSON.stringify(data), 'application/json');
+    }
+    
+
 
     if (index === 'themsv'){
       let MaSV = head_params.get('MaSV');
@@ -60,10 +110,8 @@ module.exports = async (callback, scanner) => {
       let Email = head_params.get('Email');
       console.log(MaSV,TenSV,NgaySinh,Lop,GPA,Email)
 
-
       console.log("INSERT INTO `sinhvien` (`MaSV`, `TenSV`, `NgaySinh`, `Lop`, `GPA`, `Email`) "+
       "VALUES ('"+MaSV+"','"+TenSV+"','"+NgaySinh+"', '"+Lop+"', "+GPA+", '"+Email+"')")
-
       let  result1 = await Model.InleSQL("INSERT INTO `sinhvien` (`MaSV`, `TenSV`, `NgaySinh`, `Lop`, `GPA`, `Email`) "+
           "VALUES ('"+MaSV+"','"+TenSV+"','"+NgaySinh+"', '"+Lop+"', "+GPA+", '"+Email+"')");
           if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
@@ -73,73 +121,8 @@ module.exports = async (callback, scanner) => {
           }
     }
 
-
     if (index === 'danhsachsinhvien'){
-      let khoa = Number(head_params.get('khoa'));
-      console.log(khoa)
-      if(khoa == 0){ 
-              let listkhoa = [];
-              lineReader = readline.createInterface({
-                  input: fs.createReadStream('controller/qldean/Text/khoa.txt')
-              });
-              lineReader.on('line', function (line) {
-                  if(String(line).includes('currentkhoa:')) {
-                      khoa = Number(String(line).replace('currentkhoa:',''));
-                  }else{
-                      let curbig = Number(line.split(',')[0]);
-                      listkhoa.push(curbig);
-                  }
-              });
-              lineReader.on('close', async function () {
-                let limit = 10;
-                let page = Number(head_params.get('page')) - 1;
-                if(khoa == 0) khoa = listkhoa[0];
-                let count = await Model.InleSQL("select count( maSV) from SinhVien where SUBSTRING(MaSV, 2,2)=right("+khoa+", 2);");
-                let result = await Model.InleSQL("call ShowList_SV("+khoa+","+page*limit+")");
-                let data = [];
-                data.push(result)
-                data.push(count)
-                data.push(khoa)
-                data.push(bubbleSort(listkhoa))
-                console.log(data)
-                  callback(JSON.stringify(data), 'application/json');
-              });
-
-      }else{
-          let oskhoa;
-          let listkhoa = [];
-          lineReader = readline.createInterface({
-              input: fs.createReadStream('controller/qldean/Text/khoa.txt')
-          });
-          lineReader.on('line', function (line) {
-              if(String(line).includes('currentkhoa:')) {
-                  oskhoa = String(line);
-              }else{
-                  let curbig = Number(line.split(',')[0]);
-                  listkhoa.push(curbig);
-              }
-          });
-          lineReader.on('close', async function () {
-              fs.readFile("controller/qldean/Text/khoa.txt", 'utf8', function (err,data) {
-              var formatted = data.replace(oskhoa, 'currentkhoa:'+khoa);
-              fs.writeFile("controller/qldean/Text/khoa.txt", formatted, 'utf8', function (err) {
-                  if (err) return console.log(err);
-                  });
-              });
-
-              let limit = 10;
-              let page = Number(head_params.get('page')) - 1;
-              let count = await Model.InleSQL("select count( maSV) from SinhVien where SUBSTRING(MaSV, 2,2)=right("+khoa+", 2);");
-              let result = await Model.InleSQL("call ShowList_SV("+khoa+","+page*limit+")");
-              let data = [];
-              data.push(result)
-              data.push(count)
-              data.push(khoa)
-              data.push(bubbleSort(listkhoa))
-              console.log(data)
-              callback(JSON.stringify(data), 'application/json');
-          });
-      }
+        
     }
 
     if (index === 'suasv'){
