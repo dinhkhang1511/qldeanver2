@@ -33,6 +33,8 @@ module.exports = async (callback, scanner) => {
         listNganh = await Model.InleSQL("call ComboBox_Nganh()");
         listNganh = listNganh[0];
 
+        console.log("Start+"+MaNghanh,Khoa)
+
     if(MaNghanh === '' || Khoa == 0 || String(MaNghanh) === 'null'){
 
         lineReader = readline.createInterface({
@@ -42,6 +44,7 @@ module.exports = async (callback, scanner) => {
             if(String(line).includes(MaAdmin)) {
                 MaNghanhtemp = String(line.split(',')[1]);
                 Khoatemp = Number(line.split(',')[2]);
+                if(String(Khoatemp) == 'NaN') Khoatemp = '#';
             }
         });
         lineReader.on('close', async function () {
@@ -49,8 +52,19 @@ module.exports = async (callback, scanner) => {
             if(MaNghanhtemp === '#' || Khoatemp === '#'){
                 MaNghanh = listNganh[0].MaNganh;
                 listKhoa = await Model.InleSQL("call ComboBox_Khoa('"+MaNghanh+"')");
-                listKhoa = listKhoa[0]
+                listKhoa = listKhoa[0];
                 Khoa = listKhoa[0].namBD;
+
+                fs.readFile("controller/qldean/Text/AdminStatus.txt", 'utf8', function (err,data) {
+                    let formatted = data.replace( String(MaAdmin+','+MaNghanhtemp+','+Khoatemp),String(MaAdmin+','+MaNghanh+','+Khoa));
+                    fs.writeFile("controller/qldean/Text/AdminStatus.txt", '', 'utf8', function (err) {
+                        if (err) return console.log(err);
+                        fs.writeFile("controller/qldean/Text/AdminStatus.txt", formatted, 'utf8', function (err) {
+                            if (err) return console.log(err);
+                        });
+                    });
+                });
+
             }else{
                 MaNghanh = MaNghanhtemp;
                 Khoa = Khoatemp;
@@ -58,17 +72,18 @@ module.exports = async (callback, scanner) => {
                 listKhoa = listKhoa[0];
             }
 
-            let count = await Model.InleSQL("call CountList_TB('"+Khoa+"','"+MaNghanh+"')");
-            // let count = await Model.InleSQL("select ShowList_TB('"+Khoa+"','"+MaNghanh+"'),'++'");
+            // console.log("select ShowList_TB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")")
+            let count = await Model.InleSQL("select CountList_TB('"+Khoa+"','"+MaNghanh+"')");
+            let select = await Model.InleSQL("call ShowList_TB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
 
             let data = [];
             data.push(listNganh);
             data.push(listKhoa);
             data.push(MaNghanh);
             data.push(Khoa);
-
+            data.push(count)
+            data.push(select)
             callback(JSON.stringify(data), 'application/json');
-
         });
 
     }else{
@@ -96,18 +111,34 @@ module.exports = async (callback, scanner) => {
             listKhoa = await Model.InleSQL("call ComboBox_Khoa('"+MaNghanh+"')");
             listKhoa = listKhoa[0];
 
+            let count = await Model.InleSQL("select CountList_TB('"+Khoa+"','"+MaNghanh+"')");
+            let select = await Model.InleSQL("call ShowList_TB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
+
             let data = [];
             data.push(listNganh);
             data.push(listKhoa);
             data.push(MaNghanh);
             data.push(Khoa);
+            data.push(count)
+            data.push(select)
 
             callback(JSON.stringify(data), 'application/json');
         });
     }
-
     }
 
+    if (index === 'danhsachdulieutieuban'){
+        let MaNghanh = String(head_params.get('MaNghanh')).trim();
+        let Khoa = Number(head_params.get('Khoa'));
+
+        let count = await Model.InleSQL("select CountList_TB('"+Khoa+"','"+MaNghanh+"')");
+        let select = await Model.InleSQL("call ShowList_TB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
+
+        let data = [];
+        data.push(count)
+        data.push(select)
+        callback(JSON.stringify(data), 'application/json');
+    }
 
     if (index === 'dieukienthemtb'){
         let khoa = Number(head_params.get('khoa'));
@@ -155,25 +186,29 @@ module.exports = async (callback, scanner) => {
             }
     }
     if (index === 'timmatb'){
-        let khoa = head_params.get('khoa');
+        // let MaAdmin = String(head_params.get('MaAdmin')).trim();
+        let MaNghanh = String(head_params.get('MaNghanh')).trim();
+        let Khoa = Number(head_params.get('Khoa'));
         let textsearch = head_params.get('textsearch');
+
         let limit = 10;
         let page = Number(head_params.get('page')) - 1;
 
-        let count = await Model.InleSQL('select CountList_FindTB("'+khoa+'", "'+textsearch+'");');
-        let result = await Model.InleSQL("call ShowList_FindTB('"+khoa+"', '"+textsearch+"',"+page*limit+")");
+        let count = await Model.InleSQL('select CountList_FindTB ('+Khoa+',"'+MaNghanh+'","'+textsearch+'") as dem;');
+        let result = await Model.InleSQL("call ShowList_FindTB("+Khoa+",'"+MaNghanh+"','"+textsearch+"',"+page*limit+")");
         let data = []
-        data.push(result)
         data.push(count)
-        console.log(data)
+        data.push(result)
+        console.log(count)
         callback(JSON.stringify(data), 'application/json');
     }
     
     if(index === 'danhsachGVphancongTB'){
+        let MaNghanh = head_params.get('MaNghanh');
         let ngay = String(head_params.get('ngay')).replace('T17:00:00.000Z','');
         let gio = head_params.get('gio');
-        console.log(ngay,gio)
-        let  result1 = await Model.InleSQL("call ComboBox_PhanCongGVTB('"+ngay+"', '"+gio+"')");
+        console.log(ngay,gio,MaNghanh)
+        let  result1 = await Model.InleSQL("call ComboBox_PhanCongGVTB('"+MaNghanh+"','"+ngay+"', '"+gio+"')");
         console.log(result1)    
         if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
                 callback(JSON.stringify("that bai"), 'application/json');

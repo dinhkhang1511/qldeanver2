@@ -451,6 +451,18 @@ table tr:first-child td{
     font-weight: 500;
     outline: none;
 }
+
+
+#no-color-btn-follow-row div:first-child{
+    background-color: rgba(70, 100, 145, 0.233);
+}
+#no-color-btn-follow-row div:nth-child(2){
+    background-color: rgba(202, 107, 72, 0.26);
+}
+#no-color-btn-follow-row div:nth-child(3){
+    background-color: rgba(89, 104, 74, 0.233);
+}
+
 #yes-color-btn-follow-row div:first-child{
     background-color: rgb(70, 100, 145);
 }

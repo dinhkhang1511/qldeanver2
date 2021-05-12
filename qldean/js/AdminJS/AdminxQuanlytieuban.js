@@ -10,7 +10,7 @@ $(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
 var MaAdmin = 'ADMIN';
 
 var listinfoitem;
-var currentlist = true;
+var currentlist = 0;
 var textsearch = '';
 
 var page_num = 1;
@@ -25,6 +25,7 @@ var giotemp;
 var khoacurrent = 0;
 var nghanhcurrent = '';
 var listkhoa = [];
+    var listniemkhoa = [];
 var listnghanh = [];
     var listmanganh = [];
     var listtennghanh = [];
@@ -51,22 +52,39 @@ var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
                 if(String(this.responseURL).includes('api/danhsachtieuban')){
-                    
                     var data = JSON.parse(this.responseText);
-                    console.log(data)
-                    
-                    listkhoa = [];
+                    console.log(data);
                     listnghanh = data[0];
+                    listkhoa = [];
                     for(let i = 0; i < data[1].length; i++){
                         listkhoa.push(data[1][i].namBD);
                     }
+                    listniemkhoa = [];
+                    for(let i = 0; i < data[1].length; i++){
+                        listniemkhoa.push(data[1][i].namBD + '-' + Math.ceil(data[1][i].namBD + data[1][i].SoNam));
+                    }
                     nghanhcurrent = data[2];
-                    khoacurrent = data[3] 
-
-                    tol_page =  Math.ceil(data[1][0]['count(*)'] / 10); 
-                    listinfoitem = data[0];
+                    khoacurrent = data[3];
+                    tol_page =  Math.ceil(data[4][0]["CountList_TB('"+khoacurrent+"','"+nghanhcurrent+"')"] / 10); 
+                    listinfoitem = data[5][0];
                     LoadListTieuban(listinfoitem);
                 }
+                if(String(this.responseURL).includes('api/danhsachdulieutieuban')){
+                    var data = JSON.parse(this.responseText);
+                    console.log(data);
+                    tol_page =  Math.ceil(data[0][0]["CountList_TB('"+khoacurrent+"','"+nghanhcurrent+"')"] / 10); 
+                    listinfoitem = data[1][0];
+                    LoadListDataTieuban(listinfoitem);
+                }
+                if(String(this.responseURL).includes('api/timmatb')){
+                    var data = JSON.parse(this.responseText);
+                    console.log(data);
+                    tol_page = Math.ceil(data[0][0]["dem"] / 10);  
+                    listinfoitem = data[1][0];
+                    LoadListDataTieuban(listinfoitem);
+                }
+
+
                 if(String(this.responseURL).includes('api/dieukienthemtb')){
                     var data = JSON.parse(this.responseText);
                     LoadAddFormTieuban(data[0]['AUTO_IDTB('+khoacurrent+')'])
@@ -88,7 +106,13 @@ var xhttp = new XMLHttpRequest();
                 if(String(this.responseURL).includes('api/xoatb')){
                     if(String(this.responseText) == '"that bai"')
                         alert('Fail')
-                    else loadListTieuban();
+                    else{
+                        if(currentlist === 1){
+                            loadListDataTieuban();
+                        }else{
+                            loadListSearchTieuban();
+                        }
+                    } 
                 }
                 if(String(this.responseURL).includes('api/danhsachGVphancongTB')){
                     if(String(this.responseText) == '"that bai"')
@@ -100,17 +124,7 @@ var xhttp = new XMLHttpRequest();
                         alert('Fail')
                     else loadListTieuban();
                 }
-                if(String(this.responseURL).includes('api/timmatb')){
-                    var data = JSON.parse(this.responseText);
-                    console.log(data)
-                    // tol_page = 1;
-                    tol_page =  Math.ceil(data[1][0]['CountList_FindTB("'+khoacurrent+'", "'+textsearch+'")'] / 10); 
 
-                    console.log(tol_page)
-                    listinfoitem = data[0][0];
-               
-                    LoadListDataTieuban(listinfoitem);
-                }
                 if(String(this.responseURL).includes('api/checkaddGVintoTieuban')){
                     var data = JSON.parse(this.responseText);
                     // console.log()
@@ -119,11 +133,30 @@ var xhttp = new XMLHttpRequest();
         }
     };
 
+
+function changesearch(s){
+    currentlist = 2;
+    textsearch = s;
+    page_num = 1;
+    loadListSearchTieuban();
+}
+
 //LOAD DATA TIỂU BAN----------------------------------------------------
 function loadListTieuban(){
-    currentlist = true;
+    currentlist = 0;
     textsearch = '';
-    xhttp.open("GET", "/api/danhsachtieuban?page="+page_num+"&Khoa="+khoacurrent+"&MaAdmin="+MaAdmin+"&MaNganh="+nghanhcurrent, false);
+    xhttp.open("GET", "/api/danhsachtieuban?page="+page_num+"&Khoa="+khoacurrent+"&MaNghanh="+String(nghanhcurrent)+"&MaAdmin="+MaAdmin, false);
+    xhttp.send();
+}
+function loadListDataTieuban(){
+    currentlist = 1;
+    textsearch = '';
+    xhttp.open("GET", "/api/danhsachdulieutieuban?page="+page_num+"&Khoa="+khoacurrent+"&MaNghanh="+String(nghanhcurrent)+"&MaAdmin="+MaAdmin, false);
+    xhttp.send();
+}
+function loadListSearchTieuban(){
+    currentlist = 2;
+    xhttp.open("GET", "/api/timmatb?page="+page_num+"&Khoa="+khoacurrent+"&MaNghanh="+(nghanhcurrent)+"&MaAdmin="+MaAdmin+"&textsearch="+textsearch, true);
     xhttp.send();
 }
 
@@ -132,10 +165,10 @@ function loadAddListTieuban() {
     xhttp.send();
 }
 
-function loadSearchTieuban(){
-    xhttp.open("GET", "/api/searchtieuban", false);
-    xhttp.send();
-}
+// function loadSearchTieuban(){
+//     xhttp.open("GET", "/api/searchtieuban", false);
+//     xhttp.send();
+// }
 
 function addTieuban() {
     var thoigiantieuban = document.getElementsByClassName('thoigianform').item(0).value;
@@ -145,7 +178,7 @@ function addTieuban() {
     console.log(ngay)
 
     if(String(ngay) !== ''){
-        xhttp.open("GET", "/api/themtb?ngay="+ngay+"&gio="+gio+"&maTB="+ $(".label-item-add").text()+"&MaNganh="+ nghanhcurrent, false);
+        xhttp.open("GET", "/api/themtb?ngay="+ngay+"&gio="+gio+"&maTB="+ $(".label-item-add").text()+"&MaNganh="+nghanhcurrent, false);
         xhttp.send();
     }else{
         alert("Nhập ngày giờ")
@@ -164,13 +197,12 @@ function updateListTieuban() {
     }else{
         alert("Nhập ngày giờ")
     }
-
 }
 
 function loadphancongtieuban(){
     ngaytemp = listinfoitem[currentrowtable].ngay;
     giotemp = listinfoitem[currentrowtable].gio;
-    xhttp.open("GET", "/api/danhsachGVphancongTB?ngay="+listinfoitem[currentrowtable].ngay+"&gio="+listinfoitem[currentrowtable].gio, false);
+    xhttp.open("GET", "/api/danhsachGVphancongTB?ngay="+ngaytemp+"&gio="+giotemp+"&MaNghanh="+nghanhcurrent, false);
     xhttp.send();
 }
 
@@ -216,8 +248,6 @@ function addphancongtieuban(count){
             }else{
                 loadListTieuban()
             }
-
-
         }else{
             loadListTieuban();
         }
@@ -229,24 +259,17 @@ function addphancongtieuban(count){
     }else{
         alert('Giảng viên không được trùng lặp');
     }
-
-}
-
-function changeKhoa(){
-    var e = document.getElementById("select-khoa");
-    khoacurrent = e.options[e.selectedIndex].text;
-    console.log(khoacurrent)
-    xhttp.open("GET", "/api/danhsachtieuban?page="+page_num+"&khoa="+khoacurrent, false);
-    xhttp.send();
 }
 
 
-function changesearch(s){
-    currentlist = false;
-    textsearch = s;
-    page_num = 1;
-    xhttp.open("GET", "/api/timmatb?page="+page_num+"&khoa="+khoacurrent+"&textsearch="+textsearch, true);
-    xhttp.send();
+
+function changeKhoaandNghanh(){
+    var e = document.getElementsByClassName("select-combox-headbar").item(0);
+    nghanhcurrent = String(e.options[e.selectedIndex].value);
+    e = document.getElementsByClassName("select-combox-headbar").item(1);
+    khoacurrent = e.options[e.selectedIndex].value;
+    console.log("mới tạo "+nghanhcurrent,khoacurrent)
+    loadListTieuban();
 }
 
 //LOAD ELEMENT TIỂU BAN-----------------------------------------------------
@@ -281,8 +304,8 @@ function LoadListTieuban(data) {
     $('.nav-page').empty();
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý tiểu ban') +  returnAddBtn());
-    $('#head-bar').append(returnFormComboxHeadBar('Nghành',listmanganh, listtennghanh, nghanhcurrent, 'chonnghanh',250,0));
-    $('#head-bar').append(returnFormComboxHeadBar('Khóa',listkhoa , listkhoa, khoacurrent, 'chonkhoa',100,20));
+    $('#head-bar').append(returnFormComboxHeadBar('Nghành',listmanganh, listtennghanh, nghanhcurrent, 'changeKhoaandNghanh',250,0));
+    $('#head-bar').append(returnFormComboxHeadBar('Niêm khóa',listkhoa , listniemkhoa, khoacurrent, 'changeKhoaandNghanh',120,20));
     $('.chose-bar').append(returnSearchForm('Tìm mã tiểu ban','Làm mới') );
     $('#table_data').append(returnTable( tieudeBangTieuban ,listTB));
     $('.btn-follow-row').append(returnButtonTable(tennutBangTieuban,idnutBangTieuban));
@@ -304,7 +327,7 @@ function LoadListDataTieuban(data){
     $('.nav-page').empty();
 
     $('#table_data').append(returnTable( ['Tiểu ban','Ngày','Giờ','Trạng thái'],listTB));
-    $('.btn-follow-row').append(returnButtonTable(listButtonpk,listIdBtnTable));
+    $('.btn-follow-row').append(returnButtonTable(tennutBangTieuban,idnutBangTieuban));
     $('.nav-page').append(returNavForm(tol_page+1, page_num));
 }
 
@@ -395,7 +418,7 @@ function EventAdminClick(event) {
         currentrowtable = Number(x.parentNode.id.replace('collumtalbe-',''));
     }else if(x.parentNode.className == 'btn-follow-row'){
         if(x.id == "phancongx" ){
-            console.log("xxxx")
+            console.log(listinfoitem[currentrowtable].maTB)
             maTB = listinfoitem[currentrowtable].maTB
             loadphancongtieuban()
             // LoadPhancongTieuban();
@@ -428,13 +451,12 @@ function EventAdminClick(event) {
         checkphancongtieuban();
     }
     if(x.parentNode.className == "nav-page" ){
-        if(currentlist == true){
+        if(currentlist == 1){
             page_num = Number(x.innerHTML)
-            loadListTieuban();
+            loadListDataTieuban();
         }else{
             page_num = Number(x.innerHTML)
-            xhttp.open("GET", "/api/timmatb?page="+page_num+"&khoa="+khoacurrent+"&textsearch="+textsearch, true);
-            xhttp.send();
+            loadListSearchTieuban();
         }
 
     }

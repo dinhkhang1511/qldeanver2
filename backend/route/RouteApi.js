@@ -1,25 +1,19 @@
 module.exports = (setroute = require("./Setroute")) => {
     let root_1 = "qldean.com";
-
-    // setroute.pushRoute(root_1,"GET","api/home", "qldean/HomeController@firstload");
-    // setroute.pushRoute(root_1,"GET","api/danhsachkhoa", "qldean/AdminController@danhsachkhoa");
-    // setroute.pushRoute(root_1,"GET","api/themkhoa", "qldean/AdminController@themkhoa");
-    // setroute.pushRoute(root_1,"GET","api/suakhoa", "qldean/AdminController@suakhoa");
-    // setroute.pushRoute(root_1,"GET","api/xoakhoa", "qldean/AdminController@xoakhoa");
-    // setroute.pushRoute(root_1,"GET","api/timmakhoa", "qldean/AdminController@timmakhoa");
-    // setroute.pushRoute(root_1,"GET","api/danhsachGVphancongTB", "qldean/AdminController@danhsachGVphancongTB");
-    // setroute.pushRoute(root_1,"GET","api/addGVintoTieuban", "qldean/AdminController@addGVintoTieuban");
-
     
     setroute.pushRoute(root_1,"GET","api/danhsachtieuban", "qldean/AdminTieubanController@danhsachtieuban");
+    setroute.pushRoute(root_1,"GET","api/danhsachdulieutieuban", "qldean/AdminTieubanController@danhsachdulieutieuban");
+    setroute.pushRoute(root_1,"GET","api/timmatb", "qldean/AdminTieubanController@timmatb");
+
     setroute.pushRoute(root_1,"GET","api/dieukienthemtb", "qldean/AdminTieubanController@dieukienthemtb");
     setroute.pushRoute(root_1,"GET","api/themtb", "qldean/AdminTieubanController@themtb");
     setroute.pushRoute(root_1,"GET","api/suatb", "qldean/AdminTieubanController@suatb");
     setroute.pushRoute(root_1,"GET","api/xoatb", "qldean/AdminTieubanController@xoatb");
-    setroute.pushRoute(root_1,"GET","api/timmatb", "qldean/AdminTieubanController@timmatb");
+
     setroute.pushRoute(root_1,"GET","api/danhsachGVphancongTB", "qldean/AdminTieubanController@danhsachGVphancongTB");
     setroute.pushRoute(root_1,"GET","api/checkaddGVintoTieuban", "qldean/AdminTieubanController@checkaddGVintoTieuban");
     setroute.pushRoute(root_1,"GET","api/addGVintoTieuban", "qldean/AdminTieubanController@addGVintoTieuban");
+
 
 
     setroute.pushRoute(root_1,"GET","api/themkhoasv", "qldean/AdminSinhvienController@themkhoasv");
