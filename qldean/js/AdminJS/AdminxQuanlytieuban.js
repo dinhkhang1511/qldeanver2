@@ -1,6 +1,18 @@
+$(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
+    $( "#act-tieuban" ).addClass( "active" )
+    $('#logo-title').append('<img src="/Asset 4.png" alt="" srcset="">')
+});
+
+
+    
+
+
+var MaAdmin = 'ADMIN';
+
 var listinfoitem;
 var currentlist = true;
 var textsearch = '';
+
 var page_num = 1;
 var tol_page = 0;
 
@@ -9,28 +21,31 @@ var currentrowtable = -1;
 var maTB;
 var ngaytemp;
 var giotemp;
+
 var khoacurrent = 0;
-
+var nghanhcurrent = '';
 var listkhoa = [];
+var listnghanh = [];
+    var listmanganh = [];
+    var listtennghanh = [];
 
-let listcheckGV = [];
+var listcheckGV = [];
 
-$(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
-    $( "#act-tieuban" ).addClass( "active" )
-});
+var tieudeBangTieuban =['Tiểu ban','Ngày','Giờ','Trạng thái'];
+var tennutBangTieuban = ['Phân công','Sửa','Xóa'];
+var idnutBangTieuban = ['phancongx', 'suax' , 'xoax'];
 
-var listButtonpk = ['Phân công','Sửa','Xóa'];
-var listIdBtnTable = ['phancongx', 'suax' , 'xoax'];
+var nutThemTieuban =  ['Thêm','Thoát'];
+var maunutThemTieuban = ['tomato', 'green'];
+var idnutThemTieuban = ['them', 'thoat'];
 
-var listBtnpk =  ['Thêm','Thoát'];
-var listColorpk = ['tomato', 'green'];
-var listIdBtn = ['them', 'thoa'];
+var nutSuaTieuban =  ['Sửa','Thoát'];
+var matnutSuaTieuban = ['tomato', 'green'];
+var idnutSuaTieuban = ['sua', 'thoat'];
 
-var listSuaBtnpk =  ['Sửa','Thoát'];
-var listSuaColorpk = ['tomato', 'green'];
-var listSuaIdBtn = ['sua', 'thoa'];
-
-var listphancongbtn =  ['Phân công','Thoát'];
+var nutPhancongTieuban =  ['Phân công','Thoát'];
+var maunutPhancongTieuban =  ['tomato', 'green'];
+var idnutPhancongTieuban = ['phancong','thoat']
 
 var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -39,17 +54,24 @@ var xhttp = new XMLHttpRequest();
                     
                     var data = JSON.parse(this.responseText);
                     console.log(data)
-                    tol_page =  Math.ceil(data[1][0]['count(*)'] / 10); 
-                    console.log(tol_page)
-                    listinfoitem = data[0][0];
-                    listkhoa = data[2];
+                    
+                    listkhoa = [];
+                    listnghanh = data[0];
+                    for(let i = 0; i < data[1].length; i++){
+                        listkhoa.push(data[1][i].namBD);
+                    }
+                    nghanhcurrent = data[2];
                     khoacurrent = data[3] 
+
+                    tol_page =  Math.ceil(data[1][0]['count(*)'] / 10); 
+                    listinfoitem = data[0];
                     LoadListTieuban(listinfoitem);
                 }
                 if(String(this.responseURL).includes('api/dieukienthemtb')){
                     var data = JSON.parse(this.responseText);
                     LoadAddFormTieuban(data[0]['AUTO_IDTB('+khoacurrent+')'])
                 }
+
                 if(String(this.responseURL).includes('api/themtb')){
                     if(String(this.responseText) == '"that bai"')
                         alert('Fail')
@@ -97,11 +119,11 @@ var xhttp = new XMLHttpRequest();
         }
     };
 
-// ///LOAD----------------------------------------------------
+//LOAD DATA TIỂU BAN----------------------------------------------------
 function loadListTieuban(){
     currentlist = true;
     textsearch = '';
-    xhttp.open("GET", "/api/danhsachtieuban?page="+page_num+"&khoa="+khoacurrent, false);
+    xhttp.open("GET", "/api/danhsachtieuban?page="+page_num+"&Khoa="+khoacurrent+"&MaAdmin="+MaAdmin+"&MaNganh="+nghanhcurrent, false);
     xhttp.send();
 }
 
@@ -123,13 +145,12 @@ function addTieuban() {
     console.log(ngay)
 
     if(String(ngay) !== ''){
-        xhttp.open("GET", "/api/themtb?ngay="+ngay+"&gio="+gio+"&maTB="+ $(".label-item-add").text(), false);
+        xhttp.open("GET", "/api/themtb?ngay="+ngay+"&gio="+gio+"&maTB="+ $(".label-item-add").text()+"&MaNganh="+ nghanhcurrent, false);
         xhttp.send();
     }else{
         alert("Nhập ngày giờ")
     }
 }
-
 
 function updateListTieuban() {
     var thoigiantieuban = document.getElementsByClassName('thoigianform').item(0).value;
@@ -153,7 +174,6 @@ function loadphancongtieuban(){
     xhttp.send();
 }
 
-
 function checkphancongtieuban(){
     xhttp.open("GET", "/api/checkaddGVintoTieuban?TB="+maTB, false);
     xhttp.send();
@@ -169,7 +189,6 @@ function addphancongtieuban(count){
     const unique = (value, index, self) => {
         return self.indexOf(value) === index
       }
-
     const ages = [GV01, GV02, GV03, GV04, GV05]
     const uniqueAges = ages.filter(unique)
 
@@ -211,15 +230,7 @@ function addphancongtieuban(count){
         alert('Giảng viên không được trùng lặp');
     }
 
-    // console.log(GV01,GV02,GV03,GV04,GV05,maTB)
-
-
-    // xhttp.open("GET", "/api/addGVintoTieuban?TB="+maTB+"&GV1="+GV01+"&GV2="+GV02+"&GV3="+GV03+"&GV4="+GV04+"&GV5="+GV05, false);
-    // xhttp.send();
-    // // xhttp.open("GET", "/api/addGVphancongTB", false);
-    // // xhttp.send();
 }
-
 
 function changeKhoa(){
     var e = document.getElementById("select-khoa");
@@ -238,9 +249,14 @@ function changesearch(s){
     xhttp.send();
 }
 
-//ELEMENT-----------------------------------------------------
+//LOAD ELEMENT TIỂU BAN-----------------------------------------------------
 function LoadListTieuban(data) {
-  
+    listmanganh = [];
+    listtennghanh = [];
+    for(let i = 0;i < listnghanh.length; i++){
+        listmanganh.push(listnghanh[i].MaNganh);
+        listtennghanh.push(listnghanh[i].TenNganh);
+    }
     let listTB = [];
     let dk;
     for(let i = 0; i< data.length;i++){
@@ -249,17 +265,14 @@ function LoadListTieuban(data) {
         listTB.push({maTB: data[i].maTB, ngay: data[i].ngay, gio: data[i].gio, sum: dk})
     }
 
-    //xác định ẩn hiện
     $('#button-bar').show();
     $('.chose-bar').show();
     $('#table_data').show();
     $('.btn-follow-row').show();
     $('.nav-page').show();
     $('#head-bar').show();
-
     $('.Add-New-Row').hide();
 
-    //làm rỗng các phần
     $('#head-bar').empty();
     $('#button-bar').empty();
     $('.chose-bar').empty();
@@ -267,16 +280,12 @@ function LoadListTieuban(data) {
     $('.btn-follow-row').empty();
     $('.nav-page').empty();
 
-    //thêm chi tiết vào
-    // $('#head-bar').append(returnFormListKhoa(listkhoa,khoacurrent));
-    $('#head-bar').append(returnFormComboxHeadBar('Nghành',['Công nghệ thông tin', 'An toàn thông tin', 'Đa phương tiện'], 'An toàn thông tin', 'chonnghanh',200,0));
-    $('#head-bar').append(returnFormComboxHeadBar('Khóa',listkhoa, khoacurrent, 'chonkhoa',100,20));
-
-
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý tiểu ban') +  returnAddBtn());
-    $('.chose-bar').append(returnSearchForm('Nhập mã tiểu ban','Làm mới') );
-    $('#table_data').append(returnTable( ['Tiểu ban','Ngày','Giờ','Trạng thái'],listTB));
-    $('.btn-follow-row').append(returnButtonTable(listButtonpk,listIdBtnTable));
+    $('#head-bar').append(returnFormComboxHeadBar('Nghành',listmanganh, listtennghanh, nghanhcurrent, 'chonnghanh',250,0));
+    $('#head-bar').append(returnFormComboxHeadBar('Khóa',listkhoa , listkhoa, khoacurrent, 'chonkhoa',100,20));
+    $('.chose-bar').append(returnSearchForm('Tìm mã tiểu ban','Làm mới') );
+    $('#table_data').append(returnTable( tieudeBangTieuban ,listTB));
+    $('.btn-follow-row').append(returnButtonTable(tennutBangTieuban,idnutBangTieuban));
     $('.nav-page').append(returNavForm(tol_page+1, page_num));
 }
 
@@ -300,24 +309,21 @@ function LoadListDataTieuban(data){
 }
 
 
-function LoadAddFormTieuban(maTB) {
-
+function LoadAddFormTieuban(maTB){
     $('#button-bar').show();
     $('.chose-bar').hide();
     $('#table_data').hide();
     $('.btn-follow-row').hide();
     $('.nav-page').hide();
-
     $('.Add-New-Row').show();
 
     $('#button-bar').empty();
     $('.Add-New-Row').empty();
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý tiểu ban') + returnNameIndex('Thêm mới') +  returnReturnBtn());
-    // $('.Add-New-Row').append(returnFormLabel('Thêm mới tiểu ban'));
     $('.Add-New-Row').append(returnFormLabelInfo('Mã tiểu ban',maTB));
     $('.Add-New-Row').append(returnFormInputTime('Thời gian',1,''));
-    $('.Add-New-Row').append(returnFormBtn(['Xác nhận', 'Thoát'],['tomato','green'],['them','thoat']));
+    $('.Add-New-Row').append(returnFormBtn(nutThemTieuban,maunutThemTieuban,idnutThemTieuban));
 }
 
 
@@ -379,7 +385,7 @@ function LoadPhancongTieuban(data) {
 
 
 
-//CLICK-----------------------------------------------
+//LOAD EVENT TIỂU BAN -----------------------------------------------
 function EventAdminClick(event) {
     var x = event.target;
     if( x.parentNode.className == "no-color-lum-table"){
@@ -413,14 +419,12 @@ function EventAdminClick(event) {
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
     }else if(x.id == 'search-index'){
-
         console.log(document.getElementById('input-search').value);
     }else{
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
     }
     if(x.id == 'phancong'){
-        // addphancongtieuban();
         checkphancongtieuban();
     }
     if(x.parentNode.className == "nav-page" ){

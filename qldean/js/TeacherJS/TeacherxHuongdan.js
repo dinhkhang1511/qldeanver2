@@ -22,6 +22,7 @@ var listIdBtn = ['them', 'thoa'];
 
 $(".left-bar").load("/qldean/Teacher/SlideBarCollapse.html",function () {
     $( "#act-huongdan" ).addClass( "active" );
+    $('#logo-title').append('<img src="/Asset 4.png" alt="" srcset="">')
 });
 
 

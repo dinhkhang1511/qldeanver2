@@ -21,6 +21,7 @@ var khoacurrent = 0;
 
 $(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
     $( "#act-sinhvien" ).addClass( "active" )
+    $('#logo-title').append('<img src="/Asset 4.png" alt="" srcset="">')
 });
 
 const bubbleSort = (array) => {

@@ -205,13 +205,13 @@ function returnFormListKhoa(dskhoa,khoa) {
 
 
 
-function returnFormComboxHeadBar(tieude,danhsach, chon, hamchon,width,left){
+function returnFormComboxHeadBar(tieude,danhsach,danhsachva, chon, hamchon,width,left){
     var element = '<span style="margin-left:'+left+'px" class="title-combox-headbar">'+tieude+'</span><select style="width:'+width+'px;" class="browser-default custom-select  select-combox-headbar" onchange="'+hamchon+'();">'
     for(var i = 0; i < danhsach.length; i++){
         if(String(danhsach[i]) === String(chon))
-        element = element + '<option selected value="'+danhsach[i]+'">'+danhsach[i]+'</option>';
+        element = element + '<option selected value="'+danhsach[i]+'">'+danhsachva[i]+'</option>';
         else
-        element = element + '<option value="'+danhsach[i]+'">'+danhsach[i]+'</option>';
+        element = element + '<option value="'+danhsach[i]+'">'+danhsachva[i]+'</option>';
     }
     return element + '</select>';
 }

@@ -23,6 +23,7 @@ var listIdBtn = ['them', 'thoa'];
 
 $(".left-bar").load("/qldean/Teacher/SlideBar.html",function () {
     $( "#act-tatcadoan" ).addClass( "active" )
+    $('#logo-title').append('<img src="/Asset 4.png" alt="" srcset="">')
 });
 
 var xhttp = new XMLHttpRequest();

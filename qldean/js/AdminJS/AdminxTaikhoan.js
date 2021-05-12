@@ -1,6 +1,7 @@
 
 $(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
     $( "#act-tieuban" ).addClass( "active" )
+    $('#logo-title').append('<img src="/Asset 4.png" alt="" srcset="">')
 });
 
 var listButtonpk = ['Phân công','Sửa','Xóa'];

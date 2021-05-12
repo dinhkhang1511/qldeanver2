@@ -24,6 +24,7 @@ var listkhoa = [];
 
 $(".left-bar").load("/qldean/Admin/SlideBarCollapse.html",function () {
     $( "#act-phancongphanbien" ).addClass( "active" );
+    $('#logo-title').append('<img src="/Asset 4.png" alt="" srcset="">')
 });
 
 

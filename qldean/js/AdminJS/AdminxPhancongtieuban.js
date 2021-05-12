@@ -23,6 +23,7 @@ var listkhoa = [];
 
 $(".left-bar").load("/qldean/Admin/SlideBarCollapse.html",function () {
     $( "#act-phancongtieuban" ).addClass( "active" );
+    $('#logo-title').append('<img src="/Asset 4.png" alt="" srcset="">')
 });
 
 var xhttp = new XMLHttpRequest();
