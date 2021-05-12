@@ -505,8 +505,9 @@ function EventAdminClick(event) {
                     $('#ds-khoa-btn').hide();
                     $('#xacnhan-khoa-btn').hide();
                     khoacurrenttemp = Number(document.getElementById('them-khoa-input').value);
+                    changeKhoaandNghanh();
                 });
-
+                
             }else{
                 alert("Vượt quá năm quy định!")
             }
