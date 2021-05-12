@@ -3,10 +3,6 @@ $(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
     $('#logo-title').append('<img src="/Asset 4.png" alt="" srcset="">')
 });
 
-
-    
-
-
 var MaAdmin = 'ADMIN';
 
 var listinfoitem;
@@ -15,7 +11,6 @@ var textsearch = '';
 
 var page_num = 1;
 var tol_page = 0;
-
 var currentrowtable = -1;
 
 var maTB;
@@ -47,6 +42,8 @@ var idnutSuaTieuban = ['sua', 'thoat'];
 var nutPhancongTieuban =  ['Phân công','Thoát'];
 var maunutPhancongTieuban =  ['tomato', 'green'];
 var idnutPhancongTieuban = ['phancong','thoat']
+
+
 
 var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
