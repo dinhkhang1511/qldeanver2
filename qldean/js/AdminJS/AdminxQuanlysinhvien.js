@@ -37,15 +37,18 @@ var listnghanh = [];
     var listmanganh = [];
     var listtennghanh = [];
 
+var liststartkhoa = [];
 var listkhoa = [];
 var listkhoatemp = [];
 var listniemkhoa = [];
+var listniemkhoatemp = [];
+var rangeKhoa = [2010,2021]
 
 var listchuyenganh = [];
     var listmachuyennganh = [];
     var listtenchuyennganh = [];
 
-
+var checklistlop = true;
 var listlop = []
 
 
@@ -80,6 +83,7 @@ var xhttp = new XMLHttpRequest();
                     }
 
                     listkhoa = [];
+                    liststartkhoa = data[1];
                     for(let i = 0; i < data[1].length; i++){
                         listkhoa.push(data[1][i].namBD);
                     }
@@ -91,7 +95,7 @@ var xhttp = new XMLHttpRequest();
                     nghanhcurrent = data[2];
                     khoacurrent = data[3];
 
-                    tol_page =  1; 
+                    tol_page =  1;
                     listinfoitem = [];
 
                     LoadListSinhvien(listinfoitem);
@@ -117,8 +121,7 @@ var xhttp = new XMLHttpRequest();
                     }
                     lopcurrent = data[4];
                     console.log(listmachuyennganh,listtenchuyennganh)
-                    LoadAddFormSinhvien()
-
+                    LoadAddFormSinhvien();
                 }
 
                 if(String(this.responseURL).includes('api/danhsach-theo-chuyennganhvakhoa')){
@@ -128,7 +131,28 @@ var xhttp = new XMLHttpRequest();
                     for(let i = 0; i < data[0].length; i++){
                         listlop.push(data[0][i].MaLop)
                     }
-                    console.log(listlop)
+
+                    if(listlop.length > 0){
+                        checklistlop = true;
+                        LoadComboxLop();
+                        createLopmoi();
+                    }else{
+                        checklistlop = false;
+                        createLopmoi()
+                    }
+                }
+                if(String(this.responseURL).includes('api/taomoilop')){
+                    var data = JSON.parse(this.responseText)
+                    if(checklistlop === false){
+                    $('#label-lop').empty().append(data)
+                    $('#combox-ds-lop').hide();
+                    $('#label-lop').show();
+                    $('#themlopbtn').hide();
+                    $('#dslopbtn').hide();
+                    }else{
+                        lopcurrent = data;
+                        $('#label-lop').empty().append(lopcurrent)
+                    }
                 }
 
 
@@ -238,12 +262,20 @@ function changeChuyennghanh(){
     var e = document.getElementsByClassName("combo-box-add-long").item(0);
     chuyennghanhcurrent = String(e.options[e.selectedIndex].value);
 
-    console.log(chuyennghanhcurrent,khoacurrent)
+    // console.log(chuyennghanhcurrent,khoacurrent)
 
     xhttp.open("GET", "/api/danhsach-theo-chuyennganhvakhoa?MaChuyenNghanh="+chuyennghanhcurrent+"&Khoa="+khoacurrent, false);
     xhttp.send();
 }
 
+
+function createLopmoi(){
+    var e = document.getElementsByClassName("combo-box-add-long").item(0);
+    chuyennghanhcurrent = String(e.options[e.selectedIndex].value);
+    
+    xhttp.open("GET", "/api/taomoilop?MaChuyenNghanh="+chuyennghanhcurrent+"&Khoa="+khoacurrent, false);
+    xhttp.send();
+}
 
 //ELEMENT-----------------------------------------------------
 function LoadListSinhvien(data) {
@@ -309,18 +341,34 @@ function LoadAddFormSinhvien() {
         $('#label-lop').hide();
         $('#themlopbtn').show();
         $('#dslopbtn').hide();
+        checklistlop = true;
     }else{
         $('.Add-New-Row').append(returnFormInputSelectHaveBtn('Lớp','combox-ds-lop',listlop,listlop,'','label-lop',lopcurrent,['themlopbtn','dslopbtn'],['Thêm lớp','Danh sách']))
         $('#combox-ds-lop').hide();
         $('#label-lop').show();
         $('#themlopbtn').hide();
         $('#dslopbtn').hide();
+        checklistlop = false;
     }
     $('.Add-New-Row').append(returnFormInputText('GPA', ''));
     $('.Add-New-Row').append(returnFormBtn(nutThemSinhvien,maunutThemSinhvien,idnutThemSinhvien));
 }
 
-
+function LoadComboxLop(){
+    $('#combox-ds-lopx').empty();
+    $('#combox-ds-lop').show();
+    $('#label-lop').hide();
+    $('#themlopbtn').show();
+    $('#dslopbtn').hide();
+    var element = '';
+    for(var i = 0; i < listlop.length; i++){
+        if(i == 0)
+        element = element + '<option selected value="'+listlop[i]+'">'+listlop[i]+'</option>';
+        else 
+        element = element + '<option value="'+listlop[i]+'">'+listlop[i]+'</option>';
+    }
+    $('#combox-ds-lopx').append(element);
+}
 
 // function LoadSuaFormSinhvien(listData) {
 //     console.log(listData)
@@ -380,26 +428,66 @@ function EventAdminClick(event) {
         page_num = Number(x.innerHTML)
         loadListSinhvien();
     }else if(x.id == 'them-khoa-btn'){
-        $('#select-khoa').hide();
+        $('#chon-list-khoa-add').hide();
         $('#them-khoa-btn').hide();
-        $('#input-khoa').show();
+        $('#them-khoa-input').show();
         $('#ds-khoa-btn').show();
         $('#xacnhan-khoa-btn').show();
     }else if(x.id == 'ds-khoa-btn'){
-        $('#select-khoa').show();
+        $('#chon-list-khoa-add').show();
         $('#them-khoa-btn').show();
-        $('#input-khoa').hide();
+        $('#them-khoa-input').hide();
         $('#ds-khoa-btn').hide();
         $('#xacnhan-khoa-btn').hide();
-    }else if(x.id == 'xacnhan-them-khoa'){
-        console.log(Number(document.getElementById('input-khoa').value))
-        if(Number(document.getElementById('input-khoa').value) !== 0)
-        if(listkhoa.indexOf(Number(document.getElementById('input-khoa').value)) !== -1){
+    }else if(x.id == 'xacnhan-khoa-btn'){
+
+        listkhoa = [];
+        for(let i = 0; i < liststartkhoa.length; i++){
+            listkhoa.push(liststartkhoa[i].namBD);
+        }
+        console.log(listkhoa)
+        listkhoatemp = [];
+        listniemkhoatemp = [];
+        if(Number(document.getElementById('them-khoa-input').value) !== 0 || String(Number(document.getElementById('them-khoa-input').value)) !== 'NaN')
+        if(listkhoa.indexOf(Number(document.getElementById('them-khoa-input').value)) !== -1){
             alert("Khóa đã tồn tại!")
         } else{
-            if(Number(document.getElementById('input-khoa').value) >= rangeKhoa[0] && Number(document.getElementById('input-khoa').value) <= rangeKhoa[1]){
-                xhttp.open("GET", "/api/themkhoasv?khoa="+Number(document.getElementById('input-khoa').value), false);
-                xhttp.send();
+            if(Number(document.getElementById('them-khoa-input').value) >= rangeKhoa[0] && Number(document.getElementById('them-khoa-input').value) <= rangeKhoa[1]){
+                $.getJSON( "/api/layniemkhoatheonam?MaNghanh="+nghanhcurrent, function( data ) {
+                    
+                    listkhoatemp = listkhoa;
+                    listkhoatemp.push(Number(document.getElementById('them-khoa-input').value));
+                    listkhoatemp = bubbleSort(listkhoatemp);
+
+                    for(let i = 0; i < listkhoatemp.length; i++){
+                        if(Number(document.getElementById('them-khoa-input').value) == listkhoatemp[i]){
+                            listniemkhoatemp.push(Number(document.getElementById('them-khoa-input').value) + '-' + Math.ceil(Number(document.getElementById('them-khoa-input').value) + data[0].SoNam));
+                        }else{
+                            for(let k = 0; k < liststartkhoa.length; k++){
+                                if(Number(liststartkhoa[k].namBD) == Number(listkhoatemp[i])){
+                                    listniemkhoatemp.push(listkhoatemp[i] + '-' + Math.ceil(listkhoatemp[i] + liststartkhoa[k].SoNam));
+                                }
+                            }
+                        }
+                    }
+                    $('#chon-list-khoa-add').empty();
+
+                    var element = '';
+                    for(var i = 0; i < listniemkhoatemp.length; i++){
+                        if(Number(listkhoatemp[i]) == Number(document.getElementById('them-khoa-input').value))
+                        element = element + '<option selected value="'+listkhoatemp[i]+'">'+listniemkhoatemp[i]+'</option>';
+                        else 
+                        element = element + '<option value="'+listkhoatemp[i]+'">'+listniemkhoatemp[i]+'</option>';
+                    }
+                    $('#chon-list-khoa-add').append(element);
+                    $('#chon-list-khoa-add').show();
+                    $('#them-khoa-btn').show();
+                    $('#them-khoa-input').hide();
+                    $('#ds-khoa-btn').hide();
+                    $('#xacnhan-khoa-btn').hide();
+          
+                });
+
             }else{
                 alert("Vượt quá năm quy định!")
             }

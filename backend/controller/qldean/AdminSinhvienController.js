@@ -98,6 +98,11 @@ module.exports = async (callback, scanner) => {
         data.push(Lop[0]['Lop']);
         callback(JSON.stringify(data), 'application/json');
     }
+    if(index === 'layniemkhoatheonam'){
+        let MaNghanh = head_params.get('MaNghanh');
+        let namniemkhoa = await Model.InleSQL("select SoNam from Nganh where MaNganh='"+MaNghanh+"'");
+        callback(JSON.stringify(namniemkhoa), 'application/json');
+    }
     
 
 
