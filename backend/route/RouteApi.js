@@ -29,15 +29,16 @@ module.exports = (setroute = require("./Setroute")) => {
     
 
     setroute.pushRoute(root_1,"GET","api/themsv", "qldean/AdminSinhvienController@themsv");
+    setroute.pushRoute(root_1,"GET","api/dieukiensuasv", "qldean/AdminSinhvienController@dieukiensuasv");
     setroute.pushRoute(root_1,"GET","api/suasv", "qldean/AdminSinhvienController@suasv");
     setroute.pushRoute(root_1,"GET","api/xoasv", "qldean/AdminSinhvienController@xoasv");
-    // setroute.pushRoute(root_1,"GET","api/timmasv", "qldean/AdminController@timmasv");
 
     setroute.pushRoute(root_1,"GET","api/danhsachgiangvien", "qldean/AdminGiangvienController@danhsachgiangvien");
     setroute.pushRoute(root_1,"GET","api/dieukienthemgv", "qldean/AdminGiangvienController@dieukienthemgv");
     setroute.pushRoute(root_1,"GET","api/themgv", "qldean/AdminGiangvienController@themgv");
     setroute.pushRoute(root_1,"GET","api/suagv", "qldean/AdminGiangvienController@suagv");
     setroute.pushRoute(root_1,"GET","api/xoagv", "qldean/AdminGiangvienController@xoagv");
+    setroute.pushRoute(root_1,"GET","api/danhsachdulieugiangvien", "qldean/AdminGiangvienController@danhsachdulieugiangvien");
     // setroute.pushRoute(root_1,"GET","api/timmagv", "qldean/AdminGiangvienController@timmagv");
 
     setroute.pushRoute(root_1,"GET","api/danhsachphancongHD", "qldean/AdminPhancongHuongdanController@danhsachphancongHD");

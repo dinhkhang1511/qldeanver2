@@ -1,41 +1,104 @@
-var listinfoitem;
-var page_num = 1;
-var tol_page = 0;
+// var listinfoitem;
+// var page_num = 1;
+// var tol_page = 0;
 
-var listGVTitle = ['Mã' , 'Tên' , 'Ngày sinh' , 'Email'] 
-var listGVdata = [{Ma:'SV021', Ten:'le tuan', Ngaysinh: '21/12/2222', Email:'LEtan@prox.com'},{Ma:'SV021', Ten:'le tuan', Ngaysinh: '21/12/2222', Email:'LEtan@prox.com'}]
-var listButtonpk = ['Sửa','Xóa'];
-var listIdBtnTable = [ 'suax' , 'xoax'];
+// var listGVTitle = ['Mã' , 'Tên' , 'Ngày sinh' , 'Email'] 
+// var listGVdata = [{Ma:'SV021', Ten:'le tuan', Ngaysinh: '21/12/2222', Email:'LEtan@prox.com'},{Ma:'SV021', Ten:'le tuan', Ngaysinh: '21/12/2222', Email:'LEtan@prox.com'}]
+// var listButtonpk = ['Sửa','Xóa'];
+// var listIdBtnTable = [ 'suax' , 'xoax'];
 
-var listBtnpk =  ['Thêm','Thoát'];
-var listColorpk = ['tomato', 'green'];
-var listIdBtn = ['them', 'thoat'];
+// var listBtnpk =  ['Thêm','Thoát'];
+// var listColorpk = ['tomato', 'green'];
+// var listIdBtn = ['them', 'thoat'];
 
 
-let IdGV;
+// let IdGV;
 
 $(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
     $( "#act-giangvien" ).addClass( "active" )
-    $('#logo-title').append('<img src="/Asset 4.png" alt="" srcset="">')
 });
+
+var MaAdmin = 'ADMIN';
+
+var listinfoitem;
+var currentlist = 0;
+var textsearch = '';
+
+var page_num = 1;
+var tol_page = 0;
+var currentrowtable = -1;
+var isAddGiangvien = false;
+
+var MaGV;
+var ngaytemp;
+var giotemp;
+
+var khoacurrent = 0;
+var nghanhcurrent = '';
+var listkhoa = [];
+    var listniemkhoa = [];
+var listnghanh = [];
+    var listmanganh = [];
+    var listtennghanh = [];
+
+
+var tieudeBangGiangvien =['Mã' , 'Tên' , 'Ngày sinh' ,'SDT' , 'Email'];
+var tennutBangGiangvien = ['Sửa','Xóa'];
+var idnutBangGiangvien = ['suax' , 'xoax'];
+
+var nutThemGiangvien =  ['Thêm','Thoát'];
+var maunutThemGiangvien = ['tomato', 'green'];
+var idnutThemGiangvien = ['them', 'thoat'];
+
+var nutSuaGiangvien =  ['Sửa','Thoát'];
+var matnutSuaGiangvien = ['tomato', 'green'];
+var idnutSuaGiangvien = ['sua', 'thoat'];
+
+
 
 var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
                 if(String(this.responseURL).includes('api/danhsachgiangvien')){
-                    var data = JSON.parse(this.responseText);
-                    tol_page =  Math.ceil(data[1][0]['count( maGV)'] / 10); 
+                    // tol_page =  Math.ceil(data[1][0]['count( maGV)'] / 10); 
 
+                    // console.log(data)
+                    // console.log(tol_page)
+                    // listinfoitem = data[0];
+                    // LoadListGiangvien(data[0]);
+
+                    var data = JSON.parse(this.responseText);
                     console.log(data)
-                    console.log(tol_page)
-                    listinfoitem = data[0];
-                    LoadListGiangvien(data[0]);
+                    listnghanh = data[0];
+                    listkhoa = [];
+                    for(let i = 0; i < data[1].length; i++){
+                        listkhoa.push(data[1][i].namBD);
+                    }
+                    listniemkhoa = [];
+                    for(let i = 0; i < data[1].length; i++){
+                        listniemkhoa.push(data[1][i].namBD + '-' + Math.ceil(data[1][i].namBD + data[1][i].SoNam));
+                    }
+                    nghanhcurrent = data[2];
+                    khoacurrent = data[3];
+                    tol_page = Math.ceil(data[4][0]["NumberGV"] / 10); 
+                    listinfoitem = data[5][0];
+
+                    LoadListGiangvien(listinfoitem);
+                }
+
+                if(String(this.responseURL).includes('api/danhsachdulieugiangvien')){
+                    var data = JSON.parse(this.responseText);
+                    console.log(data)
+                    tol_page =  Math.ceil(data[0][0]["NumberGV"] / 10); 
+                    listinfoitem = data[1][0];
+                    LoadListDataGiangvien(listinfoitem);
                 }
 
                 if(String(this.responseURL).includes('api/dieukienthemgv')){
                     var data = JSON.parse(this.responseText)
-                    IdGV = data[0]['AUTO_IDGV()'];
-                    LoadAddFormGiangvien(data[0]['AUTO_IDGV()']);
+                    console.log(data);
+                    // MaGV = data[0]['MaGV'];
+                    LoadAddFormGiangvien(data[0]['MaGV']);
                 }
                 if(String(this.responseURL).includes('api/themgv')){
                     if(String(this.responseText) == '"that bai"')
@@ -51,73 +114,96 @@ var xhttp = new XMLHttpRequest();
                 }
 
                 if(String(this.responseURL).includes('api/xoagv')){
+                    console.log(String(this.responseText))
                     if(String(this.responseText) == '"that bai"')
                         alert('Email hoặc field rỗng')
                     else loadListGiangvien();
                 }
-
-//                 if(String(this.responseURL).includes('/api/timmagv')){
-//                     if(String(this.responseText) == '"that bai"'){
-//                         alert('rỗng')
-//                     }else{
-//                         LoadListGiangvien(JSON.parse(this.responseText));
-//                         $('.nav-page').hide();
-//                     }
-            // }
         }
     };
 
 
 ///LOAD----------------------------------------------------
 function loadListGiangvien(){
-    xhttp.open("GET", "/api/danhsachgiangvien?page="+page_num, false);
+    xhttp.open("GET", "/api/danhsachgiangvien?page="+page_num+"&Khoa="+khoacurrent+"&MaNghanh="+String(nghanhcurrent)+"&MaAdmin="+MaAdmin, false);
+    xhttp.send();
+}
+
+function loadListDataGiangvien(){
+    currentlist = 1;
+    textsearch = '';
+    xhttp.open("GET", "/api/danhsachdulieugiangvien?page="+page_num+"&Khoa="+khoacurrent+"&MaNghanh="+String(nghanhcurrent)+"&MaAdmin="+MaAdmin, false);
     xhttp.send();
 }
 
 function loadAddListGiangvien() {
-    xhttp.open("GET", "/api/dieukienthemgv", false);
+    console.log(nghanhcurrent)
+    xhttp.open("GET", "/api/dieukienthemgv?MaNghanh="+String(nghanhcurrent), false);
     xhttp.send();
 }
 
 function addGiangvien() {
-    var MaGV = IdGV;
+    var MaGV = String(document.getElementsByClassName('label-item-add').item(0).innerHTML);
     var TenGV = document.getElementsByClassName('input-new-row-long').item(0).value;
-    var email = document.getElementsByClassName('input-new-row-long').item(1).value;
+    var SDT = document.getElementsByClassName('input-new-row-long').item(1).value;
+    var email = document.getElementsByClassName('input-new-row-long').item(2).value;
 
     var thoigiansv = document.getElementsByClassName('thoigianform').item(0).value;
-    thoigiansv = String(thoigiansv).split('T')
+    thoigiansv = String(thoigiansv).split('T');
     var ngaysinh = thoigiansv[0];
 
-    console.log(MaGV,TenGV,email,ngaysinh)
+    console.log(MaGV,TenGV,SDT,email,ngaysinh,String(nghanhcurrent) )
 
-        xhttp.open("GET", "/api/themgv?MaGV="+MaGV+"&TenGV="+TenGV+"&email="+email+"&ngaySinh="+ngaysinh, false);
+        xhttp.open("GET", "/api/themgv?MaGV="+MaGV+"&TenGV="+TenGV+"&SDT="+SDT+"&email="+email+"&ngaySinh="+ngaysinh+"&MaNghanh="+String(nghanhcurrent), false);
         xhttp.send();
 
 }
 
 function updateListGiangvien() {
-    var MaGV = IdGV;
+    var MaGV = String(document.getElementsByClassName('label-item-add').item(0).innerHTML);
     var TenGV = document.getElementsByClassName('input-new-row-long').item(0).value;
-    var email = document.getElementsByClassName('input-new-row-long').item(1).value;
+    var SDT = document.getElementsByClassName('input-new-row-long').item(1).value;
+    var email = document.getElementsByClassName('input-new-row-long').item(2).value;
 
     var thoigiansv = document.getElementsByClassName('thoigianform').item(0).value;
     thoigiansv = String(thoigiansv).split('T')
     var ngaysinh = thoigiansv[0];
 
-    console.log(MaGV,TenGV,email,ngaysinh)
+    console.log(MaGV,TenGV,email,ngaysinh,SDT)
     // if(isNumeric(magv)){
-        xhttp.open("GET", "/api/suagv?MaGV="+MaGV+"&TenGV="+TenGV+"&email="+email+"&ngaySinh="+ngaysinh, false);
+        xhttp.open("GET", "/api/suagv?MaGV="+MaGV+"&TenGV="+TenGV+"&SDT="+SDT+"&email="+email+"&ngaySinh="+ngaysinh+"&MaNghanh="+String(nghanhcurrent), false);
         xhttp.send();
     // }else{
     //     alert("Mã giang viên phải là số")
     // }
 }
 
-
+function changeKhoaandNghanh(){
+    var e = document.getElementsByClassName("select-combox-headbar").item(0);
+    nghanhcurrent = String(e.options[e.selectedIndex].value);
+    // e = document.getElementsByClassName("select-combox-headbar").item(1);
+    // khoacurrent = e.options[e.selectedIndex].value;
+    console.log("mới tạo "+nghanhcurrent,khoacurrent)
+    if(isAddGiangvien == false){
+        loadListGiangvien();
+    }else{
+        loadAddListGiangvien()
+    }
+}
 
 ///ELEMENT-----------------------------------------------------
 
 function LoadListGiangvien(data) {
+
+    isAddGiangvien = false;
+    currentlist = 1;
+    listmanganh = [];
+    listtennghanh = [];
+    for(let i = 0;i < listnghanh.length; i++){
+        listmanganh.push(listnghanh[i].MaNganh);
+        listtennghanh.push(listnghanh[i].TenNganh);
+    }
+
     $('#button-bar').show();
     $('#head-bar').show();
     $('.chose-bar').show();
@@ -136,15 +222,36 @@ function LoadListGiangvien(data) {
     $('.nav-page').empty();
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý giảng viên') +  returnAddBtn());
-    $('#head-bar').append(returnFormComboxHeadBar('Nghành',['Công nghệ thông tin', 'An toàn thông tin', 'Đa phương tiện'], 'An toàn thông tin', 'chonnghanh',200,0));
+    $('#head-bar').append(returnFormComboxHeadBar('Nghành',listmanganh, listtennghanh, nghanhcurrent, 'changeKhoaandNghanh',250,0));
+    // $('#head-bar').append(returnFormComboxHeadBar('Niêm khóa',listkhoa , listniemkhoa, khoacurrent, 'changeKhoaandNghanh',120,20));
     $('.chose-bar').append(returnSearchForm('Nhập mã giảng viên','Làm mới') );
-    $('#table_data').append(returnTable(listGVTitle,data));
-    $('.btn-follow-row').append(returnButtonTable(listButtonpk,listIdBtnTable));
+    $('#table_data').append(returnTable(tieudeBangGiangvien,data));
+    $('.btn-follow-row').append(returnButtonTable(tennutBangGiangvien,idnutBangGiangvien));
     $('.nav-page').append(returNavForm(tol_page+1, page_num));
 }
 
-function LoadAddFormGiangvien(Id) {
+function LoadListDataGiangvien(data){
+    isAddGiangvien = false;
+    currentlist = 1;
+    listmanganh = [];
+    listtennghanh = [];
+    for(let i = 0;i < listnghanh.length; i++){
+        listmanganh.push(listnghanh[i].MaNganh);
+        listtennghanh.push(listnghanh[i].TenNganh);
+    }
 
+
+    $('#table_data').empty();
+    $('.btn-follow-row').empty();
+    $('.nav-page').empty();
+
+    $('#table_data').append(returnTable(tieudeBangGiangvien,data));
+    $('.btn-follow-row').append(returnButtonTable(tennutBangGiangvien,idnutBangGiangvien));
+    $('.nav-page').append(returNavForm(tol_page+1, page_num));
+}
+
+function LoadAddFormGiangvien(MaGV) {
+    isAddGiangvien = true;
     $('#button-bar').show();
     $('.chose-bar').hide();
     $('#table_data').hide();
@@ -158,19 +265,18 @@ function LoadAddFormGiangvien(Id) {
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý giảng viên') + returnNameIndex('Thêm mới') +  returnReturnBtn());
     $('.Add-New-Row').append(returnFormLabel('Thêm mới giảng viên'));
-    $('.Add-New-Row').append(returnFormLabelInfo('Mã giảng viên',Id));
+    $('.Add-New-Row').append(returnFormLabelInfo('Mã giảng viên',MaGV));
     $('.Add-New-Row').append(returnFormInputTextLength('Tên','' ));
     $('.Add-New-Row').append(returnFormInputTime('Ngày sinh',2,''));
-
+    $('.Add-New-Row').append(returnFormInputTextLength('SDT', ''));
     $('.Add-New-Row').append(returnFormInputTextRight('Email', '@ptithcm.edu.vn'));
-
-    $('.Add-New-Row').append(returnFormBtn(listBtnpk,listColorpk,listIdBtn));
+    $('.Add-New-Row').append(returnFormBtn(nutThemGiangvien,maunutThemGiangvien,idnutThemGiangvien));
 }
 
 function LoadSuaGiangvien(data) {
     console.log(data)
 
-    IdGV = data.MaGV;
+    MaGV = data.MaNV;
 
     $('#button-bar').show();
     $('.chose-bar').hide();
@@ -185,11 +291,11 @@ function LoadSuaGiangvien(data) {
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý giảng viên') + returnNameIndex('Sửa') +  returnReturnBtn());
     $('.Add-New-Row').append(returnFormLabel('Sửa giảng viên'));
-    $('.Add-New-Row').append(returnFormLabelInfo('Mã giảng viên',data.MaGV));
-    $('.Add-New-Row').append(returnFormInputTextLength('Tên',data.TenGV ));
-    $('.Add-New-Row').append(returnFormInputTime('Ngày sinh',2,data.ngaysinh.replace('T17:00:00.000Z','')));
-
-    $('.Add-New-Row').append(returnFormInputTextLength('Email', data.email));
+    $('.Add-New-Row').append(returnFormLabelInfo('Mã giảng viên',data.MaNV));
+    $('.Add-New-Row').append(returnFormInputTextLength('Tên',data.TenNV ));
+    $('.Add-New-Row').append(returnFormInputTime('Ngày sinh',2,data.NgaySinh.replace('T17:00:00.000Z','')));
+    $('.Add-New-Row').append(returnFormInputTextLength('Tên',data.SDT ));
+    $('.Add-New-Row').append(returnFormInputTextLength('Email', data.Email));
 
     $('.Add-New-Row').append(returnFormBtn(['Xác nhận','Thoát'],['tomato','green'],['sua','thoat']));
 }
@@ -352,10 +458,9 @@ function EventAdminClick(event) {
             LoadSuaGiangvien(listinfoitem[currentrowtable])
         }
         if(x.id == 'xoax'){
-            
-        xhttp.open("GET", "/api/xoagv?MaGV="+listinfoitem[currentrowtable].MaGV, false);
-        xhttp.send();
-            console.log(listinfoitem[currentrowtable].MaGV);
+            xhttp.open("GET", "/api/xoagv?MaGV="+listinfoitem[currentrowtable].MaNV, false);
+            xhttp.send();
+            console.log(listinfoitem[currentrowtable].MaNV);
         }
     }else if(x.className == "add_new_btn" || x.parentNode.className == "add_new_btn" || x.parentNode.parentNode.className == "add_new_btn" ||  x.parentNode.parentNode.parentNode.className == "add_new_btn"){
         // LoadAddFormGiangvien();
@@ -365,7 +470,12 @@ function EventAdminClick(event) {
 
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
-    }else{
+    }
+    else if(x.parentNode.className == "nav-page" ){
+        page_num = Number(x.innerHTML)
+        loadListDataGiangvien();
+    } 
+    else{
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
     }if(x.id == "them"){
@@ -380,10 +490,7 @@ function EventAdminClick(event) {
     // if(x.className == "return_btn" || x.parentNode.className == "return_btn" || x.parentNode.parentNode.className == "return_btn"  ||  x.parentNode.parentNode.parentNode.className == "return_btn" || x.className == "exit-btn"){
     //     loadListGiangvien();
     // }
-    // if(x.parentNode.className == "nav-page" ){
-    //     page_num = Number(x.innerHTML)
-    //     loadListGiangvien();
-    // }   
+      
 
     // if(x.className == "add_new_btn" || x.parentNode.className == "add_new_btn" || x.parentNode.parentNode.className == "add_new_btn" ||  x.parentNode.parentNode.parentNode.className == "add_new_btn"){
     //     loadAddListGiangvien();

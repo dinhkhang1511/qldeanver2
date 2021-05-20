@@ -16,29 +16,6 @@ module.exports = async (callback, scanner) => {
     let Model = scanner.inleModel;
     let head_params = scanner.head_params;
 
-    if (index === 'themkhoasv'){
-    //     let khoa = Number(head_params.get('khoa'));
-    //     fs.appendFileSync('controller/qldean/Text/khoa.txt', '\n'+khoa+',0');
-    //     let oskhoa;
-
-    //     lineReader = readline.createInterface({
-    //       input: fs.createReadStream('controller/qldean/Text/khoa.txt')
-    //   });
-    //   lineReader.on('line', function (line) {
-    //       if(String(line).includes('currentkhoa:')) {
-    //         oskhoa = String(line);
-    //       }
-    //   });
-    //   lineReader.on('close', async function () {
-    //     fs.readFile("controller/qldean/Text/khoa.txt", 'utf8', function (err,data) {
-    //       var formatted = data.replace(oskhoa, 'currentkhoa:'+khoa);
-    //       fs.writeFile("controller/qldean/Text/khoa.txt", formatted, 'utf8', function (err) {
-    //           if (err) return console.log(err);
-    //           });
-    //       });
-    //       callback(JSON.stringify('done'), 'application/json');
-    //   });
-    }
 
     if (index === 'dieukienthemsv'){
         let MaNghanh = head_params.get('MaNghanh');
@@ -49,6 +26,7 @@ module.exports = async (callback, scanner) => {
         let listlop;
         let Lop;
         if(listchuyenganh.length > 0){
+            console.log("call ComboBox_Lop('"+Khoa+"','"+listchuyenganh[0].MaCN+"')")
             listlop = await Model.InleSQL("call ComboBox_Lop('"+Khoa+"','"+listchuyenganh[0].MaCN+"')"); listlop = listlop[0]
             Lop = await Model.InleSQL("SELECT Auto_IDLop('"+Khoa+"','"+listchuyenganh[0].MaCN+"') AS Lop"); Lop = Lop[0]['Lop'];
         }else{
@@ -61,6 +39,29 @@ module.exports = async (callback, scanner) => {
         data.push(listchuyenganh)
         data.push(listlop);
         data.push(Lop);
+        callback(JSON.stringify(data), 'application/json');
+    }
+
+    if(index === 'dieukiensuasv'){
+        let MaNghanh = head_params.get('MaNghanh');
+        let Khoa = head_params.get('Khoa');
+        let MaChuyenNghanh = String(head_params.get('MaChuyenNghanh'));
+        let MaSV = String(head_params.get('MaSV'));
+        
+        console.log("select count(*) into @dem from phancongdoan where MaSV='"+MaSV+"'")
+        let countchek = await Model.InleSQL("select count(*) AS checkCount from phancongdoan where MaSV='"+MaSV+"'");
+        let listchuyenganh = await Model.InleSQL("call ComboBox_CN('"+MaNghanh+"')");listchuyenganh = listchuyenganh[0];
+        let listlop;
+        if(listchuyenganh.length > 0){
+            console.log("call ComboBox_Lop('"+Khoa+"','"+MaChuyenNghanh+"')")
+            listlop = await Model.InleSQL("call ComboBox_Lop('"+Khoa+"','"+MaChuyenNghanh+"')"); listlop = listlop[0]
+        }else{
+            listlop = [];
+        }
+        let data = [];
+        data.push(listchuyenganh);
+        data.push(listlop);
+        data.push(countchek);
         callback(JSON.stringify(data), 'application/json');
     }
 
@@ -113,12 +114,14 @@ module.exports = async (callback, scanner) => {
       let Lop = head_params.get('Lop');
       let GPA = head_params.get('GPA');
       let Email = head_params.get('Email');
-      console.log(MaSV,TenSV,NgaySinh,Lop,GPA,Email)
+      let SDT = head_params.get('SDT');
+      let Khoa = head_params.get('Khoa');
+      let MaNghanh = head_params.get('MaNghanh');
 
-      console.log("INSERT INTO `sinhvien` (`MaSV`, `TenSV`, `NgaySinh`, `Lop`, `GPA`, `Email`) "+
-      "VALUES ('"+MaSV+"','"+TenSV+"','"+NgaySinh+"', '"+Lop+"', "+GPA+", '"+Email+"')")
-      let  result1 = await Model.InleSQL("INSERT INTO `sinhvien` (`MaSV`, `TenSV`, `NgaySinh`, `Lop`, `GPA`, `Email`) "+
-          "VALUES ('"+MaSV+"','"+TenSV+"','"+NgaySinh+"', '"+Lop+"', "+GPA+", '"+Email+"')");
+      console.log(MaSV,TenSV,NgaySinh,Lop,GPA,Email,Khoa)
+
+      console.log("call Insert_SV('"+Khoa+"','"+MaNghanh+"','"+Lop+"','"+MaSV+"','"+TenSV+"','"+NgaySinh+"',"+GPA+",'"+SDT+"')")
+      let  result1 = await Model.InleSQL("call Insert_SV('"+Khoa+"','"+MaNghanh+"','"+Lop+"','"+MaSV+"','"+TenSV+"','"+NgaySinh+"',"+GPA+",'"+SDT+"')");
           if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
               callback(JSON.stringify("that bai"), 'application/json');
           }else{
@@ -181,17 +184,16 @@ module.exports = async (callback, scanner) => {
                 listKhoa = listKhoa[0];
             }
 
-            // console.log("select ShowList_TB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")")
-            // let count = await Model.InleSQL("select CountList_TB('"+Khoa+"','"+MaNghanh+"')");
-            // let select = await Model.InleSQL("call ShowList_TB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
+            let count = await Model.InleSQL("select CountList_SV('"+Khoa+"','"+MaNghanh+"') AS NumberSV");
+            let select = await Model.InleSQL("call ShowList_SV('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
 
             let data = [];
             data.push(listNganh);
             data.push(listKhoa);
             data.push(MaNghanh);
             data.push(Khoa);
-            // data.push(count)
-            // data.push(select)
+            data.push(count)
+            data.push(select)
             callback(JSON.stringify(data), 'application/json');
         });
 
@@ -220,16 +222,16 @@ module.exports = async (callback, scanner) => {
             listKhoa = await Model.InleSQL("call ComboBox_Khoa('"+MaNghanh+"')");
             listKhoa = listKhoa[0];
 
-            // let count = await Model.InleSQL("select CountList_TB('"+Khoa+"','"+MaNghanh+"')");
-            // let select = await Model.InleSQL("call ShowList_TB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
+            let count = await Model.InleSQL("select CountList_SV('"+Khoa+"','"+MaNghanh+"')  AS NumberSV");
+            let select = await Model.InleSQL("call ShowList_SV('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
 
             let data = [];
             data.push(listNganh);
             data.push(listKhoa);
             data.push(MaNghanh);
             data.push(Khoa);
-            // data.push(count)
-            // data.push(select)
+            data.push(count)
+            data.push(select)
 
             callback(JSON.stringify(data), 'application/json');
         });
@@ -242,9 +244,10 @@ module.exports = async (callback, scanner) => {
       let NgaySinh = head_params.get('NgaySinh');
       let Lop = head_params.get('Lop');
       let GPA = head_params.get('GPA');
+      let SDT = head_params.get('SDT');
       // let Email = head_params.get('Email');
-      console.log(MaSV,TenSV,NgaySinh,Lop,GPA)
-      let result1 = await Model.InleSQL("UPDATE `SinhVien` SET `TenSV` = '"+TenSV+"' ,  `NgaySinh` = '"+NgaySinh+"', `Lop` = '"+Lop+"' , `GPA` = '"+GPA+"'  WHERE `MaSV` = '"+MaSV+"'");
+      console.log(MaSV,TenSV,NgaySinh,Lop,GPA,SDT+"capnhatsv")
+      let result1 = await Model.InleSQL("call update_SV('"+Lop+"','"+MaSV+"', '"+TenSV+"', '"+NgaySinh+"',"+GPA+", '"+SDT+"')");
       // console.log("UPDATE `SinhVien` SET `TenSV` = '"+TenSV+"' ,  `NgaySinh` = '"+NgaySinh+"', `Lop` = '"+Lop+"' , `GPA` = '"+GPA+"'  WHERE `MaSV` = "+MaSV)
           if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
               callback(JSON.stringify("that bai"), 'application/json');

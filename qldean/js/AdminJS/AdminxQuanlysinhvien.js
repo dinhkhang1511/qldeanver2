@@ -20,6 +20,7 @@ var MaAdmin = 'ADMIN';
 var listinfoitem;
 var currentlist = 0;
 var textsearch = '';
+var isaddSinhvien = false;
 
 var page_num = 1;
 var tol_page = 0;
@@ -53,8 +54,9 @@ var listchuyenganh = [];
 var checklistlop = true;
 var listlop = []
 
+var itemSV;
 
-var tieudeBangSinhvien = ['Mã' , 'Tên' , 'Ngày sinh' , 'Lớp' , 'Email' , 'GPA'] 
+var tieudeBangSinhvien = ['Mã' , 'Tên' , 'Lớp' ,'Chuyên ngành'  , 'SDT' , 'Email' , 'GPA'] 
 var tennutBangSinhvien = ['Sửa','Xóa'];
 var idnutBangSinhvien = [ 'suax' , 'xoax'];
 
@@ -100,8 +102,8 @@ var xhttp = new XMLHttpRequest();
                     khoacurrent = data[3];
                     khoacurrenttemp = data[3];
 
-                    tol_page =  1;
-                    listinfoitem = [];
+                    tol_page =  Math.ceil(data[4][0]["NumberSV"] / 10); 
+                    listinfoitem = data[5][0];
 
                     LoadListSinhvien(listinfoitem);
                 }
@@ -129,6 +131,31 @@ var xhttp = new XMLHttpRequest();
                     console.log(listmachuyennganh,listtenchuyennganh)
                     LoadAddFormSinhvien();
                 }
+
+                if(String(this.responseURL).includes('api/dieukiensuasv')){
+                    var data = JSON.parse(this.responseText)
+                    console.log(data)
+
+                    listchuyenganh = data[0];
+                    listmachuyennganh = [];
+                    for(let i = 0; i< listchuyenganh.length; i++){
+                        listmachuyennganh.push(listchuyenganh[i].MaCN)
+                    }
+                    listtenchuyennganh = [];
+                    for(let i = 0; i < listchuyenganh.length; i++){
+                        listtenchuyennganh.push(listchuyenganh[i].TenCN)
+                    }
+                    listlop = []
+                    for(let i = 0; i < data[1].length; i++){
+                        listlop.push(data[1][i].MaLop)
+                    }
+                    console.log(listchuyenganh,listlop)
+
+
+
+                    LoadSuaFormSinhvien(itemSV,data[2][0]['checkCount']); 
+                }
+
 
                 if(String(this.responseURL).includes('api/danhsach-theo-chuyennganhvakhoa')){
                     var data = JSON.parse(this.responseText)
@@ -221,37 +248,67 @@ function loadAddListSinhvien() {
     xhttp.send();
 }
 
+
+function loadSuaListSinhvien() {
+    var e = document.getElementsByClassName("select-combox-headbar").item(0);
+    nghanhcurrent = String(e.options[e.selectedIndex].value);
+    e = document.getElementsByClassName("select-combox-headbar").item(1);
+    khoacurrent = e.options[e.selectedIndex].value;
+    console.log("mới tạo "+nghanhcurrent,khoacurrent)
+
+    xhttp.open("GET", "/api/dieukiensuasv?Khoa="+khoacurrent+"&MaNghanh="+nghanhcurrent+"&MaChuyenNghanh="+itemSV.MaCN+"&MaSV="+itemSV.MaSV, false);
+    xhttp.send();
+}
+
 function addSinhvien() {
     var tensv = document.getElementsByClassName('input-new-row-long').item(0).value;
+    var SDT = document.getElementsByClassName('input-new-row-long').item(1).value;
     var GPA = document.getElementsByClassName('input-new-row-short').item(0).value;
 
     var e = document.getElementsByClassName('combo-box-add-long').item(0);
-    var lop = e.options[e.selectedIndex].text;
+    var chuyennganh = e.options[e.selectedIndex].value;
+    var lop;
+    
+    if(document.getElementsByClassName('label-item-add').item(0).style.display === "none"){
+        var e = document.getElementsByClassName('combo-box-add-long').item(1);
+         lop = e.options[e.selectedIndex].value;
+    }else{
+         lop = String(document.getElementsByClassName('label-item-add').item(2).innerHTML);
+    }
+    
 
     var thoigiantieuban = document.getElementsByClassName('thoigianform').item(0).value;
     thoigiantieuban = String(thoigiantieuban).split('T')
     var ngay = thoigiantieuban[0];
 
-    console.log(lop)
-    xhttp.open("GET", "/api/themsv?MaSV="+maSV+"&TenSV="+tensv+"&NgaySinh="+ngay+"&Lop="+lop+"&GPA="+GPA+"&Email="+EmailSV, false);
+    // console.log( "/api/themsv?MaSV="+maSV+"&TenSV="+tensv+"&NgaySinh="+ngay+"&Lop="+lop+"&chuyennganh="+chuyennganh+"&GPA="+GPA+"&Email="+EmailSV+"&SDT="+SDT+"&Khoa="+khoacurrent)
+    xhttp.open("GET", "/api/themsv?MaSV="+maSV+"&TenSV="+tensv+"&NgaySinh="+ngay+"&Lop="+lop+"&MaNghanh="+nghanhcurrent+"&GPA="+GPA+"&Email="+EmailSV+"&SDT="+SDT+"&Khoa="+khoacurrent, false);
     xhttp.send();
 
 }
 
 function updateListSinhvien() {
-    var MaSV = document.getElementsByClassName('label-item-add').item(0).innerHTML;
-    var TenSV = document.getElementsByClassName('input-new-row-long').item(0).value;
-    var NgaySinh = document.getElementsByClassName('thoigianform').item(0).value;
-    NgaySinh = String(NgaySinh).split('T')
-    NgaySinh = NgaySinh[0];
-    // var EmailSV = document.getElementsByClassName('label-item-add').item(1).innerHTML;
-    var e = document.getElementsByClassName('combo-box-add-long').item(0);
-    var Lop = e.options[e.selectedIndex].text;
+
+    var tensv = document.getElementsByClassName('input-new-row-long').item(0).value;
+    var SDT = document.getElementsByClassName('input-new-row-long').item(1).value;
     var GPA = document.getElementsByClassName('input-new-row-short').item(0).value;
 
-    // console.log(masv,tensv,ngaysinh,emailsv,lop,GPA)
+    var lop;
+    if(document.getElementsByClassName('label-item-add').item(4).style.display === "none"){
+        var e = document.getElementsByClassName('combo-box-add-long').item(1);
+         lop = e.options[e.selectedIndex].value;
+    }else{
+         lop = String(document.getElementsByClassName('label-item-add').item(4).innerHTML);
+    }
+    
 
-    xhttp.open("GET", "/api/suasv?MaSV="+MaSV+"&TenSV="+TenSV+"&NgaySinh="+NgaySinh+"&Lop="+Lop+"&GPA="+GPA, false);
+    var thoigiantieuban = document.getElementsByClassName('thoigianform').item(0).value;
+    thoigiantieuban = String(thoigiantieuban).split('T')
+    var ngay = thoigiantieuban[0];
+
+    console.log(itemSV.MaSV,tensv,ngay,lop,GPA)
+
+    xhttp.open("GET", "/api/suasv?MaSV="+itemSV.MaSV+"&TenSV="+tensv+"&NgaySinh="+ngay+"&Lop="+lop+"&GPA="+GPA+"&SDT="+SDT, false);
     xhttp.send();
 
 }
@@ -267,8 +324,6 @@ function changeKhoa(){
 function changeChuyennghanh(){
     var e = document.getElementsByClassName("combo-box-add-long").item(0);
     chuyennghanhcurrent = String(e.options[e.selectedIndex].value);
-
-    // console.log(chuyennghanhcurrent,khoacurrent)
 
     xhttp.open("GET", "/api/danhsach-theo-chuyennganhvakhoa?MaChuyenNghanh="+chuyennghanhcurrent+"&Khoa="+khoacurrent, false);
     xhttp.send();
@@ -291,13 +346,26 @@ function changeKhoaandNghanh(){
     var e = document.getElementsByClassName("select-combox-headbar").item(1);
     khoacurrent = Number(e.options[e.selectedIndex].value);
 
-    console.log(khoacurrent,nghanhcurrent)
-    loadAddListSinhvien();
+    if(isaddSinhvien == true){
+        console.log(khoacurrent,nghanhcurrent)
+        loadAddListSinhvien();
+    }else{
+        loadListSinhvien();
+    }
+
 }
 
 //ELEMENT-----------------------------------------------------
 function LoadListSinhvien(data) {
-    
+
+    data = data.map(o => {
+        let obj = Object.assign({}, o);
+        delete obj.NgaySinh;
+        delete obj.MaCN;
+        return obj;
+      });
+
+    isaddSinhvien = false;
     $('#button-bar').show();
     $('.chose-bar').show();
     $('#table_data').show();
@@ -324,7 +392,7 @@ function LoadListSinhvien(data) {
 }
 
 function LoadAddFormSinhvien() {
-
+    isaddSinhvien = true;
 
     $('#button-bar').show();
     $('#head-bar').show();
@@ -349,6 +417,7 @@ function LoadAddFormSinhvien() {
     $('.Add-New-Row').append(returnFormInputTime('Ngày sinh',2,''));
 
     $('.Add-New-Row').append(returnFormLabelInfo('Email',EmailSV));
+    $('.Add-New-Row').append(returnFormInputTextLength('SDT','' ));
 
     if(listmachuyennganh.length > 0){
         $('.Add-New-Row').append(returnFormInputSelect('Chuyên nghành', 'changeChuyennghanh' , listmachuyennganh, listtenchuyennganh, chuyennghanhcurrent));
@@ -389,32 +458,69 @@ function LoadComboxLop(){
     $('#combox-ds-lopx').append(element);
 }
 
-// function LoadSuaFormSinhvien(listData) {
-//     console.log(listData)
-//     $('#button-bar').show();
-//     $('.chose-bar').hide();
-//     $('#table_data').hide();
-//     $('.btn-follow-row').hide();
-//     $('.nav-page').hide();
+function LoadSuaFormSinhvien(listData,checkChuyennganh) {
+    console.log(listData)
+    $('#button-bar').show();
+    $('.chose-bar').hide();
+    $('#head-bar').hide();
+    $('#table_data').hide();
+    $('.btn-follow-row').hide();
+    $('.nav-page').hide();
 
-//     $('.Add-New-Row').show();
-//     $('#button-bar').empty();
-//     $('.Add-New-Row').empty();
+    $('.Add-New-Row').show();
+    $('#button-bar').empty();
+    $('.Add-New-Row').empty();
 
-//     $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên') + returnNameIndex('Sửa') +  returnReturnBtn());
-//     $('.Add-New-Row').append(returnFormLabel('Sửa sinh viên'));
+    $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý sinh viên') + returnNameIndex('Sửa') +  returnReturnBtn());
+    $('.Add-New-Row').append(returnFormLabel('Sửa sinh viên'));
 
-//     $('.Add-New-Row').append(returnFormLabelInfo('Mã sinh viên',listData.MaSV));
-//     $('.Add-New-Row').append(returnFormInputTextLength('Tên',listData.TenSV ));
-//     $('.Add-New-Row').append(returnFormInputTime('Ngày sinh',2,listData.NgaySinh.replace('T17:00:00.000Z','')));
-//     // $('.Add-New-Row').append(returnFormInputText('Lớp', ''));
-//     $('.Add-New-Row').append(returnFormLabelInfo('Email',listData.Email));
-//     $('.Add-New-Row').append(returnFormInputSelect('Lớp', ['CNTT','ATTT','Marketing','KeToan'], listData.Lop));
-//     // $('.Add-New-Row').append(returnFormInputTextRight('Email', '@ptithcm.edu.vn'));
-//     $('.Add-New-Row').append(returnFormInputText('GPA', listData.GPA));
+    $('.Add-New-Row').append(returnFormLabelInfo('Mã sinh viên',listData.MaSV));
 
-//     $('.Add-New-Row').append(returnFormBtn(['Xác nhận', 'Thoát'],['tomato', 'green'],['sua','thoat']));
-// }
+
+
+    $('.Add-New-Row').append(returnFormLabelInfo('Niêm khóa',listniemkhoa[listkhoa.indexOf(Number(khoacurrent))]));
+    $('.Add-New-Row').append(returnFormLabelInfo('Nghành',listtennghanh[listmanganh.indexOf(nghanhcurrent)]));
+
+    $('.Add-New-Row').append(returnFormInputTextLength('Tên',listData.TenSV ));
+
+    $('.Add-New-Row').append(returnFormInputTime('Ngày sinh',2,listData.NgaySinh.replace('T17:00:00.000Z','')));
+    // $('.Add-New-Row').append(returnFormInputText('Lớp', ''));
+    $('.Add-New-Row').append(returnFormLabelInfo('Email',listData.Email));
+
+    $('.Add-New-Row').append(returnFormInputTextLength('SDT',listData.SDT ));
+    // $('.Add-New-Row').append(returnFormInputSelect('Lớp', ['CNTT','ATTT','Marketing','KeToan'], listData.Lop));
+    // $('.Add-New-Row').append(returnFormInputTextRight('Email', '@ptithcm.edu.vn'));
+
+    console.log(listmachuyennganh+"xxxx"+listlop+"xxxxx"+listData.MaCN+"XXXX"+listData.MaLop)
+
+
+    if(checkChuyennganh == 0){
+    if(listmachuyennganh.length > 0){
+        $('.Add-New-Row').append(returnFormInputSelect('Chuyên nghành', 'changeChuyennghanh' , listmachuyennganh, listtenchuyennganh, listData.MaCN));
+    }
+    }
+
+    if(listlop.length > 0){
+        $('.Add-New-Row').append(returnFormInputSelectHaveBtn('Lớp','combox-ds-lop',listlop,listlop,'','label-lop',listData.MaLop,['themlopbtn','dslopbtn'],['Thêm lớp','Danh sách']))
+        $('#combox-ds-lop').show();
+        $('#label-lop').hide();
+        $('#themlopbtn').show();
+        $('#dslopbtn').hide();
+        checklistlop = true;
+    }else{
+        $('.Add-New-Row').append(returnFormInputSelectHaveBtn('Lớp','combox-ds-lop',listlop,listlop,'','label-lop',listData.MaLop,['themlopbtn','dslopbtn'],['Thêm lớp','Danh sách']))
+        $('#combox-ds-lop').hide();
+        $('#label-lop').show();
+        $('#themlopbtn').hide();
+        $('#dslopbtn').hide();
+        checklistlop = false;
+    }
+
+
+    $('.Add-New-Row').append(returnFormInputText('GPA', listData.GPA));
+
+    $('.Add-New-Row').append(returnFormBtn(['Xác nhận', 'Thoát'],['tomato', 'green'],['sua','thoat']));
+}
 
 //CLICK-----------------------------------------------
 function EventAdminClick(event) {
@@ -427,7 +533,8 @@ function EventAdminClick(event) {
     }else if(x.parentNode.className == 'btn-follow-row'){
         if(x.id == "suax"){
             console.log(currentrowtable)
-            LoadSuaFormSinhvien(listinfoitem[currentrowtable])
+            itemSV = listinfoitem[currentrowtable];
+            loadSuaListSinhvien();
         }
         if(x.id == 'xoax'){
             console.log(listinfoitem[currentrowtable].MaSV)

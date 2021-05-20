@@ -71,8 +71,6 @@ module.exports = async (callback, scanner) => {
                 listKhoa = await Model.InleSQL("call ComboBox_Khoa('"+MaNghanh+"')");
                 listKhoa = listKhoa[0];
             }
-
-            // console.log("select ShowList_TB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")")
             let count = await Model.InleSQL("select CountList_TB('"+Khoa+"','"+MaNghanh+"')");
             let select = await Model.InleSQL("call ShowList_TB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
 
@@ -130,6 +128,9 @@ module.exports = async (callback, scanner) => {
     if (index === 'danhsachdulieutieuban'){
         let MaNghanh = String(head_params.get('MaNghanh')).trim();
         let Khoa = Number(head_params.get('Khoa'));
+        let page = Number(head_params.get('page')) - 1;
+
+        let limit = 10;
 
         let count = await Model.InleSQL("select CountList_TB('"+Khoa+"','"+MaNghanh+"')");
         let select = await Model.InleSQL("call ShowList_TB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
@@ -147,13 +148,13 @@ module.exports = async (callback, scanner) => {
     }
 
     if (index === 'themtb'){
-        let gio = head_params.get('gio');
+        let ca = head_params.get('ca');
         let ngay = head_params.get('ngay');
         let maTB = head_params.get('maTB');
         let MaNghanh = head_params.get('MaNganh');
-        gio = gio + ":00";
-        console.log("INSERT INTO `tieuban` (`MaTB`, `MaNganh`, `Ngay`, `Gio`) VALUES ('"+maTB+"', '"+MaNghanh+"', '"+ngay+"', '"+gio+"');");
-        let result = await Model.InleSQL("INSERT INTO `tieuban` (`MaTB`, `MaNganh`, `Ngay`, `Gio`) VALUES ('"+maTB+"', '"+MaNghanh+"', '"+ngay+"', '"+gio+"');");
+
+        console.log("INSERT INTO `tieuban` (`MaTB`, `MaNganh`, `Ngay`, `Ca`) VALUES ('"+maTB+"', '"+MaNghanh+"', '"+ngay+"', '"+ca+"');");
+        let result = await Model.InleSQL("INSERT INTO `tieuban` (`MaTB`, `MaNganh`, `Ngay`, `Ca`) VALUES ('"+maTB+"', '"+MaNghanh+"', '"+ngay+"', '"+ca+"');");
             if(String(result).includes('Duplicate entry') || String(result).includes('fail')){
                 callback(JSON.stringify("that bai"), 'application/json');
             }else{
@@ -163,11 +164,11 @@ module.exports = async (callback, scanner) => {
 
     if (index === 'suatb'){
         let maTB = head_params.get('maTB');
-        let gio = head_params.get('gio');
+        let ca = head_params.get('ca');
         let ngay = head_params.get('ngay');
-        gio = gio + ":00";
-        
-        let result1 = await Model.InleSQL("UPDATE `tieuban` SET `ngay` = '"+ngay+"' ,  `gio` = '"+gio+"' WHERE `tieuban`.`maTB` = '"+maTB+"'");
+
+        console.log("UPDATE `tieuban` SET `ngay` = '"+ngay+"' ,  `ca` = '"+ca+"' WHERE `tieuban`.`maTB` = '"+maTB+"'");
+        let result1 = await Model.InleSQL("UPDATE `tieuban` SET `ngay` = '"+ngay+"' ,  `ca` = '"+ca+"' WHERE `tieuban`.`maTB` = '"+maTB+"'");
         if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
                 callback(JSON.stringify("that bai"), 'application/json');
             }else{
@@ -199,16 +200,16 @@ module.exports = async (callback, scanner) => {
         let data = []
         data.push(count)
         data.push(result)
-        console.log(count)
+        console.log('select CountList_FindTB ('+Khoa+',"'+MaNghanh+'","'+textsearch+'") as dem;')
         callback(JSON.stringify(data), 'application/json');
     }
     
     if(index === 'danhsachGVphancongTB'){
         let MaNghanh = head_params.get('MaNghanh');
         let ngay = String(head_params.get('ngay')).replace('T17:00:00.000Z','');
-        let gio = head_params.get('gio');
-        console.log(ngay,gio,MaNghanh)
-        let  result1 = await Model.InleSQL("call ComboBox_PhanCongGVTB('"+MaNghanh+"','"+ngay+"', '"+gio+"')");
+        let ca = head_params.get('ca');
+        console.log("call ComboBox_PhanCongGVTB('"+MaNghanh+"', '"+ngay+"', '"+ca+"')")
+        let  result1 = await Model.InleSQL("call ComboBox_PhanCongGVTB('"+MaNghanh+"', '"+ngay+"', '"+ca+"')");
         console.log(result1)    
         if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
                 callback(JSON.stringify("that bai"), 'application/json');
@@ -226,17 +227,22 @@ module.exports = async (callback, scanner) => {
 
     if(index === 'addGVintoTieuban'){
         let TB = head_params.get('TB');
-        let GV1 = head_params.get('GV1');
-        let GV2 = head_params.get('GV2');
-        let GV3 = head_params.get('GV3');
-        let GV4 = head_params.get('GV4');
-        let GV5 = head_params.get('GV5');
+        let listGVSQL = String(head_params.get('listGVSQL'));
 
-       let  result1 = await Model.InleSQL("insert into phanconggvtb (MaGV, MaTB) values ('"+GV1+"', '"+TB+"')");
-            result1 = await Model.InleSQL("insert into phanconggvtb (MaGV, MaTB) values ('"+GV2+"', '"+TB+"')");
-            result1 = await Model.InleSQL("insert into phanconggvtb (MaGV, MaTB) values ('"+GV3+"', '"+TB+"')");
-            result1 = await Model.InleSQL("insert into phanconggvtb (MaGV, MaTB) values ('"+GV4+"', '"+TB+"')");
-            result1 = await Model.InleSQL("insert into phanconggvtb (MaGV, MaTB) values ('"+GV5+"', '"+TB+"')");
+        console.log("call PhanCong_GVTB('"+listGVSQL+"','"+TB+"')")
+        // let GV1 = head_params.get('GV1');
+        // let GV2 = head_params.get('GV2');
+        // let GV3 = head_params.get('GV3');
+        // let GV4 = head_params.get('GV4');
+        // let GV5 = head_params.get('GV5');
+    
+        let  result1 = await Model.InleSQL("call PhanCong_GVTB('"+listGVSQL+"','"+TB+"')");
+
+    //    let  result1 = await Model.InleSQL("insert into phanconggvtb (MaGV, MaTB) values ('"+GV1+"', '"+TB+"')");
+    //         result1 = await Model.InleSQL("insert into phanconggvtb (MaGV, MaTB) values ('"+GV2+"', '"+TB+"')");
+    //         result1 = await Model.InleSQL("insert into phanconggvtb (MaGV, MaTB) values ('"+GV3+"', '"+TB+"')");
+    //         result1 = await Model.InleSQL("insert into phanconggvtb (MaGV, MaTB) values ('"+GV4+"', '"+TB+"')");
+    //         result1 = await Model.InleSQL("insert into phanconggvtb (MaGV, MaTB) values ('"+GV5+"', '"+TB+"')");
         console.log(result1)    
         if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
                 callback(JSON.stringify("that bai"), 'application/json');
