@@ -149,6 +149,8 @@ var xhttp = new XMLHttpRequest();
                     for(let i = 0; i < data[1].length; i++){
                         listlop.push(data[1][i].MaLop)
                     }
+
+                    lopcurrent = data[3];
                     console.log(listchuyenganh,listlop)
 
 
@@ -242,9 +244,10 @@ function loadAddListSinhvien() {
     nghanhcurrent = String(e.options[e.selectedIndex].value);
     e = document.getElementsByClassName("select-combox-headbar").item(1);
     khoacurrent = e.options[e.selectedIndex].value;
+    khoacurrenttemp = e.options[e.selectedIndex].value;
     console.log("mới tạo "+nghanhcurrent,khoacurrent)
 
-    xhttp.open("GET", "/api/dieukienthemsv?Khoa="+khoacurrent+"&MaNghanh="+nghanhcurrent, false);
+    xhttp.open("GET", "/api/dieukienthemsv?Khoa="+khoacurrent+"&MaNghanh="+nghanhcurrent+"&MaAdmin="+MaAdmin, false);
     xhttp.send();
 }
 
@@ -352,7 +355,6 @@ function changeKhoaandNghanh(){
     }else{
         loadListSinhvien();
     }
-
 }
 
 //ELEMENT-----------------------------------------------------
@@ -501,14 +503,14 @@ function LoadSuaFormSinhvien(listData,checkChuyennganh) {
     }
 
     if(listlop.length > 0){
-        $('.Add-New-Row').append(returnFormInputSelectHaveBtn('Lớp','combox-ds-lop',listlop,listlop,'','label-lop',listData.MaLop,['themlopbtn','dslopbtn'],['Thêm lớp','Danh sách']))
+        $('.Add-New-Row').append(returnFormInputSelectHaveBtn('Lớp','combox-ds-lop',listlop,listlop,itemSV.MaLop,'label-lop',lopcurrent,['themlopbtn','dslopbtn'],['Thêm lớp','Danh sách']))
         $('#combox-ds-lop').show();
         $('#label-lop').hide();
         $('#themlopbtn').show();
         $('#dslopbtn').hide();
         checklistlop = true;
     }else{
-        $('.Add-New-Row').append(returnFormInputSelectHaveBtn('Lớp','combox-ds-lop',listlop,listlop,'','label-lop',listData.MaLop,['themlopbtn','dslopbtn'],['Thêm lớp','Danh sách']))
+        $('.Add-New-Row').append(returnFormInputSelectHaveBtn('Lớp','combox-ds-lop',listlop,listlop,itemSV.MaLop,'label-lop',lopcurrent,['themlopbtn','dslopbtn'],['Thêm lớp','Danh sách']))
         $('#combox-ds-lop').hide();
         $('#label-lop').show();
         $('#themlopbtn').hide();

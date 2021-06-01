@@ -1,3 +1,4 @@
+const formidable = require('formidable');
 module.exports = async (callback, scanner) => {
     let index = scanner.req_bundle.index;
     let Model = scanner.inleModel;
@@ -10,7 +11,6 @@ module.exports = async (callback, scanner) => {
         let count = await Model.InleSQL(" SELECT FOUND_ROWS() ;");
         callback(JSON.stringify([result, count]), 'application/json');
     }
-
     if (index === 'danhsachdoanhuongdan'){
         let MaGV = head_params.get('MaGV');
         let limit = 10;
@@ -18,5 +18,16 @@ module.exports = async (callback, scanner) => {
         let result = await Model.InleSQL("select sv.MaSV, TenSV, Lop, Email, MaDA, TenDA from SinhVien sv, DoAn da where sv.MaSV=da.MaSV and da.MaGVHD='"+MaGV+"' LIMIT "+limit+" OFFSET " + page*limit);
         let count = await Model.InleSQL(" SELECT FOUND_ROWS() ;");
         callback(JSON.stringify([result, count]), 'application/json');
+    }
+
+    if(index === 'upfiledoan'){
+
+        console.log(scanner.body_params)
+
+        const form = new formidable.IncomingForm();
+        form.parse(scanner.req, (err, fields, files) => {
+            console.log(JSON.stringify({ fields, files }))
+        });
+ 
     }
 }

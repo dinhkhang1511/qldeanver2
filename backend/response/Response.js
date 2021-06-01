@@ -21,7 +21,8 @@ module.exports = async (scanner) => {
                 body += data;
             });
             scanner.req.on('end', () => {
-                scanner.body_params  = new URL('http://' + "localhost" + body).searchParams;
+        
+                scanner.body_params  = body;
                 getController();
             });       
 }

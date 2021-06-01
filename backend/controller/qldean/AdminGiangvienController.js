@@ -17,17 +17,6 @@ module.exports = async (callback, scanner) => {
     let head_params = scanner.head_params;
 
     if (index === 'danhsachgiangvien'){
-        // let limit = 10;
-        // let page = Number(head_params.get('page')) - 1;
-        // console.log(page)
-        // let count = await Model.InleSQL("select count( maGV) from GiangVien");
-        // let result = await Model.InleSQL("select MaGV, TenGV, ngaysinh, email from GiangVien limit " +limit+ " offset " + page*limit);
-        // console.log("select MaGV, TenGV, NgaySinh, Lop, Email from GiangVien limit " +limit+ " offset " + page*limit)
-        // let data = [];
-        // data.push(result)
-        // data.push(count)
-        // console.log(data)
-        // callback(JSON.stringify(data), 'application/json');
 
         let MaAdmin = String(head_params.get('MaAdmin')).trim();
         let MaNghanh = String(head_params.get('MaNghanh')).trim();

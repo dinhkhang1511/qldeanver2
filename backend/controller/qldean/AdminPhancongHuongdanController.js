@@ -17,146 +17,143 @@ module.exports = async (callback, scanner) => {
     let head_params = scanner.head_params;
 
     if (index === 'danhsachphancongHD'){
-        let khoa = Number(head_params.get('khoa'));
-        let GPA = Number(head_params.get('GPA'));
-        let GPAtemp = -1;
-        console.log(khoa, GPA + 'FIRST')
-        if(khoa == 0){
-                let listkhoa = [];
-                lineReader = readline.createInterface({
-                    input: fs.createReadStream('controller/qldean/Text/khoa.txt')
-                });
-                lineReader.on('line', function (line) {
-                    if(String(line).includes('currentkhoa:')) {
-                        khoa = Number(String(line).replace('currentkhoa:',''));
-                    }else{
-                        if(khoa == 0){
-                            let curbig = (line.split(','));
-                            listkhoa.push(curbig);
-                        }else{
-                            listkhoa.push(Number(line.split(',')[0]))
-                            if(khoa == Number(line.split(',')[0])){
-                                GPA = Number(line.split(',')[1]);
-                            }     
-                        }
 
-                    }
-                });
-                lineReader.on('close', async function () {
+      let MaAdmin = String(head_params.get('MaAdmin')).trim();
+      let MaNghanh = String(head_params.get('MaNghanh')).trim();
+      let Khoa = Number(head_params.get('Khoa'));
+      let GPA = Number(head_params.get('GPA'));
 
-                    if(khoa == 0){
-                    let tempkhoa = 0;
-                    let listkhoatemp = [];
-                    for(let i = 0; i < listkhoa.length; i++){
-                        listkhoatemp.push(Number(listkhoa[i][0]));
-                        if(tempkhoa < Number(listkhoa[i][0])){
-                            tempkhoa = Number(listkhoa[i][0]);
-                            GPA = Number(listkhoa[i][1]);
-                        } 
-                    }
-                    khoa = tempkhoa;
-                    listkhoa = listkhoatemp
-
-                    fs.readFile("controller/qldean/Text/khoa.txt", 'utf8', function (err,data) {
-                        var formatted = data.replace('currentkhoa:0', 'currentkhoa:'+khoa);
-                        fs.writeFile("controller/qldean/Text/khoa.txt", formatted, 'utf8', function (err) {
-                            if (err) return console.log(err);
-                            });
-                        });
-
-                    }
-
-                    let limit = 10;
-                    let page = Number(head_params.get('page')) - 1;
-                    let count = await Model.InleSQL('select CountList_SVDAHD('+khoa+', '+GPA+')');
-                    let result = await Model.InleSQL('call ShowList_SvDAHD('+khoa+', '+GPA+','+page*limit+')');
-                    let data = [];
-                    data.push(result)
-                    data.push(count)
-                    data.push(bubbleSort(listkhoa));
-                    data.push(khoa);
-                    data.push(GPA);
-                    
-                    console.log(khoa, GPA + 'END')
-              
-                    callback(JSON.stringify(data), 'application/json');
-                });
-
-        }else{
-            let oskhoa;
-            let listkhoa = [];
-            lineReader = readline.createInterface({
-                input: fs.createReadStream('controller/qldean/Text/khoa.txt')
-            });
-            lineReader.on('line', function (line) {
-                if(String(line).includes('currentkhoa:')) {
-                    oskhoa = String(line);
-                }else{
-                    let curbig = Number(line.split(',')[0]);
-                    listkhoa.push(curbig);
-                    if(Number(khoa) ==  Number(line.split(',')[0])){
-                    
-                        if(GPA !== -1) GPAtemp =  Number(line.split(',')[1])
-                        else GPA =  Number(line.split(',')[1])
-                    } 
-                }
-            });
-            lineReader.on('close', async function () {
-                fs.readFile("controller/qldean/Text/khoa.txt", 'utf8', function (err,data) {
-                var formatted = data.replace(oskhoa, 'currentkhoa:'+khoa);
-                fs.writeFile("controller/qldean/Text/khoa.txt", formatted, 'utf8', function (err) {
-                    if (err) return console.log(err);
-                    
-
-                    if(GPAtemp !== -1){
-                        fs.readFile("controller/qldean/Text/khoa.txt", 'utf8', function (err,data) {
-                            console.log( khoa+','+GPAtemp, khoa+','+GPA)
-                            console.log(data)
-                            var formatted = String(data.replace(khoa+','+GPAtemp, khoa+','+GPA));
-                            console.log(formatted)
-
-                            fs.writeFile('controller/qldean/Text/khoa.txt', '', function(){
-                                fs.appendFileSync('controller/qldean/Text/khoa.txt', formatted);
-                            })
-                            
-                            });
-                        }
-                
-                
-                    });
-                });
-
-
-                let limit = 10;
-                let page = Number(head_params.get('page')) - 1;
+      console.log(GPA,Khoa,MaAdmin)
       
-                console.log(khoa,GPA+"XXXXXXXXXX")
+      let listNganh;
+      let listKhoa;
 
-                let count = await Model.InleSQL('select CountList_SVDAHD('+khoa+', '+GPA+')');
-                let result = await Model.InleSQL('call ShowList_SvDAHD('+khoa+', '+GPA+','+page*limit+')');
-                console.log('call ShowList_SvDAHD('+khoa+', '+GPA+','+page*limit+')')
-                let data = [];
-                data.push(result)
-                data.push(count)
-                data.push(bubbleSort(listkhoa));
-                data.push(khoa);
-                data.push(GPA);
-                console.log(khoa, GPA + 'END')
-                callback(JSON.stringify(data), 'application/json');
-            });
-        }
+      let MaNghanhtemp;
+      let Khoatemp;
+
+      let limit = 10;
+      let page = Number(head_params.get('page')) - 1;
+
+      listNganh = await Model.InleSQL("call ComboBox_Nganh()");
+      listNganh = listNganh[0];
+
+      console.log("Start+"+MaNghanh,Khoa)
+
+  if(MaNghanh === '' || Khoa == 0 || String(MaNghanh) === 'null'){
+      lineReader = readline.createInterface({
+
+          input: fs.createReadStream('controller/qldean/Text/AdminStatus.txt')
+      });
+      
+      lineReader.on('line', function (line) {
+          if(String(line).includes(MaAdmin)) {
+              MaNghanhtemp = String(line.split(',')[1]);
+              Khoatemp = Number(line.split(',')[2]);
+              if(String(Khoatemp) == 'NaN') Khoatemp = '#';
+          }
+      });
+      
+      lineReader.on('close', async function () {
+          console.log(MaNghanhtemp)
+          if(MaNghanhtemp === '#' || Khoatemp === '#'){
+              MaNghanh = listNganh[0].MaNganh;
+              listKhoa = await Model.InleSQL("call ComboBox_Khoa('"+MaNghanh+"')");
+              listKhoa = listKhoa[0];
+              Khoa = listKhoa[0].namBD;
+
+              fs.readFile("controller/qldean/Text/AdminStatus.txt", 'utf8', function (err,data) {
+                  let formatted = data.replace( String(MaAdmin+','+MaNghanhtemp+','+Khoatemp),String(MaAdmin+','+MaNghanh+','+Khoa));
+                  fs.writeFile("controller/qldean/Text/AdminStatus.txt", '', 'utf8', function (err) {
+                      if (err) return console.log(err);
+                      fs.writeFile("controller/qldean/Text/AdminStatus.txt", formatted, 'utf8', function (err) {
+                          if (err) return console.log(err);
+                      });
+                  });
+              });
+
+          }else{
+              MaNghanh = MaNghanhtemp;
+              Khoa = Khoatemp;
+              listKhoa = await Model.InleSQL("call ComboBox_Khoa('"+MaNghanh+"')");
+              listKhoa = listKhoa[0];
+          }
+
+          if(GPA == 0){ GPA = await Model.InleSQL("select Diem from diemsang where NamBD='"+Khoa+"' and MaNganh='"+MaNghanh+"';"); GPA = Number(GPA[0]['Diem']);
+          }else{ await Model.InleSQL("update DiemSang set Diem='"+GPA+"' where MaNganh='"+MaNghanh+"' and NamBD="+Khoa) }
+
+          let count = await Model.InleSQL("select CountList_SvDAHD('"+Khoa+"','"+MaNghanh+"') AS NumberSV");
+          let select = await Model.InleSQL("call ShowList_SvDAHD('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
+
+          let data = [];
+          data.push(listNganh);
+          data.push(listKhoa);
+          data.push(MaNghanh);
+          data.push(Khoa);
+          data.push(GPA)
+          data.push(count)
+          data.push(select)
+          callback(JSON.stringify(data), 'application/json');
+    });
+
+  }else{
+      lineReader = readline.createInterface({
+          input: fs.createReadStream('controller/qldean/Text/AdminStatus.txt')
+      });
+      lineReader.on('line', function (line) {
+          if(String(line).includes(MaAdmin)) {
+              MaNghanhtemp = String(line.split(',')[1]).trim();
+              Khoatemp = Number(line.split(',')[2]);
+          }
+      });
+      lineReader.on('close', async function () {
+          console.log(String(MaAdmin+','+MaNghanh+','+Khoa), String(MaAdmin+','+MaNghanhtemp+','+Khoatemp))
+          fs.readFile("controller/qldean/Text/AdminStatus.txt", 'utf8', function (err,data) {
+              let formatted = data.replace( String(MaAdmin+','+MaNghanhtemp+','+Khoatemp),String(MaAdmin+','+MaNghanh+','+Khoa));
+              fs.writeFile("controller/qldean/Text/AdminStatus.txt", '', 'utf8', function (err) {
+                  if (err) return console.log(err);
+                  fs.writeFile("controller/qldean/Text/AdminStatus.txt", formatted, 'utf8', function (err) {
+                      if (err) return console.log(err);
+                  });
+              });
+          });
+
+          listKhoa = await Model.InleSQL("call ComboBox_Khoa('"+MaNghanh+"')");
+          listKhoa = listKhoa[0];
+
+          console.log(GPA);
+
+          if(GPA == 0){ GPA = await Model.InleSQL("select Diem from diemsang where NamBD='"+Khoa+"' and MaNganh='"+MaNghanh+"';"); GPA = Number(GPA[0]['Diem']);
+          }else{ await Model.InleSQL("update DiemSang set Diem='"+GPA+"' where MaNganh='"+MaNghanh+"' and NamBD="+Khoa) }
+
+          let count = await Model.InleSQL("select CountList_SvDAHD('"+Khoa+"','"+MaNghanh+"') AS NumberSV");
+          let select = await Model.InleSQL("call ShowList_SvDAHD('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
+
+          let data = [];
+          data.push(listNganh);
+          data.push(listKhoa);
+          data.push(MaNghanh);
+          data.push(Khoa);
+          data.push(GPA)
+          data.push(count)
+          data.push(select)
+
+          callback(JSON.stringify(data), 'application/json');
+      });
+    }
     }
 
-
     if(index === 'danhsachGVHDphancong'){
+
         let MaSV = String(head_params.get('MaSV'));
-        console.log(MaSV)
+        let MaNghanh = String(head_params.get('MaNghanh'));
+        let Khoa = Number(head_params.get('Khoa'));
+
         let result = await Model.InleSQL("call ShowInfor_SVHD('"+MaSV+"')");
-        let result1 =  await Model.InleSQL("select MaGV, TenGV from giangvien where MaTK is not null");
+        let result1 =  await Model.InleSQL("call ComboBox_PhanCongGVHD('"+Khoa+"','"+MaNghanh+"')");
         let data = [];
-        data.push(result)
-        data.push(result1)
-        console.log(data)
+        data.push(result);
+        data.push(result1);
+        console.log(data);
         callback(JSON.stringify(data), 'application/json');
     }
 
@@ -165,7 +162,7 @@ module.exports = async (callback, scanner) => {
         let MaSV = String(head_params.get('MaSV'));
         let NgaySinh = String(head_params.get('NgaySinh'));
         console.log(MaGVHD,MaSV,NgaySinh)
-        let  result1 = await Model.InleSQL('call Add_DA("'+MaSV+'","'+NgaySinh+'", "'+MaGVHD+'");');
+        let  result1 = await Model.InleSQL('call PhanCong_GVHD("'+MaSV+'","'+NgaySinh+'", "'+MaGVHD+'");');
               console.log(result1)
             if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
                 callback(JSON.stringify("that bai"), 'application/json');

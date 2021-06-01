@@ -4,14 +4,11 @@ var tol_page = 1;
 
 var MaGV = "Gv/n-003";
 
-
 var listTacaTitle = ['Mã đồ án' , 'Tên đồ án' , 'GVHD'] 
 var listTacadata = [{Ma:'DA42', Ten:'Lam web', GVHD: 'GV - Nguyen thi thu ngan'},{Ma:'DA42', Ten:'Lam web', GVHD: 'GV - Nguyen thi thu ngan'},{Ma:'DA42', Ten:'Lam web', GVHD: 'GV - Nguyen thi thu ngan'}]
 
-
 var listPhutrachTitle = ['Mã sinh viên','Tên sinh viên', 'Lớp', 'Email','Mã đồ án' , 'Tên đồ án' ]
 var listPhutrachdata = [{MaSV:'SV02', Ten:'Ngoc minh', Lop: 'ATTT', Email:'ngocminh@gmail.com',MaDA: 'DA44', TenDA:'Hack Wifi'}]
-
 
 var listButtonpk = ['Sửa','Xóa'];
 var listIdBtnTable = [ 'suax' , 'xoax'];
@@ -23,7 +20,6 @@ var listIdBtn = ['them', 'thoa'];
 
 $(".left-bar").load("/qldean/Teacher/SlideBar.html",function () {
     $( "#act-tatcadoan" ).addClass( "active" )
-    $('#logo-title').append('<img src="/Asset 4.png" alt="" srcset="">')
 });
 
 var xhttp = new XMLHttpRequest();

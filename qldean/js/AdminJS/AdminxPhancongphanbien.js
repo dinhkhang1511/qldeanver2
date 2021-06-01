@@ -1,30 +1,34 @@
 var listinfoitem;
+let currentrowtable;
 var page_num = 1;
 var tol_page = 0;
 
-var listLabelpk = ['Mã sinh viên','Tên sinh viên','Lớp','Mã đồ án','Tên đồ án','Điểm Hướng dẫn','Mã GVPB'];
-// var data = [{MaSV:'SV02', Ten:'Thanh Tam', Lop:'CNTT', Ma:'023', GPA:'3.4', GVHD:'GV01'},{MaSV:'SV02', Ten:'Thanh Tam', Lop:'CNTT', Ma:'023', GPA:'3.4', GVHD:'GV01'}]
-var listButtonpk = ['Phân công'];
-var listIdBtnTable = ['phancongx'];
-var listInfoPhanbien1 = ['Mã sinh viên: SV21','Tên sinh viên: Le Tấn']
-var listInfoPhanbien2 = ['Mã đồ án: DA21' ,'Tên đồ án: 21']
+var MaAdmin = 'ADMIN';
 
-var listBtnpk =  ['Phân công ','Thoát'];
-var listColorpk = ['tomato', 'green'];
-var listIdBtn = ['phancong', 'thoa'];
+var tieudeBangPB = ['Mã sinh viên','Tên sinh viên','Email','GPA','Mã GVHD','Điểm'];
+var tennutBangPB = ['Phân công'];
+var idnutBangPB = ['phancongx'];
+
+var nutPhancongPB =  ['Phân công ','Thoát'];
+var maunutPhancongPB = ['tomato', 'green'];
+var idnutPhancongPB = ['phancong', 'thoat'];
 
 let MaGVtemp;
 let MaDAtemp;
 let MaSVtemp;
-// let GPAtemp = 0;
 
-let khoacurrent = 0;
+
+
+var khoacurrent = 0;
+var nghanhcurrent = 'null';
 var listkhoa = [];
-
+    var listniemkhoa = [];
+var listnghanh = [];
+    var listmanganh = [];
+    var listtennghanh = [];
 
 $(".left-bar").load("/qldean/Admin/SlideBarCollapse.html",function () {
     $( "#act-phancongphanbien" ).addClass( "active" );
-    $('#logo-title').append('<img src="/Asset 4.png" alt="" srcset="">')
 });
 
 
@@ -33,15 +37,23 @@ var xhttp = new XMLHttpRequest();
         if (this.readyState == 4 && this.status == 200) {
                 if(String(this.responseURL).includes('api/danhsachphancongPB')){
                     var data = JSON.parse(this.responseText);
-                    // tol_page =  Math.ceil(data[1][0]['count(*)'] / 10); 
-                   
-                    console.log(data)
-                    listkhoa = data[2]
-                    khoacurrent = data[3]
+                    console.log(data);
 
-                    tol_page =   Math.ceil(data[1][0]['CountList_SVDAPB('+khoacurrent+')'] / 10); 
-                    // console.log(tol_page)
-                    listinfoitem = data[0][0];
+                    listnghanh = data[0];
+                    listkhoa = [];
+                    for(let i = 0; i < data[1].length; i++){
+                        listkhoa.push(data[1][i].namBD);
+                    }
+                    listniemkhoa = [];
+                    for(let i = 0; i < data[1].length; i++){
+                        listniemkhoa.push(data[1][i].namBD + '-' + Math.ceil(data[1][i].namBD + data[1][i].SoNam));
+                    }
+                    nghanhcurrent = data[2];
+                    khoacurrent = data[3];
+
+                    tol_page =  Math.ceil(data[4][0]['NumberSV'] / 10); 
+                    listinfoitem = data[5][0];
+
                     LoadListPhanbien(listinfoitem);
                 }
 
@@ -66,7 +78,8 @@ var xhttp = new XMLHttpRequest();
 
 
 function loadListPhanbien(){
-    xhttp.open("GET", "/api/danhsachphancongPB?page="+page_num+"&khoa="+khoacurrent, false);
+    console.log(nghanhcurrent)
+    xhttp.open("GET", "/api/danhsachphancongPB?page="+page_num+"&Khoa="+khoacurrent+"&MaAdmin="+MaAdmin+"&MaNghanh="+String(nghanhcurrent), false);
     xhttp.send();
 }
 
@@ -94,6 +107,14 @@ function changeKhoa(){
 
 
 function LoadListPhanbien(data) {
+
+    listmanganh = [];
+    listtennghanh = [];
+    for(let i = 0;i < listnghanh.length; i++){
+        listmanganh.push(listnghanh[i].MaNganh);
+        listtennghanh.push(listnghanh[i].TenNganh);
+    }
+
   
     $('#button-bar').show();
     $('.chose-bar').hide();
@@ -111,12 +132,13 @@ function LoadListPhanbien(data) {
     $('.btn-follow-row').empty();
     $('.nav-page').empty();
 
-    $('#head-bar').append(returnFormComboxHeadBar('Nghành',['Công nghệ thông tin', 'An toàn thông tin', 'Đa phương tiện'], 'An toàn thông tin', 'chonnghanh',200,0));
-    $('#head-bar').append(returnFormComboxHeadBar('Khóa',listkhoa, khoacurrent, 'chonkhoa',100,20));
+    $('#head-bar').append(returnFormComboxHeadBar('Nghành',listmanganh, listtennghanh, nghanhcurrent, 'changeKhoaandNghanh',250,0));
+    $('#head-bar').append(returnFormComboxHeadBar('Niêm khóa',listkhoa , listniemkhoa, khoacurrent, 'changeKhoaandNghanh',120,20));
+
     $('#button-bar').append(returnIconHome() + returnNameIndex('Phụ trách')  + returnNameIndex('Phản biện') );
-    // $('.chose-bar').append(returnSearchForm('Nhập GPA tối thiểu','Lọc') );
-    $('#table_data').append(returnTable(listLabelpk,data));
-    $('.btn-follow-row').append(returnButtonTable(listButtonpk,listIdBtnTable));
+
+    $('#table_data').append(returnTable(tieudeBangPB,data));
+    $('.btn-follow-row').append(returnButtonTable(tennutBangPB,idnutBangPB));
     $('.nav-page').append(returNavForm(tol_page+1, page_num));
 }
 

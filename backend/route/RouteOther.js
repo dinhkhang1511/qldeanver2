@@ -15,12 +15,13 @@ module.exports = (setroute = require("./Setroute")) => {
     setroute.pushRoute(root_1,"GET","admin/phancongtieuban", "qldean/Admin/AdminxPhancongtieuban.html");
     setroute.pushRoute(root_1,"GET","admin/taikhoan", "qldean/Admin/AdminxTaikhoan.html");
 
-    setroute.pushRoute(root_1,"GET","giangvien/phancong", "qldean/Teacher/TeacherxPhancong.html");
+
     setroute.pushRoute(root_1,"GET","giangvien/taikhoan", "qldean/Teacher/TeacherxTaikhoan.html");
 
     setroute.pushRoute(root_1,"GET","giangvien/huongdan", "qldean/Teacher/TeacherxHuongdan.html");
     
-    setroute.pushRoute(root_1,"GET","giangvien/tatcadoan", "qldean/Teacher/TeacherxTatcadoan.html");
+    setroute.pushRoute(root_1,"GET","giangvien/danhsachdoan", "qldean/Teacher/TeacherxDanhsachdoan.html");
+    setroute.pushRoute(root_1,"GET","giangvien/danhsachsinhvien", "qldean/Teacher/TeacherxDanhsachsinhvien.html");
     setroute.pushRoute(root_1,"GET","giangvien/phanbien", "qldean/Teacher/TeacherxPhanbien.html");
     setroute.pushRoute(root_1,"GET","giangvien/tieuban", "qldean/Teacher/TeacherxTieuban.html");
 

@@ -3,25 +3,29 @@ let currentrowtable;
 var page_num = 1;
 var tol_page = 0;
 
-var listLabelpk = ['Mã sinh viên','Tên sinh viên','Lớp','GPA','Mã đồ án','Tên đồ án','Mã GVHD'];
-// var data = [{MaSV:'SV02', Ten:'Minh Chien', Lop:'CNTT', Ma:'023', GPA:'3.4', GVHD:'GV02'}]
-var listButtonpk = ['Phân công'];
-var listIdBtnTable = ['phancongx'];
-var listInfoHuongdan1 = ['Mã sinh viên: SV21','Tên sinh viên: Le Tấn']
-var listInfoHuongdan2 = ['Mã đồ án: DA21' ,'Tên đồ án: 21']
+var MaAdmin = 'ADMIN';
 
-var listBtnpk =  ['Phân công ','Thoát'];
-var listColorpk = ['tomato', 'green'];
-var listIdBtn = ['phancong', 'thoat'];
+var tieudeBangHD = ['Mã sinh viên','Tên sinh viên','Email','GPA','Mã GVHD','Điểm'];
+var tennutBangHD = ['Phân công'];
+var idnutBangHD = ['phancongx'];
+
+var nutPhancongHD =  ['Phân công ','Thoát'];
+var maunutPhancongHD = ['tomato', 'green'];
+var idnutPhancongHD = ['phancong', 'thoat'];
 
 let MaGVtemp;
 let MaDAtemp;
 let MaSVtemp;
 let NgaySinhtemp;
-
-let khoacurrent = 0;
 let GPAtemp = 0;
+
+var khoacurrent = 0;
+var nghanhcurrent = '';
 var listkhoa = [];
+    var listniemkhoa = [];
+var listnghanh = [];
+    var listmanganh = [];
+    var listtennghanh = [];
 
 $(".left-bar").load("/qldean/Admin/SlideBarCollapse.html",function () {
     $( "#act-phanconghuongdan" ).addClass( "active" );
@@ -33,23 +37,34 @@ var xhttp = new XMLHttpRequest();
         if (this.readyState == 4 && this.status == 200) {
                 if(String(this.responseURL).includes('api/danhsachphancongHD')){
                     var data = JSON.parse(this.responseText);
-                    console.log(data)
-                    GPAtemp = data[4];
+                    console.log(data);
+
+                    listnghanh = data[0];
+                    listkhoa = [];
+                    for(let i = 0; i < data[1].length; i++){
+                        listkhoa.push(data[1][i].namBD);
+                    }
+                    listniemkhoa = [];
+                    for(let i = 0; i < data[1].length; i++){
+                        listniemkhoa.push(data[1][i].namBD + '-' + Math.ceil(data[1][i].namBD + data[1][i].SoNam));
+                    }
+                    nghanhcurrent = data[2];
                     khoacurrent = data[3];
-                    listkhoa = data[2]
-                    // tol_page =  Math.ceil(data[1][0]['count(*)'] / 10); 
-                    tol_page =  Math.ceil(data[1][0]['CountList_SVDAHD('+khoacurrent+', '+GPAtemp+')'] / 10); 
-                    listinfoitem = data[0][0];
+
+                    GPAtemp = data[4];
+
+                    tol_page =  Math.ceil(data[5][0]['NumberSV'] / 10); 
+                    listinfoitem = data[6][0];
 
                     LoadListHuongdan(listinfoitem);
                 }
 
                 if(String(this.responseURL).includes('api/danhsachGVHDphancong')){
                     var data = JSON.parse(this.responseText)
-                    // console.log(data,listinfoitem[currentrowtable])
+
                     console.log(data)
                     LoadPhancongHuongdan(data);
-                    // LoadAddFormGiangvien(data[0]['AUTO_IDGV()']);
+
                 }
                 if(String(this.responseURL).includes('api/addGVHDphancong')){
                     if(String(this.responseText) == '"that bai"')
@@ -63,12 +78,12 @@ var xhttp = new XMLHttpRequest();
 
 
 function loadListHuongdan(){
-    xhttp.open("GET", "/api/danhsachphancongHD?page="+page_num+"&GPA="+GPAtemp+"&khoa="+khoacurrent, false);
+    xhttp.open("GET", "/api/danhsachphancongHD?page="+page_num+"&GPA="+GPAtemp+"&Khoa="+khoacurrent+"&MaAdmin="+MaAdmin+"&MaNghanh="+String(nghanhcurrent), false);
     xhttp.send();
 }
 
 function loadPhancongHuongdan(MaSV){
-    xhttp.open("GET", "/api/danhsachGVHDphancong?MaSV="+MaSV, false);
+    xhttp.open("GET", "/api/danhsachGVHDphancong?MaSV="+MaSV+"&Khoa="+khoacurrent+"&MaAdmin="+MaAdmin+"&MaNghanh="+String(nghanhcurrent), false);
     xhttp.send();
 }
 
@@ -84,16 +99,26 @@ function loadAddPhancongHuongdan(){
     }
 }
 
-function changeKhoa(){
-    var e = document.getElementById("select-khoa");
-    khoacurrent = e.options[e.selectedIndex].text;
-    console.log(khoacurrent)
-    xhttp.open("GET", "/api/danhsachphancongHD?page="+page_num+"&GPA="+-1+"&khoa="+khoacurrent, false);
-    xhttp.send();
+
+function changeKhoaandNghanh(){
+    var e = document.getElementsByClassName("select-combox-headbar").item(0);
+    nghanhcurrent = String(e.options[e.selectedIndex].value);
+    e = document.getElementsByClassName("select-combox-headbar").item(1);
+    khoacurrent = e.options[e.selectedIndex].value;
+    console.log("mới tạo "+nghanhcurrent,khoacurrent)
+    loadListHuongdan();
 }
+
 
 function LoadListHuongdan(data) {
   
+    listmanganh = [];
+    listtennghanh = [];
+    for(let i = 0;i < listnghanh.length; i++){
+        listmanganh.push(listnghanh[i].MaNganh);
+        listtennghanh.push(listnghanh[i].TenNganh);
+    }
+
     $('#button-bar').show();
     $('.chose-bar').show();
     $('#table_data').show();
@@ -110,19 +135,19 @@ function LoadListHuongdan(data) {
     $('.btn-follow-row').empty();
     $('.nav-page').empty();
 
-    $('#head-bar').append(returnFormComboxHeadBar('Nghành',['Công nghệ thông tin', 'An toàn thông tin', 'Đa phương tiện'], 'An toàn thông tin', 'chonnghanh',200,0));
-    $('#head-bar').append(returnFormComboxHeadBar('Khóa',listkhoa, khoacurrent, 'chonkhoa',100,20));
+
+    $('#head-bar').append(returnFormComboxHeadBar('Nghành',listmanganh, listtennghanh, nghanhcurrent, 'changeKhoaandNghanh',250,0));
+    $('#head-bar').append(returnFormComboxHeadBar('Niêm khóa',listkhoa , listniemkhoa, khoacurrent, 'changeKhoaandNghanh',120,20));
     
     $('#button-bar').append(returnIconHome() + returnNameIndex('Phụ trách')  + returnNameIndex('Hướng dẫn') );
     $('.chose-bar').append(returnSearchForm('Nhập GPA tối thiểu','Lọc') );
     document.getElementById('input-search').value = GPAtemp;
 
 
-    if(tol_page > 0){
-    $('#table_data').append(returnTable(listLabelpk,data));
-    $('.btn-follow-row').append(returnButtonTable(listButtonpk,listIdBtnTable));
+    $('#table_data').append(returnTable(tieudeBangHD,data));
+    $('.btn-follow-row').append(returnButtonTable(tennutBangHD,idnutBangHD));
     $('.nav-page').append(returNavForm(tol_page+1, page_num));
-    }
+
 }
 
 
@@ -130,9 +155,10 @@ function LoadPhancongHuongdan(data) {
 
     var InfoSV = data[0][0][0];
     console.log(InfoSV)
-    var listgvhd = data[1];
+    var listgvhd = data[1][0];
 
     console.log(InfoSV)
+    console.log(listgvhd)
 
     $('#button-bar').show();
     $('.chose-bar').hide();
@@ -148,20 +174,21 @@ function LoadPhancongHuongdan(data) {
     $('#button-bar').append(returnIconHome() + returnNameIndex('Phụ trách')  + returnNameIndex('Hướng dẫn') + returnNameIndex('Phân công')  + returnReturnBtn());
 
     $('.Add-New-Row').append(returnLormInfo( ['Mã sinh viên: '+InfoSV.MaSV,'Tên sinh viên: '+InfoSV.TenSV]));
-    $('.Add-New-Row').append(returnLormInfo( ['Lớp: '+InfoSV.Lop,'GPA: '+InfoSV.GPA]));
+    $('.Add-New-Row').append(returnLormInfo( ['Lớp: '+InfoSV.MaLop,'GPA: '+InfoSV.GPA]));
+    $('.Add-New-Row').append(returnLormOneInfo('SDT: '+InfoSV.SDT));
     $('.Add-New-Row').append(returnLormOneInfo('Email: '+InfoSV.Email));
 
 
 
 
-    if(String(InfoSV.TenDA) != 'null')
+    if(String(InfoSV.TenDA) != '')
     $('.Add-New-Row').append(returnLormInfo(['Mã đồ án: '+InfoSV.MaDA ,'Tên đồ án: '+InfoSV.TenDA]));
     else
     $('.Add-New-Row').append(returnLormInfo(['Mã đồ án: '+InfoSV.MaDA ,'Tên đồ án: Chưa đặt tên']));
     // $('.Add-New-Row').append(returnLormOneInfo('Giảng viên hướng dẫn: GV02 - Trần Minh Chiến'));
     // $('.Add-New-Row').append(returnLormOneInfo('Tiểu ban: TB02'));
 
-    if(String(InfoSV.Diem) != 'null')
+    if(String(InfoSV.Diem) != '')
     $('.Add-New-Row').append(returnLormOneInfo('Điểm hướng dẫn: '+InfoSV.Diem));
     else
     $('.Add-New-Row').append(returnLormOneInfo('Điểm hướng dẫn: Chưa chấm'));
@@ -179,12 +206,11 @@ function LoadPhancongHuongdan(data) {
     }
        
 
-    // console.log(listGVHD,listgvhd)
     if(String(MaGVtemp) == 'null')
     $('.Add-New-Row').append(returnLormInputSelect('Phân công giáo viên hướng dẫn: ',listGVHD ,listgvhd[0].MaGV+' - '+listgvhd[0].TenGV));
     else
     $('.Add-New-Row').append(returnLormInputSelect('Phân công giáo viên hướng dẫn: ',listGVHD ,choseGV));
-    $('.Add-New-Row').append(returnLormBtn(listBtnpk,listColorpk,listIdBtn));
+    $('.Add-New-Row').append(returnLormBtn(nutPhancongHD,maunutPhancongHD,idnutPhancongHD));
 
 }
 

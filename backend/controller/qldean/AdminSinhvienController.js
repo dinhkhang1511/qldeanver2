@@ -20,6 +20,39 @@ module.exports = async (callback, scanner) => {
     if (index === 'dieukienthemsv'){
         let MaNghanh = head_params.get('MaNghanh');
         let Khoa = head_params.get('Khoa');
+        let MaAdmin = String(head_params.get('MaAdmin')).trim();
+
+        let MaNghanhtemp;
+        let Khoatemp;
+
+        listNganh = await Model.InleSQL("call ComboBox_Nganh()");
+        listNganh = listNganh[0];
+
+        lineReader = readline.createInterface({
+            input: fs.createReadStream('controller/qldean/Text/AdminStatus.txt')
+        });
+        lineReader.on('line', function (line) {
+            if(String(line).includes(MaAdmin)) {
+                MaNghanhtemp = String(line.split(',')[1]).trim();
+                Khoatemp = Number(line.split(',')[2]);
+            }
+        });
+        lineReader.on('close', async function () {
+            console.log(String(MaAdmin+','+MaNghanh+','+Khoa), String(MaAdmin+','+MaNghanhtemp+','+Khoatemp))
+            fs.readFile("controller/qldean/Text/AdminStatus.txt", 'utf8', function (err,data) {
+                let formatted = data.replace( String(MaAdmin+','+MaNghanhtemp+','+Khoatemp),String(MaAdmin+','+MaNghanh+','+Khoa));
+                fs.writeFile("controller/qldean/Text/AdminStatus.txt", '', 'utf8', function (err) {
+                    if (err) return console.log(err);
+                    fs.writeFile("controller/qldean/Text/AdminStatus.txt", formatted, 'utf8', function (err) {
+                        if (err) return console.log(err);
+                    });
+                });
+            });
+
+        });
+
+
+
         let MaSV = await Model.InleSQL("select AUTO_IDSV('"+Khoa+"','"+MaNghanh+"') as MaSV"); MaSV = MaSV[0]['MaSV']
         let EmailSV = MaSV + '@student.ptithcm.edu.vn';
         let listchuyenganh = await Model.InleSQL("call ComboBox_CN('"+MaNghanh+"')");listchuyenganh = listchuyenganh[0];
@@ -52,16 +85,20 @@ module.exports = async (callback, scanner) => {
         let countchek = await Model.InleSQL("select count(*) AS checkCount from phancongdoan where MaSV='"+MaSV+"'");
         let listchuyenganh = await Model.InleSQL("call ComboBox_CN('"+MaNghanh+"')");listchuyenganh = listchuyenganh[0];
         let listlop;
+        let Lop;
         if(listchuyenganh.length > 0){
             console.log("call ComboBox_Lop('"+Khoa+"','"+MaChuyenNghanh+"')")
             listlop = await Model.InleSQL("call ComboBox_Lop('"+Khoa+"','"+MaChuyenNghanh+"')"); listlop = listlop[0]
+            Lop = await Model.InleSQL("SELECT Auto_IDLop('"+Khoa+"','"+MaChuyenNghanh+"') AS Lop"); Lop = Lop[0]['Lop'];
         }else{
             listlop = [];
+            Lop = '';
         }
         let data = [];
         data.push(listchuyenganh);
         data.push(listlop);
         data.push(countchek);
+        data.push(Lop);
         callback(JSON.stringify(data), 'application/json');
     }
 
