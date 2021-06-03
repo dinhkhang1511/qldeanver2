@@ -195,7 +195,7 @@ function LoadPhancongHuongdan(data) {
 
     MaDAtemp = InfoSV.MaDA;
     MaSVtemp = InfoSV.MaSV;
-    NgaySinhtemp = InfoSV.MaSV;
+    NgaySinhtemp = InfoSV.NgaySinh;
 
     let listGVHD = [];
     let choseGV;
