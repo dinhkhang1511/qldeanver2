@@ -185,8 +185,8 @@ module.exports = async (callback, scanner) => {
         let limit = 10;
         let page = Number(head_params.get('page')) - 1;
 
-        let count = 0;
-        let select = await Model.InleSQL("call ShowList_Files('"+MaDoan+"', '"+MaGV+"',0)");
+        let count = await Model.InleSQL("select CountList_Files('"+MaDoan+"', '"+MaGV+"') AS Number;");
+        let select = await Model.InleSQL("call ShowList_Files('"+MaDoan+"', '"+MaGV+"',"+limit*page+")");
 
         let data = [];
         data.push(count);

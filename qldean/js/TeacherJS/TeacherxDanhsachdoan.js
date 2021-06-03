@@ -7,10 +7,14 @@ var pagelist = 0;
 var MaGV = "GVCN006";
 var MaChuyennganh = "CP";
 var MaDoan = '';
+var TenDoan = '';
 
 var listTacaTitle = ['Đồ án' , 'Chuyên ngành' , 'Người tạo','Ngày tạo','Lần cuối cập nhật','Trạng thái'] 
 
 var listCanhanTitle = ['Mã sinh viên','Tên sinh viên', 'Lớp', 'Email','Mã đồ án' , 'Tên đồ án' ]
+
+var listTailieuTitle = ['Tệp','Giảng viên', 'Thời gian cập nhật', 'Đã phân công']
+
 
 var listButtonpk = ['Sửa','Xóa'];
 var listIdBtnTable = [ 'suax' , 'xoax'];
@@ -37,6 +41,8 @@ var filename1;
 var filename2;
 
 var MaDoan;
+
+var pageStatus = 1;
 
 $(".left-bar").load("/qldean/Teacher/SlideBar.html",function () {
     $( "#act-danhsachdoan" ).addClass( "active" )
@@ -117,6 +123,9 @@ var xhttp = new XMLHttpRequest();
                 if(String(this.responseURL).includes('api/danhsachtailieu')){
                     var data = JSON.parse(this.responseText);
                     console.log(data);
+                    tol_page =  Math.ceil(data[0][0]['Number'] / 10); 
+                    listinfoitem = data[1][0];
+                    LoadTailieu(listinfoitem);
                 }
         }
     };
@@ -165,13 +174,62 @@ function loadListTailieu(){
 }
 
 //ELEMENT-----------------------------------------------------
+function LoadTailieu(data){
+
+    pageStatus = 1;
+
+    var listtailieu = [];
+    var trangthai;
+    for(var i = 0; i < data.length; i++){
+        if(Number(data[i].TrangThai) == 0) trangthai = 'Rồi';
+        else trangthai = 'Đã';
+        listtailieu.push({tep:data[i].Tep_Goc,giangvien: data[i].MaGV + '-' + data[i].TenNV,thoigian: data[i].ThoiGian, trangthai:trangthai });
+    }
+
+    $('#button-bar').show();
+    $('.chose-bar').hide();
+    $('#table_data').show();
+    $('.btn-follow-row').show();
+    $('.nav-page').show();
+    $('.switch-bar').hide();
+
+    $('#head-bar').hide();
+
+    $('.Add-New-Row').hide();
+    $('.Detail-project').hide();
+
+    $('.label-bar').show();
+
+    $('.switch-bar').empty();
+    $('#button-bar').empty();
+    $('.chose-bar').empty();
+    $('#table_data').empty();
+    $('.btn-follow-row').empty();
+    $('.nav-page').empty();
+    $('.label-bar').empty();
+    $('#head-bar').empty();
+    $('#button-bar').append(returnIconHome() + returnNameIndex('Đồ án') + returnNameIndex('Tài liệu')  +  returnReturnBtn());
+
+    $('.label-bar').append( '<div id="label-table"> Đồ án: '+MaDoan+'-'+TenDoan+'</div>' )
+
+    $('#table_data').append(returnTable(listTailieuTitle,listtailieu));
+    $('.btn-follow-row').append(returnButtonTable(['Phân công'],['phancong']));
+    $('.nav-page').append(returNavForm(tol_page+1, 1));
+
+    console.log(data);
+}
+
+
 function LoadListDoan(data){
+    pageStatus = 1;
+
     $('#button-bar').show();
     $('.chose-bar').show();
     $('#table_data').show();
     $('.btn-follow-row').show();
     $('.nav-page').show();
     $('.switch-bar').show();
+    $('.label-bar').hide();
 
     $('#head-bar').show();
 
@@ -200,6 +258,9 @@ function LoadListDoan(data){
 }
 
 function LoadListDoanCanhan(data){
+
+    pageStatus = 1;
+
     $('#table_data').show();
     $('.btn-follow-row').show();
     $('.nav-page').show();
@@ -207,6 +268,7 @@ function LoadListDoanCanhan(data){
     $('#table_data').empty();
     $('.btn-follow-row').empty();
     $('.nav-page').empty();
+    $('.label-bar').hide();
 
 
     $('#table_data').append(returnTable(listTacaTitle,data));
@@ -216,6 +278,9 @@ function LoadListDoanCanhan(data){
 
 
 function LoadListDoanTatca(data){
+
+    pageStatus = 1;
+
     $('#table_data').show();
     $('.btn-follow-row').show();
     $('.nav-page').show();
@@ -223,6 +288,7 @@ function LoadListDoanTatca(data){
     $('#table_data').empty();
     $('.btn-follow-row').empty();
     $('.nav-page').empty();
+    $('.label-bar').hide();
 
     $('#table_data').append(returnTable(listTacaTitle,data));
     $('.btn-follow-row').append(returnButtonTable(['Tài liệu'],['tailieu']));
@@ -376,28 +442,15 @@ function LoadAddDoan(){
             }
         }
     };
-
 }
+
+
+
 
 function getFile(){
     document.getElementById('selectedFile').click();
 }
 
-function LoadXemchitiet(){
-    $('#button-bar').show();
-    $('.chose-bar').hide();
-    $('#table_data').hide();
-    $('.btn-follow-row').hide();
-    $('.nav-page').hide();
-
-    $('.Add-New-Row').hide();
-    $('.Detail-project').show();
-
-    $('#button-bar').empty();
-    $('.chose-bar').empty();
-
-    $('#button-bar').append(returnIconHome() + returnNameIndex('Tất cả đồ án') + returnNameIndex('Chi tiết') +  returnReturnBtn());
-}
 
 //CLICK-----------------------------------------------
 async function EventTeacherClick(event) {
@@ -410,7 +463,8 @@ async function EventTeacherClick(event) {
     }else if(x.parentNode.className == 'btn-follow-row'){
         if(x.id == "tailieu"){
             console.log(listinfoitem[currentrowtable].MaDA)
-            MaDoan = listinfoitem[currentrowtable].MaDA
+            MaDoan = listinfoitem[currentrowtable].MaDA;
+            TenDoan = listinfoitem[currentrowtable].TenDA;
             loadListTailieu()
         }
     }else if(x.parentNode.parentNode.className == 'item-add-file-upload'){
@@ -484,5 +538,3 @@ async function EventTeacherClick(event) {
 //FIRST---------------------------------------------------------
 // LoadListPhancong() 
 loadListDoan();
-
-

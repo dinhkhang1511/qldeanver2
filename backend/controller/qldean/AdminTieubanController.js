@@ -74,6 +74,8 @@ module.exports = async (callback, scanner) => {
             let count = await Model.InleSQL("select CountList_TB('"+Khoa+"','"+MaNghanh+"')");
             let select = await Model.InleSQL("call ShowList_TB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
 
+            console.log("call ShowList_TB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")")
+
             let data = [];
             data.push(listNganh);
             data.push(listKhoa);
