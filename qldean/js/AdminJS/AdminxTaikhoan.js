@@ -92,8 +92,6 @@ function LoadInfo(){
 
 
 function LoadDoimatkhau(){
-
-
     $('.Add-New-Row').show();
     $('.Add-New-Row').empty();
     //làm rỗng các phần

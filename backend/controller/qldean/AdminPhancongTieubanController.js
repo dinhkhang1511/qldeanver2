@@ -17,85 +17,133 @@ module.exports = async (callback, scanner) => {
     let head_params = scanner.head_params;
 
     if (index === 'danhsachphancongTB'){
-        let khoa = Number(head_params.get('khoa'));
-        console.log(khoa)
-        if(khoa == 0){ 
-                let listkhoa = [];
-                lineReader = readline.createInterface({
-                    input: fs.createReadStream('controller/qldean/Text/khoa.txt')
-                });
-                lineReader.on('line', function (line) {
-                    if(String(line).includes('currentkhoa:')) {
-                        khoa = Number(String(line).replace('currentkhoa:',''));
-                    }else{
-                        let curbig = Number(line.split(',')[0]);
-                        listkhoa.push(curbig);
-                    }
-                });
-                lineReader.on('close', async function () {
-                    let limit = 10;
-                    let page = Number(head_params.get('page')) - 1;
-                    if(khoa == 0) khoa = listkhoa[0];
-                    console.log(khoa)
-                    let count = await Model.InleSQL('select CountList_SVDATB('+khoa+')');
-                    let result = await Model.InleSQL('call ShowList_SvDATB('+khoa+','+page*limit+')');
-                    let data = [];
-                    data.push(result)
-                    data.push(count)
-                    data.push(bubbleSort(listkhoa));
-                    data.push(khoa);
-                    console.log(data)
-                    callback(JSON.stringify(data), 'application/json');
-                });
 
-        }else{
-            let oskhoa;
-            let listkhoa = [];
-            lineReader = readline.createInterface({
-                input: fs.createReadStream('controller/qldean/Text/khoa.txt')
-            });
-            lineReader.on('line', function (line) {
-                if(String(line).includes('currentkhoa:')) {
-                    oskhoa = String(line);
-                }else{
-                    let curbig = Number(line.split(',')[0]);
-                    listkhoa.push(curbig);
-                }
-            });
-            lineReader.on('close', async function () {
-                fs.readFile("controller/qldean/Text/khoa.txt", 'utf8', function (err,data) {
-                var formatted = data.replace(oskhoa, 'currentkhoa:'+khoa);
-                fs.writeFile("controller/qldean/Text/khoa.txt", formatted, 'utf8', function (err) {
-                    if (err) return console.log(err);
+
+
+        let MaAdmin = String(head_params.get('MaAdmin')).trim();
+        let MaNghanh = String(head_params.get('MaNghanh')).trim();
+        let Khoa = Number(head_params.get('Khoa'));
+
+        console.log(MaNghanh)
+        
+        let listNganh;
+        let listKhoa;
+  
+        let MaNghanhtemp;
+        let Khoatemp;
+  
+        let limit = 10;
+        let page = Number(head_params.get('page')) - 1;
+  
+        listNganh = await Model.InleSQL("call ComboBox_Nganh()");
+        listNganh = listNganh[0];
+  
+        console.log("Start+"+MaNghanh,Khoa)
+  
+    if(MaNghanh === '' || Khoa == 0 || String(MaNghanh) === 'null'){
+  
+        lineReader = readline.createInterface({
+            input: fs.createReadStream('controller/qldean/Text/AdminStatus.txt')
+        });
+        lineReader.on('line', function (line) {
+            if(String(line).includes(MaAdmin)) {
+                MaNghanhtemp = String(line.split(',')[1]);
+                Khoatemp = Number(line.split(',')[2]);
+                if(String(Khoatemp) == 'NaN') Khoatemp = '#';
+            }
+        });
+        lineReader.on('close', async function () {
+            console.log(MaNghanhtemp)
+            if(MaNghanhtemp === '#' || Khoatemp === '#'){
+                MaNghanh = listNganh[0].MaNganh;
+                listKhoa = await Model.InleSQL("call ComboBox_Khoa('"+MaNghanh+"')");
+                listKhoa = listKhoa[0];
+                Khoa = listKhoa[0].namBD;
+  
+                fs.readFile("controller/qldean/Text/AdminStatus.txt", 'utf8', function (err,data) {
+                    let formatted = data.replace( String(MaAdmin+','+MaNghanhtemp+','+Khoatemp),String(MaAdmin+','+MaNghanh+','+Khoa));
+                    fs.writeFile("controller/qldean/Text/AdminStatus.txt", '', 'utf8', function (err) {
+                        if (err) return console.log(err);
+                        fs.writeFile("controller/qldean/Text/AdminStatus.txt", formatted, 'utf8', function (err) {
+                            if (err) return console.log(err);
+                        });
                     });
                 });
-
-                let limit = 10;
-                let page = Number(head_params.get('page')) - 1;
-                console.log(khoa)
-                let count = await Model.InleSQL('select CountList_SVDATB('+khoa+')');
-                let result = await Model.InleSQL('call ShowList_SvDATB('+khoa+','+page*limit+')');
-                let data = [];
-                data.push(result)
-                data.push(count)
-                data.push(bubbleSort(listkhoa));
-                data.push(khoa);
-                console.log(data)
-                callback(JSON.stringify(data), 'application/json');
+  
+            }else{
+                MaNghanh = MaNghanhtemp;
+                Khoa = Khoatemp;
+                listKhoa = await Model.InleSQL("call ComboBox_Khoa('"+MaNghanh+"')");
+                listKhoa = listKhoa[0];
+            }
+  
+            let count = await Model.InleSQL("select CountList_SvDATB('"+Khoa+"','"+MaNghanh+"') AS NumberSV");
+            let select = await Model.InleSQL("call ShowList_SvDATB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
+  
+            let data = [];
+            data.push(listNganh);
+            data.push(listKhoa);
+            data.push(MaNghanh);
+            data.push(Khoa);
+            data.push(count)
+            data.push(select)
+            callback(JSON.stringify(data), 'application/json');
+        });
+  
+    }else{
+        lineReader = readline.createInterface({
+            input: fs.createReadStream('controller/qldean/Text/AdminStatus.txt')
+        });
+        lineReader.on('line', function (line) {
+            if(String(line).includes(MaAdmin)) {
+                MaNghanhtemp = String(line.split(',')[1]).trim();
+                Khoatemp = Number(line.split(',')[2]);
+            }
+        });
+        lineReader.on('close', async function () {
+            console.log(String(MaAdmin+','+MaNghanh+','+Khoa), String(MaAdmin+','+MaNghanhtemp+','+Khoatemp))
+            fs.readFile("controller/qldean/Text/AdminStatus.txt", 'utf8', function (err,data) {
+                let formatted = data.replace( String(MaAdmin+','+MaNghanhtemp+','+Khoatemp),String(MaAdmin+','+MaNghanh+','+Khoa));
+                fs.writeFile("controller/qldean/Text/AdminStatus.txt", '', 'utf8', function (err) {
+                    if (err) return console.log(err);
+                    fs.writeFile("controller/qldean/Text/AdminStatus.txt", formatted, 'utf8', function (err) {
+                        if (err) return console.log(err);
+                    });
+                });
             });
-        }
+  
+            listKhoa = await Model.InleSQL("call ComboBox_Khoa('"+MaNghanh+"')");
+            listKhoa = listKhoa[0];
+  
+            let count = await Model.InleSQL("select CountList_SvDATB('"+Khoa+"','"+MaNghanh+"') AS NumberSV");
+            let select = await Model.InleSQL("call ShowList_SvDATB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
+  
+            let data = [];
+            data.push(listNganh);
+            data.push(listKhoa);
+            data.push(MaNghanh);
+            data.push(Khoa);
+            data.push(count)
+            data.push(select)
+  
+            callback(JSON.stringify(data), 'application/json');
+        });
+    }
+
+
+
     }
 
 
     if(index === 'danhsachTBphancong'){
         let MaSV = String(head_params.get('MaSV'));
-        let khoa = String(head_params.get('khoa'));
-        // let MaDA = String(head_params.get('MaDA'));
-        console.log("Xxx")
-        // console.log(MaSV,MaDA)
-        console.log(MaSV)
+        let MaNghanh = String(head_params.get('MaNghanh'));
+        let Khoa = Number(head_params.get('Khoa'));
+        console.log("Xxx");
+       
         let result = await Model.InleSQL("call ShowInfor_SVTB('"+MaSV+"')");
-        let result1 =  await Model.InleSQL("call ComboBox_PhancongDATB('"+khoa+"')");
+        let result1 = await Model.InleSQL("call ComboBox_PhanCongDATB('"+Khoa+"');");
+        console.log("call ComboBox_PhanCongDATB('"+Khoa+"');");
         let data = [];
         data.push(result)
         data.push(result1)
@@ -107,8 +155,11 @@ module.exports = async (callback, scanner) => {
     if(index === 'addTBphancong'){
         let MaTB = String(head_params.get('MaTB'));
         let MaDA = String(head_params.get('MaDA'));
-
+    
         let  result1 = await Model.InleSQL("call PhanCong_DATB('"+MaDA+"','"+MaTB+"')");
+
+        console.log("call PhanCong_DATB('"+MaDA+"','"+MaTB+"')")
+        console.log(result1)
                         // await Model.InleSQL("insert into `chamdiemhd-pb`(MaDA, MaGV) values ('"+MaDA+"', '"+MaGVPB+"')")
             if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
                 callback(JSON.stringify("that bai"), 'application/json');

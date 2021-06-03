@@ -1,10 +1,15 @@
 //FILE SYSTEM
 const http = require("http");
 let url = require('url');
+const formidable = require('formidable');
+
 
 //CONNECT MONGO
 let Connect = require("./Connect");
 const connect = new Connect();
+
+const path = require('path');
+const fs = require('fs');
 
 //RES REQ
 const reqUest = require("./request/Request");
@@ -30,11 +35,28 @@ let SERVER = async (con) => {
             scanner.req = req;
             scanner.res = res;
 
-            if((req.url).includes("api")) scanner.req_bundle = reqUest(req,routeapi);
-            else scanner.req_bundle = reqUest(req,routeother);
-        
-            if (scanner.req_bundle.status == 1) responseFile(scanner.res, scanner.req_bundle);
-            else resPonse(scanner);
+            ///UPLOAD LÀM SAU
+            if(req.url.includes('api/upfile_')){
+                var form = new formidable.IncomingForm();
+                form.uploadDir = "controller/qldean/uploads/";
+                form.parse(scanner.req, function (err, fields, file) {
+                    var path = file.file.path;
+                    var newpath = form.uploadDir + file.file.name;
+                    fs.rename(path, newpath, function (err) {
+                        if (err) throw err;
+                        res.writeHead(200)
+                        res.end('thanh cong');
+                    });
+                });
+            }else{
+                if((req.url).includes("api")) scanner.req_bundle = reqUest(req,routeapi);
+                else scanner.req_bundle = reqUest(req,routeother);
+            
+                if (scanner.req_bundle.status == 1) responseFile(scanner.res, scanner.req_bundle);
+                else resPonse(scanner);
+            }
+
+
             
     }).listen(connect.portSERVER, () => console.log("server run on PORT:" + connect.portSERVER));;
 }

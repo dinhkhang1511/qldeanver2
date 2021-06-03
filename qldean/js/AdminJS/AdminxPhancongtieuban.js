@@ -1,29 +1,35 @@
 var listinfoitem;
+let currentrowtable;
 var page_num = 1;
 var tol_page = 0;
 
-var listLabelpk = ['Mã sinh viên','Tên sinh viên','Lớp','Mã đồ án','Điểm GVPB','TB'];
-// var data = [{MaSV:'SV02', Ten:'Thanh Tu', Lop:'CNTT', Ma:'023', GPA:'3.4', GVHD:'GV01'},{MaSV:'SV54', Ten:'Le Tam', Lop:'CNTT', Ma:'023', GPA:'3.4', GVHD:'GV01'},{MaSV:'SV02', Ten:'Nguyen Tam', Lop:'CNTT', Ma:'023', GPA:'3.4', GVHD:'GV01'}]
-var listButtonpk = ['Phân công'];
-var listIdBtnTable = ['phancongx'];
-var listInfoTieuban1 = ['Mã sinh viên: SV21','Tên sinh viên: Le Tấn']
-var listInfoTieuban2 = ['Mã đồ án: DA21' ,'Tên đồ án: 21']
+var MaAdmin = 'ADMIN';
 
-var listBtnpk =  ['Phân công ','Thoát'];
-var listColorpk = ['tomato', 'green'];
-var listIdBtn = ['phancong', 'thoat'];
+var tieudeBangTB = ['Mã sinh viên','Tên sinh viên','Email','Điểm PB','Mã GVPB','Điểm'];
+var tennutBangTB = ['Phân công'];
+var idnutBangTB = ['phancongx'];
+
+var nutPhancongTB =  ['Phân công ','Thoát'];
+var maunutPhancongTB = ['tomato', 'green'];
+var idnutPhancongTB = ['phancong', 'thoat'];
 
 
 var TBtemp;
-var MaDAtemp;
+let MaGVtemp;
+let MaDAtemp;
+let MaSVtemp;
 
-let khoacurrent = 0;
+
+var khoacurrent = 0;
+var nghanhcurrent = 'null';
 var listkhoa = [];
-
+    var listniemkhoa = [];
+var listnghanh = [];
+    var listmanganh = [];
+    var listtennghanh = [];
 
 $(".left-bar").load("/qldean/Admin/SlideBarCollapse.html",function () {
     $( "#act-phancongtieuban" ).addClass( "active" );
-    $('#logo-title').append('<img src="/Asset 4.png" alt="" srcset="">')
 });
 
 var xhttp = new XMLHttpRequest();
@@ -31,11 +37,23 @@ var xhttp = new XMLHttpRequest();
         if (this.readyState == 4 && this.status == 200) {
                 if(String(this.responseURL).includes('api/danhsachphancongTB')){
                     var data = JSON.parse(this.responseText);
-                    listkhoa = data[2]
-                    khoacurrent = data[3]
-                    console.log(data)
-                    tol_page =   Math.ceil(data[1][0]['CountList_SVDATB('+khoacurrent+')'] / 10); 
-                    listinfoitem = data[0][0];
+                    console.log(data);
+
+                    listnghanh = data[0];
+                    listkhoa = [];
+                    for(let i = 0; i < data[1].length; i++){
+                        listkhoa.push(data[1][i].namBD);
+                    }
+                    listniemkhoa = [];
+                    for(let i = 0; i < data[1].length; i++){
+                        listniemkhoa.push(data[1][i].namBD + '-' + Math.ceil(data[1][i].namBD + data[1][i].SoNam));
+                    }
+                    nghanhcurrent = data[2];
+                    khoacurrent = data[3];
+
+                    tol_page =  Math.ceil(data[4][0]['NumberSV'] / 10); 
+                    listinfoitem = data[5][0];
+
                     LoadListTieuban(listinfoitem);
                 }
 
@@ -55,12 +73,12 @@ var xhttp = new XMLHttpRequest();
 
 
 function loadListTieuban(){
-    xhttp.open("GET", "/api/danhsachphancongTB?page="+page_num, false);
+    xhttp.open("GET", "/api/danhsachphancongTB?page="+page_num+"&Khoa="+khoacurrent+"&MaAdmin="+MaAdmin+"&MaNghanh="+String(nghanhcurrent), false);
     xhttp.send();
 }
 
 function loadPhancongTieuban(MaSV,MaDA){
-    xhttp.open("GET", "/api/danhsachTBphancong?MaSV="+MaSV+"&MaDA="+MaDA+"&khoa="+khoacurrent, false);
+    xhttp.open("GET", "/api/danhsachTBphancong?MaSV="+MaSV+"&Khoa="+khoacurrent, false);
     xhttp.send();
 }
 
@@ -74,17 +92,26 @@ function loadAddPhancongTieuban(){
     xhttp.send();
 }
 
-function changeKhoa(){
-    var e = document.getElementById("select-khoa");
-    khoacurrent = e.options[e.selectedIndex].text;
-    console.log(khoacurrent)
-    xhttp.open("GET", "/api/danhsachphancongTB?page="+page_num+"&khoa="+khoacurrent, false);
-    xhttp.send();
+function changeKhoaandNghanh(){
+    var e = document.getElementsByClassName("select-combox-headbar").item(0);
+    nghanhcurrent = String(e.options[e.selectedIndex].value);
+    e = document.getElementsByClassName("select-combox-headbar").item(1);
+    khoacurrent = e.options[e.selectedIndex].value;
+    console.log("mới tạo "+nghanhcurrent,khoacurrent)
+    loadListTieuban();
 }
 
 
 function LoadListTieuban(data) {
     console.log(data)
+
+    listmanganh = [];
+    listtennghanh = [];
+    for(let i = 0;i < listnghanh.length; i++){
+        listmanganh.push(listnghanh[i].MaNganh);
+        listtennghanh.push(listnghanh[i].TenNganh);
+    }
+
     $('#button-bar').show();
     $('.chose-bar').hide();
     $('#table_data').show();
@@ -101,12 +128,13 @@ function LoadListTieuban(data) {
     $('.btn-follow-row').empty();
     $('.nav-page').empty();
 
-    $('#head-bar').append(returnFormComboxHeadBar('Nghành',['Công nghệ thông tin', 'An toàn thông tin', 'Đa phương tiện'], 'An toàn thông tin', 'chonnghanh',200,0));
-    $('#head-bar').append(returnFormComboxHeadBar('Khóa',listkhoa, khoacurrent, 'chonkhoa',100,20));
+    $('#head-bar').append(returnFormComboxHeadBar('Nghành',listmanganh, listtennghanh, nghanhcurrent, 'changeKhoaandNghanh',250,0));
+    $('#head-bar').append(returnFormComboxHeadBar('Niêm khóa',listkhoa , listniemkhoa, khoacurrent, 'changeKhoaandNghanh',120,20));
+
     $('#button-bar').append(returnIconHome() + returnNameIndex('Phụ trách')  + returnNameIndex('Tiểu ban') );
-    // $('.chose-bar').append(returnSearchForm('Nhập GPA tối thiểu','Lọc') );
-    $('#table_data').append(returnTable(listLabelpk,data));
-    $('.btn-follow-row').append(returnButtonTable(listButtonpk,listIdBtnTable));
+
+    $('#table_data').append(returnTable(tieudeBangTB,data));
+    $('.btn-follow-row').append(returnButtonTable(tennutBangTB,idnutBangTB));
     $('.nav-page').append(returNavForm(tol_page+1, page_num));
 }
 
@@ -133,7 +161,9 @@ function LoadPhancongTieuban(data) {
     $('.Add-New-Row').append(returnLormInfo( ['Lớp: '+InfoSV.Lop,'GPA: '+InfoSV.GPA]));
     $('.Add-New-Row').append(returnLormOneInfo('Email: '+InfoSV.Email));
 
-    if(String(InfoSV.TenDA) != 'null')
+    MaDAtemp = InfoSV.MaDA;
+
+    if(String(InfoSV.TenDA) != "")
     $('.Add-New-Row').append(returnLormInfo(['Mã đồ án: '+InfoSV.MaDA ,'Tên đồ án: '+InfoSV.TenDA]));
     else
     $('.Add-New-Row').append(returnLormInfo(['Mã đồ án: '+InfoSV.MaDA ,'Tên đồ án: Chưa đặt tên']));
@@ -155,8 +185,8 @@ function LoadPhancongTieuban(data) {
     let choseTB;
 
     for(let i = 0; i < listtb.length; i++){
-        if(String(listtb[i].MaTB) ===  String(TBtemp)) choseTB = listtb[i].MaTB + ' - ' + listtb[i]['count(tblDATB.MaDA)']
-        listTB.push( listtb[i].MaTB  + '&nbsp;&nbsp; - &nbsp;&nbsp;&nbsp; ' + listtb[i]['count(tblDATB.MaDA)'])
+        if(String(listtb[i].MaTB) ===  String(TBtemp)) choseTB = listtb[i].MaTB + ' - ' + listtb[i]['total']
+        listTB.push( listtb[i].MaTB  + '&nbsp;&nbsp; - &nbsp;&nbsp;&nbsp; ' + listtb[i]['total'])
     }
 
     if(String(TBtemp) == '' )
@@ -164,7 +194,7 @@ function LoadPhancongTieuban(data) {
     else
     $('.Add-New-Row').append(returnLormInputSelect('Phân công tiểu ban: ',listTB ,choseTB));
 
-    $('.Add-New-Row').append(returnLormBtn(listBtnpk,listColorpk,listIdBtn));
+    $('.Add-New-Row').append(returnLormBtn(nutPhancongTB,maunutPhancongTB,idnutPhancongTB));
 }
 
 
@@ -205,7 +235,7 @@ function EventAdminClick(event) {
         currentrowtable = Number(x.parentNode.id.replace('collumtalbe-',''));
     }else if(x.parentNode.className == 'btn-follow-row'){
         if(x.id == "phancongx" ){
-            MaDAtemp = listinfoitem[currentrowtable].MaDA;
+            // MaDAtemp = listinfoitem[currentrowtable].MaDA;
             TBtemp = listinfoitem[currentrowtable].MaTB;
             loadPhancongTieuban(listinfoitem[currentrowtable].MaSV ,  listinfoitem[currentrowtable].MaDA)
 

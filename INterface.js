@@ -188,6 +188,9 @@ function returnSwitchBtn(str,str_) {
     return '<div  class="switchbtn"><span class="loadswitch1" id="activeswitchbar">'+str+'</span><span class="loadswitch2">'+str_+'</span></div>';
 }
 
+function returnSwitchTable(str,str_) {
+    return '<div  class="switchbtn_table"><span class="loadswitch1" id="activeswitchbar">'+str+'</span><span class="loadswitch2">'+str_+'</span></div>';
+}
 
 ///Ngoại 
 function returnFormKhoa(dskhoa,khoa) {
@@ -244,8 +247,6 @@ function returnFormAddComboxBar(idselect,danhsach,danhsachva,chon,hamchon,width,
     return element
 }
 
-
-
 function returnButtonAddMore(idopen,idclose){
     return '<div id="chose-option-more"> <button id="'+idopen+'" ><svg height="20px"  fill="white" viewBox="0 0 491.996 491.996" width="20px"><g>'+
     '<path d="M484.132,124.986l-16.116-16.228c-5.072-5.068-11.82-7.86-19.032-7.86c-7.208,0-13.964,2.792-19.036,7.86l-183.84,183.848'+
@@ -260,4 +261,15 @@ function returnButtonAddMore(idopen,idclose){
     'c5.064,5.06,11.82,7.852,19.032,7.852c7.208,0,13.96-2.792,19.028-7.852l16.128-16.132'+
     'C494.624,356.041,494.624,338.965,484.136,328.473z"/>'+
     +'</g></svg></button></div>';
+}
+
+function returnCheckBoxHaveMore(label,listlabel){
+    var element = '<div class="display-checkbox" style="margin-top:-3px;"><span>'+label+': </span> <span class="checkboxtag">'
+    for(var i = 0; i < listlabel.length; i++){
+        element = element + '<div class="form-check"><input class="form-check-input" type="checkbox" value="'+listlabel[i]+'" id="flexCheckDefault"><label>'+listlabel[i]+'</label></div>'
+    }
+    element = element + '<div class="form-check"><input id="check-khac" class="form-check-input" type="checkbox" value="khac" id="flexCheckDefault"><label class="form-check-label" for="flexCheckDefault">Khác</label></div>';
+    element = element + '<input class="form-control input-more-checkbox" type="text" value="">'
+    element = element + '</span></div>';
+    return element;
 }

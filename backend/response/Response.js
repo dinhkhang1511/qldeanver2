@@ -21,7 +21,6 @@ module.exports = async (scanner) => {
                 body += data;
             });
             scanner.req.on('end', () => {
-        
                 scanner.body_params  = body;
                 getController();
             });       

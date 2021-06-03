@@ -88,6 +88,25 @@
     cursor: pointer;
 }
 
+
+.switchbtn_table{
+    position: relative;
+    float: left;
+    width: auto;
+    height: auto;
+    margin-left: 1px;
+}
+.switchbtn_table span{
+    float: left;
+    position: relative;
+    padding: 3px 7px;
+    background-color: rgb(187, 187, 187);
+    color: white;
+    cursor: pointer;
+}
+
+
+
 #activeswitchbar{
     background-color: tomato;
 }
@@ -258,6 +277,20 @@
     font-weight: bold;
     box-shadow: 0 0px 5px -4px black;
 }
+
+
+.switch-bar{
+    position: relative;
+    float: left;
+    background-color:transparent;
+    width: 100%;
+    margin-top: 5px;
+    border-radius: 3px;
+    color: white;
+    font-weight: bold;
+}
+
+
 
 #button-bar svg{
     float: left;
@@ -585,7 +618,7 @@ table tr:first-child td{
 
 }
 
-.Add-New-Row div{
+.Add-New-Row div:not(.form-check){
     float: left;
     position: relative;
     width: 100%;
@@ -629,7 +662,7 @@ table tr:first-child td{
     margin-left: calc(20%);
 }
 
-.Add-New-Row div div:not(.one-row-item-add) {
+.Add-New-Row div div:not(.one-row-item-add , .Add-New-Row div span div ) {
     position: relative;
     float: left;
     width: 210px;
@@ -650,7 +683,7 @@ table tr:first-child td{
     padding-right: 10px;
 
 } */
-.Add-New-Row div div:nth-child(1){
+.Add-New-Row div div:nth-child(1):not(.checkboxtag div ){
     margin-left: 50px;
 
 }
@@ -1343,3 +1376,4 @@ iframe {
     float: left;
     margin-right: 10px;
 }
+

@@ -31,6 +31,12 @@ function getCurrentDay(){
   return date;
 }
 
+function getCurrentDayx(){
+  var today = new Date();
+  var date = today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate();
+  return date;
+}
+
 function decode_utf8( s ){
     return decodeURI(s).replace(/0765547053/gi, "&");
 }
