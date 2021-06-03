@@ -28,7 +28,7 @@ var listnghanh = [];
 
 var listcheckGV = [];
 
-var tieudeBangTieuban =['Tiểu ban','Ngày','Giờ','Trạng thái'];
+var tieudeBangTieuban =['Tiểu ban','Ngày','Ca','Trạng thái'];
 var tennutBangTieuban = ['Phân công','Sửa','Xóa'];
 var idnutBangTieuban = ['phancongx', 'suax' , 'xoax'];
 
@@ -262,7 +262,7 @@ function LoadListTieuban(data) {
         if(Number(data[i].sum) != 5 && Number(data[i].sum) !=3 ) dk = 'Chưa phân công';
         else if(Number(data[i].sum)==5) dk = 'Hoàn thành';
         else if(Number(data[i].sum)==3) dk = 'Hoàn thành';
-        listTB.push({maTB: data[i].MaTB, ngay: data[i].Ngay, ca: data[i].ca, sum: dk})
+        listTB.push({maTB: data[i].MaTB, ngay: data[i].Ngay, ca: data[i].Ca, sum: dk})
     }
 
     $('#button-bar').show();
@@ -298,7 +298,7 @@ function LoadListDataTieuban(data){
     for(let i = 0; i< data.length;i++){
         if(Number(data[i].sum)<5) dk = 'Đang phân công';
         else if(Number(data[i].sum)==5) dk = 'Hoàn thành';
-        listTB.push({maTB: data[i].MaTB, ngay: data[i].Ngay, ca: data[i].ca, sum: dk})
+        listTB.push({maTB: data[i].MaTB, ngay: data[i].Ngay, ca: data[i].Ca, sum: dk})
     }
 
     $('#table_data').empty();
