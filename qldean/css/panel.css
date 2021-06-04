@@ -305,6 +305,22 @@
     font-weight: bold;
 }
 
+#detail-bar{
+    position: relative;
+    float: left;
+    background-color:rgb(255, 255, 255);
+    width: 100%;
+    margin-top: 5px;
+    border-radius: 3px;
+    color: black;
+    font-weight: bold;
+    height: 5px;
+}
+
+#thongtin-doan{
+    position: relative;
+}
+
 
 
 #button-bar svg{
@@ -497,7 +513,6 @@ table tr:first-child td{
     font-weight: 500;
     outline: none;
 }
-
 
 #no-color-btn-follow-row div:first-child{
     background-color: rgba(70, 100, 145, 0.233);

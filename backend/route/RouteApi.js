@@ -49,16 +49,13 @@ module.exports = (setroute = require("./Setroute")) => {
     setroute.pushRoute(root_1,"GET","api/danhsachGVPBphancong", "qldean/AdminPhancongPhanbienController@danhsachGVPBphancong");
     setroute.pushRoute(root_1,"GET","api/addGVPBphancong", "qldean/AdminPhancongPhanbienController@addGVPBphancong");
 
-
     setroute.pushRoute(root_1,"GET","api/danhsachphancongTB", "qldean/AdminPhancongTieubanController@danhsachphancongTB");
     setroute.pushRoute(root_1,"GET","api/danhsachTBphancong", "qldean/AdminPhancongTieubanController@danhsachTBphancong");
     setroute.pushRoute(root_1,"GET","api/addTBphancong", "qldean/AdminPhancongTieubanController@addTBphancong");
 
-    
-    
     setroute.pushRoute(root_1,"POST","api/upfile_doan", "qldean/TeacherController@upfiledoan");
-
-    
+    setroute.pushRoute(root_1,"GET","api/dieukiensuadoan", "qldean/TeacherController@dieukiensuadoan");
+    setroute.pushRoute(root_1,"GET","api/suadoan", "qldean/TeacherController@suadoan");
     setroute.pushRoute(root_1,"GET","api/danhsachtailieu", "qldean/TeacherController@danhsachtailieu");
     setroute.pushRoute(root_1,"GET","api/danhsachdoan-tatca", "qldean/TeacherController@danhsachdoan-tatca");
     setroute.pushRoute(root_1,"GET","api/danhsachdoan-canhan", "qldean/TeacherController@danhsachdoan-canhan");

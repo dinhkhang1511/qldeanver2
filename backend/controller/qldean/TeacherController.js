@@ -53,6 +53,38 @@ module.exports = async (callback, scanner) => {
         }
     }
 
+    if (index === 'dieukiensuadoan'){
+        let MaDoan = head_params.get('MaDoan');
+        let MaGV = head_params.get('MaGV');
+
+        let  data = await Model.InleSQL("call shonInfor_DA_Update('"+MaDoan+"', '"+MaGV+"');");
+        callback(JSON.stringify(data), 'application/json');
+    }
+
+    if (index === 'suadoan'){
+        let MaDoan = head_params.get('MaDoan');
+        let TenDoan = head_params.get('TenDoan');
+        let chuyennganh = head_params.get('chuyennganh');
+        let ngay = head_params.get('ngay') ;
+        let MaGV = head_params.get('MaGV');
+        let filedoc = head_params.get('filedoc');
+        let infotep = head_params.get('infotep');
+        let NUMBERFILE = head_params.get('NUMBERFILE');
+        let ischangefile = head_params.get('ischangefile');
+
+        if(String(ischangefile) !== 'x'){ 
+            await Model.InleSQL("call DELETE_FileHD("+NUMBERFILE+")");
+            console.log("call DELETE_FileHD("+NUMBERFILE+")")
+        }
+        console.log("call Update_DAFull('"+MaDoan+"', '"+TenDoan+"', '"+chuyennganh+"','"+MaGV+"','"+ngay+"','"+infotep+"','"+filedoc+"')")
+        let  result1 = await Model.InleSQL("call Update_DAFull('"+MaDoan+"', '"+TenDoan+"', '"+chuyennganh+"','"+MaGV+"','"+ngay+"','"+infotep+"','"+filedoc+"')");
+        if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
+            console.log(result1)
+            callback(JSON.stringify("that bai"), 'application/json');
+        }else{
+            callback(JSON.stringify(result1), 'application/json');
+        }
+    }
 
     if (index === 'danhsachdoan-data'){
 
@@ -195,4 +227,6 @@ module.exports = async (callback, scanner) => {
         callback(JSON.stringify(data), 'application/json');
 
     }
+
+
 }

@@ -17,8 +17,6 @@ let MaGVtemp;
 let MaDAtemp;
 let MaSVtemp;
 
-
-
 var khoacurrent = 0;
 var nghanhcurrent = 'null';
 var listkhoa = [];
