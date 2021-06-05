@@ -79,7 +79,9 @@ module.exports = async (callback, scanner) => {
   
             let count = await Model.InleSQL("select CountList_SvDATB('"+Khoa+"','"+MaNghanh+"') AS NumberSV");
             let select = await Model.InleSQL("call ShowList_SvDATB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
-  
+            let niemkhoahientai = await Model.InleSQL("select nienkhoahientai('"+MaNghanh+"') AS nienkhoahientai");
+
+
             let data = [];
             data.push(listNganh);
             data.push(listKhoa);
@@ -87,6 +89,7 @@ module.exports = async (callback, scanner) => {
             data.push(Khoa);
             data.push(count)
             data.push(select)
+            data.push(niemkhoahientai);
             callback(JSON.stringify(data), 'application/json');
         });
   
@@ -117,7 +120,8 @@ module.exports = async (callback, scanner) => {
   
             let count = await Model.InleSQL("select CountList_SvDATB('"+Khoa+"','"+MaNghanh+"') AS NumberSV");
             let select = await Model.InleSQL("call ShowList_SvDATB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
-  
+            let niemkhoahientai = await Model.InleSQL("select nienkhoahientai('"+MaNghanh+"') AS nienkhoahientai");
+
             let data = [];
             data.push(listNganh);
             data.push(listKhoa);
@@ -125,6 +129,7 @@ module.exports = async (callback, scanner) => {
             data.push(Khoa);
             data.push(count)
             data.push(select)
+            data.push(niemkhoahientai);
   
             callback(JSON.stringify(data), 'application/json');
         });

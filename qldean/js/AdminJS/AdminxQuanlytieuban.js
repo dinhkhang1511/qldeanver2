@@ -17,6 +17,7 @@ var maTB;
 var ngaytemp;
 var giotemp;
 var catemp;
+let nienkhoahientai;
 
 var khoacurrent = 0;
 var nghanhcurrent = '';
@@ -64,6 +65,9 @@ var xhttp = new XMLHttpRequest();
                     khoacurrent = data[3];
                     tol_page =  Math.ceil(data[4][0]["CountList_TB('"+khoacurrent+"','"+nghanhcurrent+"')"] / 10); 
                     listinfoitem = data[5][0];
+
+                    nienkhoahientai =  data[6][0]['nienkhoahientai'];
+                    
                     LoadListTieuban(listinfoitem);
                 }
                 //Dữ liệu bảng tiểu ban
@@ -83,7 +87,8 @@ var xhttp = new XMLHttpRequest();
                 //Load điều kiện thêm tiểu ban
                 if(String(this.responseURL).includes('api/dieukienthemtb')){
                     var data = JSON.parse(this.responseText);
-                    LoadAddFormTieuban(data[0]['AUTO_IDTB('+khoacurrent+')'])
+                    LoadAddFormTieuban(data[0]['AUTO_IDTB('+nienkhoahientai+')'])
+                    khoacurrent = nienkhoahientai;
                 }
                 //Thêm tiểu ban
                 if(String(this.responseURL).includes('api/themtb')){
@@ -152,7 +157,8 @@ function loadListSearchTieuban(){
 }
 
 function loadAddListTieuban() {
-    xhttp.open("GET", "/api/dieukienthemtb?khoa="+khoacurrent, false);
+    console.log(nienkhoahientai)
+    xhttp.open("GET", "/api/dieukienthemtb?khoa="+nienkhoahientai, false);
     xhttp.send();
 }
 function addTieuban() {
@@ -317,6 +323,7 @@ function LoadAddFormTieuban(maTB){
     $('.chose-bar').hide();
     $('#table_data').hide();
     $('.btn-follow-row').hide();
+    $('#head-bar').hide();
     $('.nav-page').hide();
     $('.Add-New-Row').show();
 

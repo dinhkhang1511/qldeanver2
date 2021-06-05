@@ -57,6 +57,7 @@ module.exports = async (callback, scanner) => {
         let MaDoan = head_params.get('MaDoan');
         let MaGV = head_params.get('MaGV');
 
+        console.log("call shonInfor_DA_Update('"+MaDoan+"', '"+MaGV+"');")
         let  data = await Model.InleSQL("call shonInfor_DA_Update('"+MaDoan+"', '"+MaGV+"');");
         callback(JSON.stringify(data), 'application/json');
     }
@@ -84,6 +85,18 @@ module.exports = async (callback, scanner) => {
         }else{
             callback(JSON.stringify(result1), 'application/json');
         }
+    }
+
+    if (index === 'xoadoan'){
+        let MaDoan = head_params.get('MaDoan');
+
+        let  result1 = await Model.InleSQL("call Delete_DA('"+MaDoan+"')");
+        if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
+            callback(JSON.stringify("that bai"), 'application/json');
+        }else{
+            callback(JSON.stringify(result1), 'application/json');
+        }
+        
     }
 
     if (index === 'danhsachdoan-data'){

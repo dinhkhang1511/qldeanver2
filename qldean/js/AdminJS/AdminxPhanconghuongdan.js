@@ -18,6 +18,8 @@ let MaDAtemp;
 let MaSVtemp;
 let NgaySinhtemp;
 let GPAtemp = 0;
+let nienkhoahientai;
+let TTmokhoamoi;
 
 var khoacurrent = 0;
 var nghanhcurrent = '';
@@ -55,24 +57,22 @@ var xhttp = new XMLHttpRequest();
 
                     tol_page =  Math.ceil(data[5][0]['NumberSV'] / 10); 
                     listinfoitem = data[6][0];
-
+                    nienkhoahientai =  data[7][0]['nienkhoahientai']
+                    TTmokhoamoi = data[8][0]['TTmokhoamoi']
                     LoadListHuongdan(listinfoitem);
                 }
 
                 if(String(this.responseURL).includes('api/danhsachGVHDphancong')){
                     var data = JSON.parse(this.responseText)
-
-                    console.log(data)
+                    console.log(data);
                     LoadPhancongHuongdan(data);
-
                 }
                 if(String(this.responseURL).includes('api/addGVHDphancong')){
                     if(String(this.responseText) == '"that bai"')
                         alert('Trùng mã sinh viên, Email hoặc field rỗng')
                     else
-                        loadListHuongdan()
+                        loadListHuongdan();
                 }
-
         }
     };
 
@@ -92,10 +92,10 @@ function loadAddPhancongHuongdan(){
     var strUser = String(e.value).split(' - ');
     console.log(strUser[0])
     if(String(MaGVtemp) !== String(strUser[0])){
-    xhttp.open("GET", "/api/addGVHDphancong?MaSV="+MaSVtemp+"&MaGVHD="+strUser[0]+"&NgaySinh="+NgaySinhtemp, false);
-    xhttp.send();
+        xhttp.open("GET", "/api/addGVHDphancong?MaSV="+MaSVtemp+"&MaGVHD="+strUser[0]+"&NgaySinh="+NgaySinhtemp, false);
+        xhttp.send();
     }else{
-        loadListHuongdan()
+        loadListHuongdan();
     }
 }
 
@@ -105,7 +105,7 @@ function changeKhoaandNghanh(){
     nghanhcurrent = String(e.options[e.selectedIndex].value);
     e = document.getElementsByClassName("select-combox-headbar").item(1);
     khoacurrent = e.options[e.selectedIndex].value;
-    console.log("mới tạo "+nghanhcurrent,khoacurrent)
+    console.log("mới tạo "+nghanhcurrent,khoacurrent);
     loadListHuongdan();
 }
 
@@ -138,16 +138,15 @@ function LoadListHuongdan(data) {
 
     $('#head-bar').append(returnFormComboxHeadBar('Nghành',listmanganh, listtennghanh, nghanhcurrent, 'changeKhoaandNghanh',250,0));
     $('#head-bar').append(returnFormComboxHeadBar('Niêm khóa',listkhoa , listniemkhoa, khoacurrent, 'changeKhoaandNghanh',120,20));
-    
+    if(TTmokhoamoi == 1) $('#head-bar').append( '<a href="/admin/quanlysinhvien?mokhoamoi='+nienkhoahientai+'">'+ returnAddBtnLeftLabel('Mở Khóa mới') + '</a>');
+
     $('#button-bar').append(returnIconHome() + returnNameIndex('Phụ trách')  + returnNameIndex('Hướng dẫn') );
     $('.chose-bar').append(returnSearchForm('Nhập GPA tối thiểu','Lọc') );
     document.getElementById('input-search').value = GPAtemp;
 
-
     $('#table_data').append(returnTable(tieudeBangHD,data));
     $('.btn-follow-row').append(returnButtonTable(tennutBangHD,idnutBangHD));
     $('.nav-page').append(returNavForm(tol_page+1, page_num));
-
 }
 
 
@@ -185,8 +184,7 @@ function LoadPhancongHuongdan(data) {
     $('.Add-New-Row').append(returnLormInfo(['Mã đồ án: '+InfoSV.MaDA ,'Tên đồ án: '+InfoSV.TenDA]));
     else
     $('.Add-New-Row').append(returnLormInfo(['Mã đồ án: '+InfoSV.MaDA ,'Tên đồ án: Chưa đặt tên']));
-    // $('.Add-New-Row').append(returnLormOneInfo('Giảng viên hướng dẫn: GV02 - Trần Minh Chiến'));
-    // $('.Add-New-Row').append(returnLormOneInfo('Tiểu ban: TB02'));
+
 
     if(String(InfoSV.Diem) != '')
     $('.Add-New-Row').append(returnLormOneInfo('Điểm hướng dẫn: '+InfoSV.Diem));
@@ -244,15 +242,21 @@ function LoadChitietHuongdan() {
 function EventAdminClick(event) {
     var x = event.target;
     if( x.parentNode.className == "no-color-lum-table"){
+        console.log(nienkhoahientai,khoacurrent);
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
+        if(khoacurrent == nienkhoahientai){
         $('#no-color-btn-follow-row').attr("id", "yes-color-btn-follow-row");
+        }
         x.parentNode.className = 'yes-color-lum-table';
         currentrowtable = Number(x.parentNode.id.replace('collumtalbe-',''));
+   
     }else if(x.parentNode.className == 'btn-follow-row'){
         if(x.id == "phancongx" ){
+            if(khoacurrent == nienkhoahientai){
             console.log(listinfoitem[currentrowtable].MaSV)
             MaGVtemp = listinfoitem[currentrowtable].MaGVHD;
             loadPhancongHuongdan(listinfoitem[currentrowtable].MaSV);
+            }
         }else if(x.id == "chitietx"){
             LoadChitietHuongdan();
         }

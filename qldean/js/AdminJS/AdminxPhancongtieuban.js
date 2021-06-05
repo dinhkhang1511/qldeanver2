@@ -18,6 +18,7 @@ var TBtemp;
 let MaGVtemp;
 let MaDAtemp;
 let MaSVtemp;
+let nienkhoahientai;
 
 
 var khoacurrent = 0;
@@ -53,6 +54,8 @@ var xhttp = new XMLHttpRequest();
 
                     tol_page =  Math.ceil(data[4][0]['NumberSV'] / 10); 
                     listinfoitem = data[5][0];
+
+                    nienkhoahientai =  data[6][0]['nienkhoahientai']
 
                     LoadListTieuban(listinfoitem);
                 }
@@ -217,8 +220,6 @@ function LoadChitietTieuban() {
     $('.Add-New-Row').append(returnLormOneInfo('Giảng viên hướng dẫn: GV02 - Trần Minh Chiến'));
     $('.Add-New-Row').append(returnLormOneInfo('Giảng viên phản biện: GV02 - Trần Minh Chiến'));
 
-    // $('.Add-New-Row').append(returnLormOneInfo('Tiểu ban: TB02'));
-
     $('.Add-New-Row').append(returnLormOneInfo('Tiểu ban: TB023'));
     $('.Add-New-Row').append(returnLormBtn(['Thoát'],['tomato'],['thoat']));
 
@@ -230,15 +231,17 @@ function EventAdminClick(event) {
     var x = event.target;
     if( x.parentNode.className == "no-color-lum-table"){
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
-        $('#no-color-btn-follow-row').attr("id", "yes-color-btn-follow-row");
+        if(khoacurrent == nienkhoahientai){
+            $('#no-color-btn-follow-row').attr("id", "yes-color-btn-follow-row");
+        }
         x.parentNode.className = 'yes-color-lum-table';
         currentrowtable = Number(x.parentNode.id.replace('collumtalbe-',''));
     }else if(x.parentNode.className == 'btn-follow-row'){
         if(x.id == "phancongx" ){
-            // MaDAtemp = listinfoitem[currentrowtable].MaDA;
+            if(khoacurrent == nienkhoahientai){
             TBtemp = listinfoitem[currentrowtable].MaTB;
             loadPhancongTieuban(listinfoitem[currentrowtable].MaSV ,  listinfoitem[currentrowtable].MaDA)
-
+            }
         }else if(x.id == "chitietx"){
             LoadChitietTieuban();
         }

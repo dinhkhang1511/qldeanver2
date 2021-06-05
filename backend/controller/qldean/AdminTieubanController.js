@@ -33,7 +33,7 @@ module.exports = async (callback, scanner) => {
         listNganh = await Model.InleSQL("call ComboBox_Nganh()");
         listNganh = listNganh[0];
 
-        console.log("Start+"+MaNghanh,Khoa)
+        console.log("Start+"+MaNghanh,Khoa);
 
     if(MaNghanh === '' || Khoa == 0 || String(MaNghanh) === 'null'){
 
@@ -73,8 +73,7 @@ module.exports = async (callback, scanner) => {
             }
             let count = await Model.InleSQL("select CountList_TB('"+Khoa+"','"+MaNghanh+"')");
             let select = await Model.InleSQL("call ShowList_TB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
-
-            console.log("call ShowList_TB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")")
+            let niemkhoahientai = await Model.InleSQL("select nienkhoahientai('"+MaNghanh+"') AS nienkhoahientai");
 
             let data = [];
             data.push(listNganh);
@@ -82,7 +81,9 @@ module.exports = async (callback, scanner) => {
             data.push(MaNghanh);
             data.push(Khoa);
             data.push(count)
-            data.push(select)
+            data.push(select);
+            data.push(niemkhoahientai);
+
             callback(JSON.stringify(data), 'application/json');
         });
 
@@ -113,14 +114,16 @@ module.exports = async (callback, scanner) => {
 
             let count = await Model.InleSQL("select CountList_TB('"+Khoa+"','"+MaNghanh+"')");
             let select = await Model.InleSQL("call ShowList_TB('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
+            let niemkhoahientai = await Model.InleSQL("select nienkhoahientai('"+MaNghanh+"') AS nienkhoahientai");
 
             let data = [];
             data.push(listNganh);
             data.push(listKhoa);
             data.push(MaNghanh);
             data.push(Khoa);
-            data.push(count)
-            data.push(select)
+            data.push(count);
+            data.push(select);
+            data.push(niemkhoahientai);
 
             callback(JSON.stringify(data), 'application/json');
         });

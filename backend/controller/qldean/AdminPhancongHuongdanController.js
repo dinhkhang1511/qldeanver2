@@ -83,6 +83,8 @@ module.exports = async (callback, scanner) => {
 
           let count = await Model.InleSQL("select CountList_SvDAHD('"+Khoa+"','"+MaNghanh+"') AS NumberSV");
           let select = await Model.InleSQL("call ShowList_SvDAHD('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
+          let niemkhoahientai = await Model.InleSQL("select nienkhoahientai('"+MaNghanh+"') AS nienkhoahientai");
+          let TTmokhoamoi = await Model.InleSQL("SELECT TrangThai_MoKhoaMoi('"+MaNghanh+"') AS TTmokhoamoi");
 
           let data = [];
           data.push(listNganh);
@@ -92,6 +94,9 @@ module.exports = async (callback, scanner) => {
           data.push(GPA)
           data.push(count)
           data.push(select)
+          data.push(niemkhoahientai)
+          data.push(TTmokhoamoi)
+
           callback(JSON.stringify(data), 'application/json');
     });
 
@@ -127,6 +132,8 @@ module.exports = async (callback, scanner) => {
 
           let count = await Model.InleSQL("select CountList_SvDAHD('"+Khoa+"','"+MaNghanh+"') AS NumberSV");
           let select = await Model.InleSQL("call ShowList_SvDAHD('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
+          let niemkhoahientai = await Model.InleSQL("select nienkhoahientai('"+MaNghanh+"') AS nienkhoahientai");
+          let TTmokhoamoi = await Model.InleSQL("SELECT TrangThai_MoKhoaMoi('"+MaNghanh+"') AS TTmokhoamoi");
 
           let data = [];
           data.push(listNganh);
@@ -136,6 +143,8 @@ module.exports = async (callback, scanner) => {
           data.push(GPA)
           data.push(count)
           data.push(select)
+          data.push(niemkhoahientai);
+          data.push(TTmokhoamoi)
 
           callback(JSON.stringify(data), 'application/json');
       });

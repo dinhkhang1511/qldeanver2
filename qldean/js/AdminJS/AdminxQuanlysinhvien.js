@@ -15,6 +15,9 @@ const bubbleSort = (array) => {
 }
 
 
+var niemkhoamoi;
+var ismokhoa = false;
+
 var MaAdmin = 'ADMIN';
 
 var listinfoitem;
@@ -99,13 +102,14 @@ var xhttp = new XMLHttpRequest();
                     listniemkhoatemp = listniemkhoa;
 
                     nghanhcurrent = data[2];
-                    khoacurrent = data[3];
+                    if(isaddSinhvien == false) khoacurrent = data[3];
                     khoacurrenttemp = data[3];
 
                     tol_page =  Math.ceil(data[4][0]["NumberSV"] / 10); 
                     listinfoitem = data[5][0];
 
                     LoadListSinhvien(listinfoitem);
+ 
                 }
                 if(String(this.responseURL).includes('api/dieukienthemsv')){
                     var data = JSON.parse(this.responseText)
@@ -235,6 +239,7 @@ var xhttp = new XMLHttpRequest();
 
 ///LOAD----------------------------------------------------
 function loadListSinhvien(){
+    console.log("/api/danhsachsinhvien?page="+page_num+"&Khoa="+khoacurrent+"&MaNghanh="+String(nghanhcurrent)+"&MaAdmin="+MaAdmin)
     xhttp.open("GET", "/api/danhsachsinhvien?page="+page_num+"&Khoa="+khoacurrent+"&MaNghanh="+String(nghanhcurrent)+"&MaAdmin="+MaAdmin, false);
     xhttp.send();
 }
@@ -243,11 +248,11 @@ function loadAddListSinhvien() {
     var e = document.getElementsByClassName("select-combox-headbar").item(0);
     nghanhcurrent = String(e.options[e.selectedIndex].value);
     e = document.getElementsByClassName("select-combox-headbar").item(1);
-    khoacurrent = e.options[e.selectedIndex].value;
+    // khoacurrent = e.options[e.selectedIndex].value;
     khoacurrenttemp = e.options[e.selectedIndex].value;
     console.log("mới tạo "+nghanhcurrent,khoacurrent)
 
-    xhttp.open("GET", "/api/dieukienthemsv?Khoa="+khoacurrent+"&MaNghanh="+nghanhcurrent+"&MaAdmin="+MaAdmin, false);
+    xhttp.open("GET", "/api/dieukienthemsv?Khoa="+khoacurrenttemp+"&MaNghanh="+nghanhcurrent+"&MaAdmin="+MaAdmin, false);
     xhttp.send();
 }
 
@@ -271,20 +276,25 @@ function addSinhvien() {
     var e = document.getElementsByClassName('combo-box-add-long').item(0);
     var chuyennganh = e.options[e.selectedIndex].value;
     var lop;
+
+    e = document.getElementsByClassName("select-combox-headbar").item(1);
+    khoacurrent = e.options[e.selectedIndex].value;
     
-    if(document.getElementsByClassName('label-item-add').item(0).style.display === "none"){
+    if(document.getElementsByClassName('label-item-add').item(2).style.display === "none"){
         var e = document.getElementsByClassName('combo-box-add-long').item(1);
          lop = e.options[e.selectedIndex].value;
     }else{
          lop = String(document.getElementsByClassName('label-item-add').item(2).innerHTML);
     }
+
+    console.log(lop)
     
 
     var thoigiantieuban = document.getElementsByClassName('thoigianform').item(0).value;
     thoigiantieuban = String(thoigiantieuban).split('T')
     var ngay = thoigiantieuban[0];
 
-    // console.log( "/api/themsv?MaSV="+maSV+"&TenSV="+tensv+"&NgaySinh="+ngay+"&Lop="+lop+"&chuyennganh="+chuyennganh+"&GPA="+GPA+"&Email="+EmailSV+"&SDT="+SDT+"&Khoa="+khoacurrent)
+    console.log( "/api/themsv?MaSV="+maSV+"&TenSV="+tensv+"&NgaySinh="+ngay+"&Lop="+lop+"&chuyennganh="+chuyennganh+"&GPA="+GPA+"&Email="+EmailSV+"&SDT="+SDT+"&Khoa="+khoacurrent)
     xhttp.open("GET", "/api/themsv?MaSV="+maSV+"&TenSV="+tensv+"&NgaySinh="+ngay+"&Lop="+lop+"&MaNghanh="+nghanhcurrent+"&GPA="+GPA+"&Email="+EmailSV+"&SDT="+SDT+"&Khoa="+khoacurrent, false);
     xhttp.send();
 
@@ -347,7 +357,10 @@ function changeKhoaandNghanh(){
     nghanhcurrent = String(e.options[e.selectedIndex].value);
 
     var e = document.getElementsByClassName("select-combox-headbar").item(1);
-    khoacurrent = Number(e.options[e.selectedIndex].value);
+
+    if(isaddSinhvien == false ) khoacurrent = Number(e.options[e.selectedIndex].value);
+    khoacurrenttemp = Number(e.options[e.selectedIndex].value);
+
 
     if(isaddSinhvien == true){
         console.log(khoacurrent,nghanhcurrent)
@@ -391,6 +404,9 @@ function LoadListSinhvien(data) {
     $('#table_data').append(returnTable(tieudeBangSinhvien,data));
     $('.btn-follow-row').append(returnButtonTable(tennutBangSinhvien,idnutBangSinhvien));
     $('.nav-page').append(returNavForm(tol_page+1, page_num));
+
+    if(ismokhoa == true) loadAddListSinhvien();
+
 }
 
 function LoadAddFormSinhvien() {
@@ -442,6 +458,83 @@ function LoadAddFormSinhvien() {
     }
     $('.Add-New-Row').append(returnFormInputText('GPA', ''));
     $('.Add-New-Row').append(returnFormBtn(nutThemSinhvien,maunutThemSinhvien,idnutThemSinhvien));
+
+    console.log(khoacurrent)
+    LoadAddnewNienkhoa()
+}
+
+
+function LoadAddnewNienkhoa(){
+    if(ismokhoa == true){
+        
+        ismokhoa = false;
+        isaddSinhvien = true;
+        document.getElementById('them-khoa-input').value = niemkhoamoi;
+
+        listkhoa = [];
+        for(let i = 0; i < liststartkhoa.length; i++){
+            listkhoa.push(liststartkhoa[i].namBD);
+        }
+        console.log(listkhoa,nghanhcurrent)
+        listkhoatemp = [];
+        listniemkhoatemp = [];
+
+        console.log(Number(niemkhoamoi) + 'xffffffffff')
+
+        if(Number(niemkhoamoi) !== 0 || String(Number(niemkhoamoi)) !== 'NaN')
+        if(listkhoa.indexOf(Number(niemkhoamoi)) !== -1){
+            alert("Khóa đã tồn tại!")
+            khoacurrent = Number(niemkhoamoi);
+            loadListSinhvien();
+        } else{
+            if(Number(niemkhoamoi) >= rangeKhoa[0] && Number(niemkhoamoi) <= rangeKhoa[1]){
+                $.getJSON( "/api/layniemkhoatheonam?MaNghanh="+nghanhcurrent, function( data ) {
+
+                    console.log("/api/layniemkhoatheonam?MaNghanh="+nghanhcurrent)
+
+                    listkhoatemp = listkhoa;
+                    listkhoatemp.push(Number(niemkhoamoi));
+                    listkhoatemp = bubbleSort(listkhoatemp);
+
+                    console.log(Number(niemkhoamoi) + 'xffffffffff')
+
+                    console.log(listkhoatemp+Number(niemkhoamoi))
+
+                    for(let i = 0; i < listkhoatemp.length; i++){
+                        if(Number(niemkhoamoi) == listkhoatemp[i]){
+                            listniemkhoatemp.push(Number(niemkhoamoi) + '-' + Math.ceil(Number(niemkhoamoi) + data[0].SoNam));
+                        }else{
+                            for(let k = 0; k < liststartkhoa.length; k++){
+                                if(Number(liststartkhoa[k].namBD) == Number(listkhoatemp[i])){
+                                    listniemkhoatemp.push(listkhoatemp[i] + '-' + Math.ceil(listkhoatemp[i] + liststartkhoa[k].SoNam));
+                                }
+                            }
+                        }
+                    }
+                    $('#chon-list-khoa-add').empty();
+
+                    var element = '';
+                    for(var i = 0; i < listniemkhoatemp.length; i++){
+                        if(Number(listkhoatemp[i]) == Number(niemkhoamoi))
+                        element = element + '<option selected value="'+listkhoatemp[i]+'">'+listniemkhoatemp[i]+'</option>';
+                        else 
+                        element = element + '<option value="'+listkhoatemp[i]+'">'+listniemkhoatemp[i]+'</option>';
+                    }
+                    $('#chon-list-khoa-add').append(element);
+                    $('#chon-list-khoa-add').show();
+                    $('#them-khoa-btn').show();
+                    $('#them-khoa-input').hide();
+                    $('#ds-khoa-btn').hide();
+                    $('#xacnhan-khoa-btn').hide();
+                    khoacurrenttemp = Number(niemkhoamoi);
+                    changeKhoaandNghanh();
+
+
+                });
+            }
+        }
+
+    }
 }
 
 function LoadComboxLop(){
@@ -518,9 +611,7 @@ function LoadSuaFormSinhvien(listData,checkChuyennganh) {
         checklistlop = false;
     }
 
-
     $('.Add-New-Row').append(returnFormInputText('GPA', listData.GPA));
-
     $('.Add-New-Row').append(returnFormBtn(['Xác nhận', 'Thoát'],['tomato', 'green'],['sua','thoat']));
 }
 
@@ -641,4 +732,11 @@ function EventAdminClick(event) {
 }
 
 //FIRST---------------------------------------------------------
-loadListSinhvien() ;
+if(GetUrlParameter('mokhoamoi') !== undefined){
+    ismokhoa = true;
+    niemkhoamoi = Number(GetUrlParameter('mokhoamoi'))
+    console.log(niemkhoamoi)
+}
+
+loadListSinhvien();
+

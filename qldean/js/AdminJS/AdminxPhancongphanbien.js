@@ -16,6 +16,7 @@ var idnutPhancongPB = ['phancong', 'thoat'];
 let MaGVtemp;
 let MaDAtemp;
 let MaSVtemp;
+let nienkhoahientai;
 
 var khoacurrent = 0;
 var nghanhcurrent = 'null';
@@ -51,6 +52,8 @@ var xhttp = new XMLHttpRequest();
 
                     tol_page =  Math.ceil(data[4][0]['NumberSV'] / 10); 
                     listinfoitem = data[5][0];
+
+                    nienkhoahientai =  data[6][0]['nienkhoahientai']
 
                     LoadListPhanbien(listinfoitem);
                 }
@@ -232,16 +235,19 @@ function EventAdminClick(event) {
     var x = event.target;
     if( x.parentNode.className == "no-color-lum-table"){
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
-        $('#no-color-btn-follow-row').attr("id", "yes-color-btn-follow-row");
+        if(khoacurrent == nienkhoahientai){
+            $('#no-color-btn-follow-row').attr("id", "yes-color-btn-follow-row");
+        }
         x.parentNode.className = 'yes-color-lum-table';
         currentrowtable = Number(x.parentNode.id.replace('collumtalbe-',''));
     }else if(x.parentNode.className == 'btn-follow-row'){
         if(x.id == "phancongx" ){
-
+            if(khoacurrent == nienkhoahientai){
             console.log(listinfoitem[currentrowtable].MaSV)
             MaGVtemp = listinfoitem[currentrowtable].MaGVPB;
             MaSVtemp =  listinfoitem[currentrowtable].MaSV;
             loadPhancongPhanbien(listinfoitem[currentrowtable].MaSV,  listinfoitem[currentrowtable].MaDA);
+            }
         }else if(x.id == "chitietx"){
             LoadChitietPhanbien();
         }
