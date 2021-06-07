@@ -58,7 +58,7 @@ function returnTable(listLabel, data) {
         element = element + '<tr  id="collumtalbe-'+i+'" class="no-color-lum-table">';
         Object.keys(data[i]).forEach(key => {
             if(String(data[i][key]) != 'null')
-            element = element + '<td>'+String(data[i][key]).replace('T17:00:00.000Z','').replace('T',' ').replace('.000Z',' ')+'</td>';
+            element = element + '<td>'+String(data[i][key]).replace('T17:00:00.000Z','').replace('.000Z',' ')+'</td>';
             else 
             element = element + '<td>'+'</td>';
         });
@@ -205,9 +205,9 @@ function returnFormKhoa(dskhoa,khoa) {
     var element = '<select id="select-khoa"  class="browser-default custom-select" onchange="changeKhoa();">'
     for(var i = 0; i < dskhoa.length; i++){
         if(Number(dskhoa[i]) == Number(khoa))
-        element = element + '<option selected  value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
+            element = element + '<option selected  value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
         else
-        element = element + '<option value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
+            element = element + '<option value="'+dskhoa[i]+'">'+dskhoa[i]+'</option>';
     }
     element = element + '</select>';
     element = element + '<input style="display: none;" type="text" name="" class="form-control" placeholder="Nhập khóa" id="input-khoa"><button style="display: none;" id="xacnhan-them-khoa">Xác nhận</button><button id="themkhoa" type="submit">Thêm Khóa</button><button style="display: none;" id="dskhoa" type="submit">Danh sách</button>';

@@ -21,7 +21,6 @@ module.exports = async (callback, scanner) => {
         let count = await Model.InleSQL(" SELECT FOUND_ROWS() ;");
         callback(JSON.stringify([result, count]), 'application/json');
     }
-
     if (index === 'dieukienthemdoan'){
         let MaNghanh = head_params.get('MaNghanh');
         let list = await Model.InleSQL("call ComboBox_CN('"+MaNghanh+"')");
@@ -239,9 +238,58 @@ module.exports = async (callback, scanner) => {
         data.push(select);
 
         callback(JSON.stringify(data), 'application/json');
-
     }
 
 
+    if(index === 'firstload-phancong-tailieu'){
+        let MaGV = String(head_params.get('MaGV')).trim();
+        let MaDoan = String(head_params.get('MaDoan')).trim();
+        let MaCT = String(head_params.get('MaCT')).trim();
+        let MaCN = String(head_params.get('MaCN')).trim();
+
+
+        let select1 = await Model.InleSQL("call ShowInfor_DA('"+MaDoan+"',"+MaCT+");");
+        let select2 = await Model.InleSQL("call ComboBox_SV('"+MaGV+"','"+MaCN+"');");
+        console.log("call ComboBox_SV('"+MaGV+"','"+MaCN+"')")
+        console.log(select2)
+        
+        // let select = await Model.InleSQL("call ShowList_Files('"+MaDoan+"', '"+MaGV+"',"+limit*page+")");
+
+        let data = [];
+
+        data.push(select1);
+        data.push(select2);
+
+        callback(JSON.stringify(data), 'application/json');
+    }
+
+    if(index === 'infosv-phancong-tailieu'){
+        let MaSV = String(head_params.get('MaSV')).trim();
+
+        let select1 = await Model.InleSQL("call ShowInfor_SV('"+MaSV+"')");
+
+        let data = [];
+        data.push(select1);
+
+        callback(JSON.stringify(data), 'application/json');
+    }
+
+
+    if(index === 'add-phancong-tailieu'){
+        let MaDoan = head_params.get('MaDoan');
+        let MaGV = head_params.get('MaGV');
+        let MaSV = head_params.get('MaSV');
+        let MaCT = head_params.get('MaCT');
+
+        let  result1 = await Model.InleSQL("call PhanCong_DA('"+MaGV+"','"+MaSV+"','"+MaDoan+"',"+MaCT+")");
+        console.log("call PhanCong_DA('"+MaGV+"','"+MaSV+"','"+MaDoan+"',"+MaCT+")")
+        console.log(result1)
+        if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
+                callback(JSON.stringify("that bai"), 'application/json');
+            }else{
+                callback(JSON.stringify(result1), 'application/json');
+            }
+    }
+    
 
 }

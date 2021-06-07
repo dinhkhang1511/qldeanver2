@@ -34,6 +34,8 @@ var MaGV = "GVCN006";
 var MaChuyennganh = "";
 var MaDoan = '';
 var TenDoan = '';
+var MaCT = '';
+var MaSV = '';
 
 var contentfile1;
 var contentfile2;
@@ -138,7 +140,25 @@ var xhttp = new XMLHttpRequest();
                         else if((pagelist == 2)) loadListDoanTatca();
                     };
                 }
-       
+                if(String(this.responseURL).includes('api/firstload-phancong-tailieu')){
+                    var data = JSON.parse(this.responseText);
+                    console.log(data[0][0][0])
+                    LoadPhancongTailieu(data[0][0][0],data[1][0]);
+                    console.log(data[1][0])
+                    
+                }
+                if(String(this.responseURL).includes('api/infosv-phancong-tailieu')){
+                    var data = JSON.parse(this.responseText);
+                    console.log(data[0][0][0])
+                    LoadInfoSvPhancongtailieu(data[0][0][0])
+                }
+                if(String(this.responseURL).includes('api/add-phancong-tailieu')){
+                    if(String(this.responseText) == '"that bai"')alert('Fail')
+                    else {
+                        loadListTailieu()
+                    };
+                }  
+
                 
         }
     };
@@ -207,6 +227,18 @@ function loadXoaDoan(){
     xhttp.open("GET", "/api/xoadoan?MaDoan="+MaDoan, false);
     xhttp.send();
 }
+
+function loadFirstPhancongtailieu(){
+    xhttp.open("GET", "/api/firstload-phancong-tailieu?MaDoan="+MaDoan+"&MaGV="+MaGV+"&MaCT="+MaCT+"&MaCN="+MaChuyennganh, false);
+    xhttp.send();
+}
+
+
+function loadInfoSvPhancongtailieu(MaSV){
+    xhttp.open("GET", "/api/infosv-phancong-tailieu?MaSV="+MaSV, false);
+    xhttp.send();
+}
+
 
 //ELEMENT-----------------------------------------------------
 function LoadListDoan(data){
@@ -476,7 +508,7 @@ function LoadSuaDoan(data){
 
     //Them ham
     $("#check-khac").change(function() {
-        if(this.checked) {
+        if(this.checked){
             $(".input-more-checkbox").show();
         }else{
             $(".input-more-checkbox").hide();
@@ -540,7 +572,7 @@ function loadSuaDoan(){
 ////////////////////////////
 
 
-function LoadPhancong(){
+function LoadPhancongTailieu(doan,listsinhvien){
     pageStatus = 3;
 
     $('#button-bar').show();
@@ -563,10 +595,79 @@ function LoadPhancong(){
     $('.nav-page').empty();
     $('.label-bar').empty();
     $('#head-bar').empty();
+    $('#detail-bar').empty();
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Đồ án') + returnNameIndex('Tài liệu')  + returnNameIndex('Phân công')  + returnReturnBtn());
+
+
+    $('#detail-bar').append(
+
+        '<span id="thongtin-doan">'+
+            '<span id="thongtin-doan-doan">'+
+                '<div>Thông tin đồ án:</div>'+
+                '<div>Mã: '+doan.MaDA+'</div>'+
+                '<div>Tên: '+doan.TenDA+'</div>'+
+                '<div>Chuyên ngành: '+doan.tenCN+'</div>'+
+                '<div>Người tạo: '+doan.MaNguoiTaoDA+' - '+doan.TenNguoiTaoDA+'</div>'+
+                '<div>Ngày tạo: '+doan.NgayTao.replace('T17:00:00.000Z','')+'</div>'+
+                '<div style="color: rgb(107, 144, 185);">Tài liệu hướng dẫn:</div>'+
+                '<span>Người cập nhật: '+doan.MaNguoiCapNhat+' - '+doan.TenNguoiCapNhat+'</span>'+
+                '<span>Ngày cập nhật: '+doan.NgayCapNhat.replace('T17:00:00.000Z','')+'</span>'+
+                '<span>Tệp: <a href="http://">'+doan.Tep_Goc+'</a> </span>'+
+                '<span>Mô tả: '+doan.MoTa+'</span><span></span><span></span>'+
+            '</span>'+
+        '</span>'
+    );
+
+
+    $('#detail-bar').append('<span id="thongtin-sv">'+
+                                '<div>Thông tin sinh viên:</div>'+
+                                '<div>Mã: DA03</div>'+
+                                '<div>Tên: Lập trình AI</div>'+
+                                '<div>Ngày sinh: 23.12.1212</div>'+
+                                '<div>SDT: 01551551530</div>'+
+                                '<div>Email: cuocsong@gmail.com</div>'+
+                                '<div>Lớp: D182XCASD</div>'+
+                                '<div>Ngành: Công nghệ thông tin - Công nghệ phần mềm</div>'+
+                                '<div></div>'+
+                            '</span>');
+
+    var element = '<select class="select-sinh-vien browser-default custom-select">';
+    for(let i = 0; i< listsinhvien.length; i++){
+        element = element +  '<option  value="'+listsinhvien[i].MaSV+'">'+listsinhvien[i].MaSV+' - '+listsinhvien[i].tenSV+'</option>';
+    }
+    element = element + '</select>';
+    $('#detail-bar').append(element);
+
+    MaSV = listsinhvien[0].MaSV;
+
+    $('.select-sinh-vien').on('change', function() {
+        MaSV = this.value;
+        loadInfoSvPhancongtailieu(this.value);
+    });
+    
+    $('#detail-bar').append('<button class="phancong-sinhvien-doan-btn">Phân công</button>')
+    loadInfoSvPhancongtailieu(listsinhvien[0].MaSV);
 }
 
+
+
+
+
+function LoadInfoSvPhancongtailieu(infosv){
+    $('#thongtin-sv').empty();
+    $('#thongtin-sv').append(
+        '<div>Thông tin sinh viên:</div>'+
+        '<div>Mã: '+infosv.MaSV+'</div>'+
+        '<div>Tên: '+infosv.TenSV+'</div>'+
+        '<div>Ngày sinh: '+infosv.NgaySinh.replace('T17:00:00.000Z','')+'</div>'+
+        '<div>SDT: '+infosv.SDT+'</div>'+
+        '<div>Email: '+infosv.Email+'</div>'+
+        '<div>Lớp: '+infosv.MaLop+'</div>'+
+        '<div>Ngành: '+infosv.TenNganh+' - '+infosv.TenCN+'</div>'+
+        '<div></div>'
+    )
+}
 
 function LoadTailieu(data){
     pageStatus = 2;
@@ -619,9 +720,13 @@ async function EventTeacherClick(event) {
         $('#no-color-btn-follow-row').attr("id", "yes-color-btn-follow-row");
         x.parentNode.className = 'yes-color-lum-table';
         currentrowtable = Number(x.parentNode.id.replace('collumtalbe-',''));
+        // console.log(listinfoitem[currentrowtable].pbFileKhac,  listinfoitem[currentrowtable].totalPC)
         if(listinfoitem[currentrowtable].pbFileKhac == 1 || listinfoitem[currentrowtable].totalPC == 1){
             document.querySelector('#yes-color-btn-follow-row div:first-child').style.background = "rgba(70, 100, 145, 0.233)";
             document.querySelector('#yes-color-btn-follow-row div:nth-child(2)').style.background = "rgba(202, 107, 72, 0.26)";
+        }else{
+            document.querySelector('#yes-color-btn-follow-row div:first-child').style.background = "rgb(70, 100, 145)";
+            document.querySelector('#yes-color-btn-follow-row div:nth-child(2)').style.background = "rgb(202, 107, 72)";
         }
     }else if(x.parentNode.className == 'btn-follow-row'){
         if(x.id == "tailieu"){
@@ -634,7 +739,9 @@ async function EventTeacherClick(event) {
             loadXoaDoan();
         }
         if(x.id == "phancong"){
-            LoadPhancong();
+            MaCT = listinfoitem[currentrowtable].MaCT;
+            console.log(MaCT);
+            loadFirstPhancongtailieu();
         }
         if(x.id == 'sua'){
             if(listinfoitem[currentrowtable].pbFileKhac == 0 && listinfoitem[currentrowtable].totalPC == 0){
@@ -726,6 +833,11 @@ async function EventTeacherClick(event) {
             if(pagelist == 1) loadListDoanCanhan();
             else if((pagelist == 2)) loadListDoanTatca();
         }
+    }else if(x.className == "phancong-sinhvien-doan-btn"){
+        console.log(MaDoan,MaGV,MaSV,MaCT)
+        xhttp.open("GET", "/api/add-phancong-tailieu?MaDoan="+MaDoan+"&MaGV="+MaGV+"&MaSV="+MaSV+"&MaCT="+MaCT, false);
+        xhttp.send();
+        
     }else{
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
