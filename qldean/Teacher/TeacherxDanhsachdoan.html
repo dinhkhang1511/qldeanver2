@@ -119,20 +119,53 @@
 
 
     <div id="detail-bar">
+
         <span id="thongtin-doan">
             <span id="thongtin-doan-doan">
                 <div>Thông tin đồ án:</div>
                 <div>Mã: DA03</div>
                 <div>Tên: Lập trình AI</div>
-            </span>
-            <span id="thongtin-doan-tailieu">
-                <div>Thông tin đồ án:</div>
-                <div>Mã: DA03</div>
-                <div>Tên: Lập trình AI</div>
+                <div>Chuyên ngành: Công nghệ phần cứng</div>
+                <div>Người tạo: cuoc song - GV0231</div>
+                <div>Ngày tạo: 23.12.1212</div>
+                <div style="color: rgb(107, 144, 185);">Tài liệu hướng dẫn:</div>
+                <span>Người cập nhật: Vo thanh liem - GV0312</span>
+                <span>Ngày cập nhật: 23.12.1212</span>
+                <span>Tệp: <a href="http://">xxvideio.txt</a> </span>
+                <span>Mô tả: Tệp văn bản, tệp chương trình, Tệp thuyền trình</span>
+                <span></span>
+                <span></span>
             </span>
         </span>
 
+
+        <span id="thongtin-sv">
+
+                <div>Thông tin sinh viên:</div>
+                <div>Mã: DA03</div>
+                <div>Tên: Lập trình AI</div>
+                <div>Ngày sinh: 23.12.1212</div>
+                <div>SDT: 01551551530</div>
+                <div>Email: cuocsong@gmail.com</div>
+                <div>Lớp: D182XCASD</div>
+                <div>Ngành: Công nghệ thông tin - Công nghệ phần mềm</div>
+                <div></div>
+        </span>
+
+
+        <select class="select-sinh-vien browser-default custom-select" >
+            <option selected>N19DCCN195 - Lê Quốc Tấn</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+        </select>
+
+        <button class="phancong-sinhvien-doan-btn">Phân công</button>
+
     </div>  
+
+
+
 
 
     <input type="file" id="selectedFile" style="display: none;" /> 
@@ -224,6 +257,10 @@
     width: 190px;
     height: 25px;
     margin-bottom: 10px;
+}
+
+.custom-select{
+    width: calc(50% - 10px);
 }
 
 </style>

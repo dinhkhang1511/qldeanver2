@@ -56,8 +56,6 @@ let SERVER = async (con) => {
                 else resPonse(scanner);
             }
 
-
-            
     }).listen(connect.portSERVER, () => console.log("server run on PORT:" + connect.portSERVER));;
 }
 //RUN SERVER

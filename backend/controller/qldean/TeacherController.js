@@ -1,4 +1,3 @@
-const formidable = require('formidable');
 const readline = require('readline');
 const fs = require('fs');
 
@@ -145,6 +144,8 @@ module.exports = async (callback, scanner) => {
             let count = await Model.InleSQL("SELECT CountList_DAofGV('"+MaGV+"','"+MaChuyennganh+"') AS Number;");
             let select = await Model.InleSQL("call ShowList_DAofGV('"+MaGV+"','"+MaChuyennganh+"',"+limit*page+");");
 
+            console.log("call ShowList_DAofGV('"+MaGV+"','"+MaChuyennganh+"',"+limit*page+");")
+
             let data = [];
             data.push(listChuyennganh);
             data.push(MaChuyennganh);
@@ -240,6 +241,7 @@ module.exports = async (callback, scanner) => {
         callback(JSON.stringify(data), 'application/json');
 
     }
+
 
 
 }

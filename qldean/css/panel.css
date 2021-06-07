@@ -308,7 +308,7 @@
 #detail-bar{
     position: relative;
     float: left;
-    background-color:rgb(255, 255, 255);
+    background-color:transparent;
     width: 100%;
     margin-top: 5px;
     border-radius: 3px;
@@ -316,6 +316,20 @@
     font-weight: bold;
     height: 5px;
 }
+
+
+#xxxdetail-bar{
+    position: relative;
+    float: left;
+    background-color:transparent;
+    width: 100%;
+    margin-top: 5px;
+    border-radius: 3px;
+    color: black;
+    font-weight: bold;
+    height: 5px;
+}
+
 
 #thongtin-doan{
     position: relative;
@@ -1433,4 +1447,96 @@ iframe {
 #label-table{
     color: rgb(24, 24, 24);
     margin-left: 1px;
+}
+
+#thongtin-doan{
+    position: relative;
+    float: left;
+    width: 50%;
+    font-size: 13px;
+    font-weight: 400;
+    background-color: white;
+    border-radius: 4px;
+}
+
+#thongtin-doan div:first-child{
+    color: royalblue;
+    font-size: 17px;
+    margin-top: 7px;
+    margin-left: 10px;
+}
+
+#thongtin-doan div:not(#thongtin-doan div:first-child){
+    margin-left: 20px;
+    margin-top: 9px;
+    position: relative;
+    
+}
+
+
+#thongtin-doan-doan span{
+    position: relative;
+    float: left;
+    width: 100%;
+    margin-left: 35px;
+    margin-top: 7px;
+}
+
+#thongtin-doan-doan span a{
+    color: tomato;
+    text-decoration: underline;
+}
+
+
+
+#thongtin-sv{
+    position: relative;
+    float: left;
+    width: calc(50% - 10px);
+    margin-left: 10px;
+    font-size: 13px;
+    font-weight: 400;
+    background-color: white;
+    border-radius: 4px;
+}
+
+
+#thongtin-sv div:first-child{
+    color: tomato;
+    font-size: 17px;
+    margin-top: 7px;
+    margin-left: 10px;
+}
+
+#thongtin-sv div:not(#thongtin-sv div:first-child){
+    margin-left: 20px;
+    margin-top: 9px;
+    position: relative;
+    
+}
+
+
+.select-sinh-vien{
+    margin-top: 10px;
+    position: relative;
+    width: calc(50% - 10px);
+    margin-left: 10px;
+    float: left;
+}
+
+
+.phancong-sinhvien-doan-btn{
+    margin-top: 5px;
+    width: auto;
+    float: right;
+    text-align: center;
+    margin-top: 5px;
+    padding: 3px 7px;
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
+    border: none;
+    font-weight: 500;
+    outline: none;
+    background-color: blueviolet;
 }
