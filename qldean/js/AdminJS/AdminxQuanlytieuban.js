@@ -29,7 +29,7 @@ var listnghanh = [];
 
 var listcheckGV = [];
 
-var tieudeBangTieuban =['Tiểu ban','Ngày','Ca','Trạng thái'];
+var tieudeBangTieuban = ['Tiểu ban','Ngày','Ca','Trạng thái'];
 var tennutBangTieuban = ['Phân công','Sửa','Xóa'];
 var idnutBangTieuban = ['phancongx', 'suax' , 'xoax'];
 

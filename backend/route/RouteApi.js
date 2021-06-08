@@ -68,10 +68,17 @@ module.exports = (setroute = require("./Setroute")) => {
     setroute.pushRoute(root_1,"GET","api/danhsachdoanhuongdan", "qldean/TeacherController@danhsachdoanhuongdan");
 
     setroute.pushRoute(root_1,"GET","api/danhsach-chamdiem-huongdan", "qldean/TeacherController@danhsach-chamdiem-huongdan");
-
     setroute.pushRoute(root_1,"GET","api/loadChamdiemhuongdan", "qldean/TeacherController@loadChamdiemhuongdan");
     setroute.pushRoute(root_1,"GET","api/chamDiemHuongdan", "qldean/TeacherController@chamDiemHuongdan");
 
+    setroute.pushRoute(root_1,"GET","api/danhsach-chamdiem-phanbien", "qldean/TeacherController@danhsach-chamdiem-phanbien");
+    setroute.pushRoute(root_1,"GET","api/loadChamdiemphanbien", "qldean/TeacherController@loadChamdiemphanbien");
+    setroute.pushRoute(root_1,"GET","api/chamDiemPhanbien", "qldean/TeacherController@chamDiemPhanbien");
+    
+    setroute.pushRoute(root_1,"GET","api/danhsachtieubanphancong", "qldean/TeacherController@danhsachtieubanphancong");
+    setroute.pushRoute(root_1,"GET","api/danhsach-chamdiem-tieuban", "qldean/TeacherController@danhsach-chamdiem-tieuban");
+    setroute.pushRoute(root_1,"GET","api/loadChamdiemtieuban", "qldean/TeacherController@loadChamdiemtieuban");
+    setroute.pushRoute(root_1,"GET","api/chamDiemTieuban", "qldean/TeacherController@chamDiemTieuban");
 
     return setroute.getRoute();
 }

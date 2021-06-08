@@ -336,13 +336,108 @@ module.exports = async (callback, scanner) => {
     }
 
 
-    if(index === 'danhsach-chamdiem-huongdan'){
+    if(index === 'danhsach-chamdiem-phanbien'){
         let MaGV = head_params.get('MaGV');
         let limit = 10;
         let page = Number(head_params.get('page')) - 1;
-        let result = await Model.InleSQL("call ShowList_SVHD_GV('"+MaGV+"',"+page*limit+");");
-        let count = await Model.InleSQL("select CountList_SVHD_GV('"+MaGV+"') AS Number");
+        let result = await Model.InleSQL("call ShowList_SVPB_GV('"+MaGV+"',"+page*limit+");");
+        let count = await Model.InleSQL("select CountList_SVPB_GV('"+MaGV+"') AS Number");
         callback(JSON.stringify([result, count]), 'application/json');
     }
-    
+    if(index === 'loadChamdiemphanbien'){
+        let MaDoan = head_params.get('MaDoan');
+        let MaPC = head_params.get('MaPC');
+        let MaGV = head_params.get('MaGV');
+        let MaSV = head_params.get('MaSV');
+        let MaCT = head_params.get('MaCT');
+
+        let result = await Model.InleSQL("call ShowInfor_SVPB('"+MaSV+"')");
+        let result1 = await Model.InleSQL("call ShowInfor_DA('"+MaGV+"','"+MaDoan+"',"+MaCT+");"); 
+        let result2 = await Model.InleSQL("call ShowFullDiem('"+MaSV+"');"); 
+        let result3 = await Model.InleSQL("call ShowFile_BaoCao('"+MaPC+"');"); 
+
+        console.log("call ShowInfor_DA('"+MaGV+"','"+MaDoan+"',"+MaCT+");")
+
+        let data = [];
+        data.push(result);
+        data.push(result1);
+        data.push(result2);
+        data.push(result3);
+        callback(JSON.stringify(data), 'application/json');
+    }
+    if(index === 'chamDiemPhanbien'){
+        let DiemCham = head_params.get('DiemCham');
+        let MaPC = head_params.get('MaPC');
+        let MaGV = head_params.get('MaGV');
+
+        let result1 = await Model.InleSQL("call ChamDiem_PB('"+MaPC+"', '"+MaGV+"',"+DiemCham+");");
+        console.log("call ChamDiem_PB('"+MaPC+"', '"+MaGV+"',"+DiemCham+");")
+        if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
+            callback(JSON.stringify("that bai"), 'application/json');
+        }else{
+            callback(JSON.stringify(result1), 'application/json');
+        }
+    }
+
+
+
+    if(index === 'danhsachtieubanphancong'){
+        let limit = 10;
+        let page = Number(head_params.get('page')) - 1;
+        let MaGV = head_params.get('MaGV');
+
+        let count = await Model.InleSQL("SELECT CountList_TB_GV('"+MaGV+"') AS Number;");
+        let select = await Model.InleSQL("call ShowList_TB_GV('"+MaGV+"', "+page*limit+");");
+
+        console.log("SELECT CountList_TB_GV('"+MaGV+"') ;")
+
+        let data = [];
+        data.push(count);
+        data.push(select);
+        callback(JSON.stringify(data), 'application/json');
+    }
+    if(index === 'danhsach-chamdiem-tieuban'){
+        let MaTB = head_params.get('MaTB');
+        let MaGV = head_params.get('MaGV');
+        let limit = 10;
+        let page = Number(head_params.get('page')) - 1;
+        let result = await Model.InleSQL("call ShowList_SVTB_GV('"+MaGV+"','"+MaTB+"',"+page*limit+");");
+        let count = await Model.InleSQL("select CountList_SVTB_GV('"+MaGV+"','"+MaTB+"') AS Number");
+        callback(JSON.stringify([result, count]), 'application/json');
+    }
+    if(index === 'loadChamdiemtieuban'){
+        let MaDoan = head_params.get('MaDoan');
+        let MaPC = head_params.get('MaPC');
+        let MaGV = head_params.get('MaGV');
+        let MaSV = head_params.get('MaSV');
+        let MaCT = head_params.get('MaCT');
+
+        let result = await Model.InleSQL("call ShowInfor_SVTB('"+MaSV+"')");
+        let result1 = await Model.InleSQL("call ShowInfor_DA('"+MaGV+"','"+MaDoan+"',"+MaCT+");"); 
+        let result2 = await Model.InleSQL("call ShowFullDiem('"+MaSV+"');"); 
+        let result3 = await Model.InleSQL("call ShowFile_BaoCao('"+MaPC+"');"); 
+
+        console.log("call ShowInfor_SVTB('"+MaSV+"')")
+
+        let data = [];
+        data.push(result);
+        data.push(result1);
+        data.push(result2);
+        data.push(result3);
+        callback(JSON.stringify(data), 'application/json');
+    }
+    if(index === 'chamDiemTieuban'){
+        let DiemCham = head_params.get('DiemCham');
+        let MaPC = head_params.get('MaPC');
+        let MaGV = head_params.get('MaGV');
+        let MaTB = head_params.get('MaTB');
+
+        let result1 = await Model.InleSQL("call ChamDiem_TB('"+MaPC+"', '"+MaTB+"', '"+MaGV+"',"+DiemCham+");");
+        console.log("call ChamDiem_TB('"+MaPC+"', '"+MaTB+"', '"+MaGV+"',"+DiemCham+");");
+        if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
+            callback(JSON.stringify("that bai"), 'application/json');
+        }else{
+            callback(JSON.stringify(result1), 'application/json');
+        }
+    }
 }
