@@ -920,7 +920,6 @@ table tr:first-child td{
     position: relative;
     float: left;
     width: calc(100% - 0px);
-    margin-top: 20px;
     height: auto;
     background-color: white;
     padding: 10px 10px;

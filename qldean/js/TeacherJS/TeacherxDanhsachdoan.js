@@ -142,8 +142,11 @@ var xhttp = new XMLHttpRequest();
                 }
                 if(String(this.responseURL).includes('api/firstload-phancong-tailieu')){
                     var data = JSON.parse(this.responseText);
+                    console.log("Thông tin đồ án")
                     console.log(data[0][0][0])
+                    console.log(data[1][0])
                     LoadPhancongTailieu(data[0][0][0],data[1][0]);
+
                     console.log(data[1][0])
                     
                 }
@@ -634,12 +637,17 @@ function LoadPhancongTailieu(doan,listsinhvien){
 
     var element = '<select class="select-sinh-vien browser-default custom-select">';
     for(let i = 0; i< listsinhvien.length; i++){
-        element = element +  '<option  value="'+listsinhvien[i].MaSV+'">'+listsinhvien[i].MaSV+' - '+listsinhvien[i].tenSV+'</option>';
+        if(String(listsinhvien[i].MaSV) === String(doan.MaSV))  element = element +  '<option selected  value="'+listsinhvien[i].MaSV+'">'+listsinhvien[i].MaSV+' - '+listsinhvien[i].tenSV+'</option>';
+        else element = element +  '<option  value="'+listsinhvien[i].MaSV+'">'+listsinhvien[i].MaSV+' - '+listsinhvien[i].tenSV+'</option>';
     }
     element = element + '</select>';
     $('#detail-bar').append(element);
 
-    MaSV = listsinhvien[0].MaSV;
+    if(String(doan.MaSV) === 'null'){
+        MaSV = listsinhvien[0].MaSV;
+    }else{
+        MaSV = doan.MaSV;
+    }
 
     $('.select-sinh-vien').on('change', function() {
         MaSV = this.value;
@@ -647,7 +655,7 @@ function LoadPhancongTailieu(doan,listsinhvien){
     });
     
     $('#detail-bar').append('<button class="phancong-sinhvien-doan-btn">Phân công</button>')
-    loadInfoSvPhancongtailieu(listsinhvien[0].MaSV);
+    loadInfoSvPhancongtailieu(MaSV);
 }
 
 
@@ -675,7 +683,7 @@ function LoadTailieu(data){
     var listtailieu = [];
     var trangthai;
     for(var i = 0; i < data.length; i++){
-        if(Number(data[i].TrangThai) == 0) trangthai = 'Rồi';
+        if(Number(data[i].TrangThai) == 0) trangthai = 'Chưa';
         else trangthai = 'Đã';
         listtailieu.push({tep:data[i].Tep_Goc,giangvien: data[i].MaGV + '-' + data[i].TenNV,thoigian: data[i].ThoiGian, trangthai:trangthai });
     }
