@@ -604,7 +604,6 @@ function LoadPhancongTailieu(doan,listsinhvien){
 
 
     $('#detail-bar').append(
-
         '<span id="thongtin-doan">'+
             '<span id="thongtin-doan-doan">'+
                 '<div>Thông tin đồ án:</div>'+

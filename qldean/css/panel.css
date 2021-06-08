@@ -1017,6 +1017,7 @@ table tr:first-child td{
     width: auto;
     margin-left: 10px;
     font-size: 14px;
+    margin-top: 7px;
 }
 #info-sv div:first-child{
     margin-top: 10px;
@@ -1043,6 +1044,13 @@ table tr:first-child td{
     width: auto;
     margin-left: 10px;
     font-size: 14px;
+    margin-top: 7px;
+}
+
+
+#info-doan div a{
+    color: tomato;
+    text-decoration: underline;
 }
 
 
@@ -1539,3 +1547,5 @@ iframe {
     outline: none;
     background-color: blueviolet;
 }
+
+

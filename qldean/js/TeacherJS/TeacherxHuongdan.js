@@ -35,7 +35,7 @@ var xhttp = new XMLHttpRequest();
                 }
                 if(String(this.responseURL).includes('api/loadChamdiemhuongdan')){
                     var data = JSON.parse(this.responseText);
-                    LoadChamdiemhuongdan(data[0][0][0],data[1][0][0]);
+                    LoadChamdiemhuongdan(data[0][0][0],data[1][0][0],data[2][0][0],data[3][0][0]);
                     console.log(data)
                     
 
@@ -85,7 +85,6 @@ function chuyendoiBangchamdiemhuongdan(data){
 
 function loadChamdiem(){
     console.log(document.getElementById('input-diem').value)
-
     if(String(Number(document.getElementById('input-diem').value)) != 'NaN'){
         DiemCham = Number(document.getElementById('input-diem').value);
         xhttp.open("GET", "/api/chamDiemHuongdan?DiemCham="+DiemCham+"&MaGV="+MaGV+"&MaPC="+MaPC, false);
@@ -118,7 +117,7 @@ function LoadListChamdiemHuongdan(data) {
     $('.nav-page').append(returNavForm(tol_page+1, 1));
 }
 
-function LoadChamdiemhuongdan(infosv,infodoan){
+function LoadChamdiemhuongdan(infosv,infodoan,infodiem,infobaocaofile){
     $('#button-bar').show();
     $('.chose-bar').hide();
     $('#table_data').hide();
@@ -134,43 +133,89 @@ function LoadChamdiemhuongdan(infosv,infodoan){
     $('#button-bar').append(returnIconHome() +returnNameIndex('Phụ trách') + returnNameIndex('Hướng dẫn') + returnNameIndex('Chấm điểm') +  returnReturnBtn());
 
 
-    // $('.Detail-project').empty();
-
-    // $('.Detail-project').append(
-    //     '<span id="info-sv">'+
-    //         '<div>Thông tin sinh viên:</div>'+
-    //         '<div>Mã: '+infosv.MaSV+'</div>'+
-    //         '<div>Tên: '+infosv.TenSV+'</div>'+
-    //         '<div>Lớp: '+infosv.MaLop+'</div>'+
-    //         '<div>Email: '+infosv.Email+'</div>'+
-    //         '<div>GPA: '+infosv.GPA+'</div>'+
-    //     '</span>'
-    // )
-
-    // $('.Detail-project').append(
-    //     '<span id="info-doan">'+
-    //         '<div>Thông tin đồ án:</div>'+
-    //         '<div>Mã: '+infodoan.MaDA+'</div>'+
-    //         '<div>Tên: '+infodoan.TenDA+'</div>'+
-    //         '<div>Chuyên ngành: '+infodoan.TenDA+'</div>'+
-            
-    //         // '<span>GVHD: '+infodoan.+'</span>  <span>Điểm: 10</span>'+
-    //         // '<span>GVPB: Đàm thị ngọc linh</span>  <span>Điểm: 9</span>'+
-    //         // '<span>Tiểu ban: TB19</span>  <span>Điểm trung bình: 8/3</span>'+
-    //     '</span>'
-    // )
+    $('.Detail-project').empty();
 
 
+    $('.Detail-project').append(
+        '<span id="info-doan">'+
+            '<div>Thông tin đồ án:</div>'+
+            '<div>Mã: '+infodoan.MaDA+'</div>'+
+            '<div>Tên: '+infodoan.TenDA+'</div>'+
+            '<div>Chuyên ngành: '+infodoan.tenCN+'</div>'+
+            '<div>Người tạo: '+infodoan.MaNguoiTaoDA+' - '+infodoan.TenNguoiTaoDA+'</div>'+
+            '<div>Tài liệu hướng dẫn:   <a href="http://">'+infodoan.Tep_Goc+'</a> </div>'+
+            '<div>Mô tả: '+infodoan.MoTa+'</div>'+
+        '</span>'
+    )
 
-    // if(String(infosv.Diem) === 'null') DiemCham = '__';
-    // else DiemCham = Number(infosv.Diem);
-    // $('.Detail-project').append(
-    //     '<span id="diem-doan">'+
-    //         '<div id="btn-update-diem">cập nhật</div>'+
-    //         '<div id="info-diem-label"><span id="diem-label">Điểm: </span><span id="number-diem">'+DiemCham+'</span></div>'+
-    //     '</span>'
 
-    // )
+    var baocaofile;
+    var mota;
+    if(String(infobaocaofile.Tep_Goc) === 'null') baocaofile = 'Chưa có';
+    else baocaofile = '<a href="http://">' +  infobaocaofile.Tep_Goc + '</a>';
+    if(String(infobaocaofile.MoTa) === 'null') mota = 'Chưa có';
+    else mota = infobaocaofile.MoTa;
+
+
+    var elementInfoDiem = '<div> Trạng thái: '
+    console.log(infodiem)
+
+    if(String(infodiem.MaGVPB) === 'null' && String(infodiem.MaTB) === 'null'){
+        if(Number(infodiem.DiemHD) < 4 && String(infodiem.DiemHD) !== 'null'){
+            elementInfoDiem = elementInfoDiem + '<span style="color:red">F</span>';
+        }else{
+            elementInfoDiem = elementInfoDiem + '<span style="color:green">Đang báo cáo hướng dẫn</span>';
+        }
+    }else if(String(infodiem.MaGVPB) != 'null' && String(infodiem.MaTB) === 'null'){
+        if(Number(infodiem.DiemPB) < 4 && String(infodiem.DiemPB) !== 'null'){
+            elementInfoDiem = elementInfoDiem + '<span style="color:red">F</span>';
+        }else{
+            elementInfoDiem = elementInfoDiem + '<span style="color:green">Đang báo cáo phản biện</span>';
+        }
+    }else if(String(infodiem.MaTB) != 'null'){
+        if(Number(infodiem.DiemTB) < 4 && String(infodiem.DiemTB) !== 'null'){
+            elementInfoDiem = elementInfoDiem + '<span style="color:red">F</span>';
+        }else{
+            elementInfoDiem = elementInfoDiem + '<span style="color:green">Đang báo cáo tiểu ban</span>';
+        }
+    }
+
+    elementInfoDiem = elementInfoDiem + '</div>'
+    // elementInfoDiem = elementInfoDiem + 
+    // if()
+
+
+    $('.Detail-project').append(
+        '<span id="info-sv">'+
+            '<div>Thông tin sinh viên:</div>'+
+            '<div>Mã: '+infosv.MaSV+'</div>'+
+            '<div>Tên: '+infosv.TenSV+'</div>'+
+            '<div>Ngày sinh: '+infosv.NgaySinh.replace('T17:00:00.000Z','')+'</div>'+
+            '<div>SDT: '+infosv.SDT+'</div>'+
+            '<div>Lớp: '+infosv.MaLop+'</div>'+
+            '<div>Email: '+infosv.Email+'</div>'+
+            '<div>Ngành: '+infosv.TenNganh+' - '+infosv.TenCN+'</div>'+
+            '<div>GPA: '+infosv.GPA+'</div>'+
+            elementInfoDiem+
+            '<div>Báo cáo file: '+baocaofile+'</div>'+
+            '<div>Mô tả: '+mota+'</div>'+
+        '</span>'
+    )
+
+
+
+
+
+    if(String(infosv.Diem) === 'null') DiemCham = '__';
+    else DiemCham = Number(infosv.Diem);
+    $('.Detail-project').append(
+        '<span id="diem-doan">'+
+            '<div id="btn-update-diem">cập nhật</div>'+
+            '<div id="info-diem-label"><span id="diem-label">Điểm: </span><span id="number-diem">'+DiemCham+'</span></div>'+
+        '</span>'
+    )
+
+    
     
 }
 
@@ -195,8 +240,7 @@ function EventTeacherClick(event) {
             MaSV = listinfoitem[currentrowtable].MaSV;
             MaCT = listinfoitem[currentrowtable].MaCT;
             MaPC = listinfoitem[currentrowtable].MaPhanCong;
-            // loadChamdiemhuongdan();
-            LoadChamdiemhuongdan('','')
+            loadChamdiemhuongdan();
         }
     }else if(x.className == "return_btn" || x.parentNode.className == "return_btn" || x.parentNode.parentNode.className == "return_btn" ||  x.parentNode.parentNode.parentNode.className == "return_btn"){
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
@@ -205,6 +249,8 @@ function EventTeacherClick(event) {
     }else if(x.id == "btn-update-diem"){
         $('.Form-input-diem').show();
         $('.shadow-input-diem').show();
+        if(DiemCham != '__') 
+        document.getElementById('input-diem').value = DiemCham;
     }else if(x.id == "btn-thoat-diem"){
         $('.Form-input-diem').hide();
         $('.shadow-input-diem').hide();

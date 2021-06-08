@@ -292,19 +292,16 @@ module.exports = async (callback, scanner) => {
     }
 
 
+
+
     if(index === 'danhsach-chamdiem-huongdan'){
         let MaGV = head_params.get('MaGV');
         let limit = 10;
         let page = Number(head_params.get('page')) - 1;
-
         let result = await Model.InleSQL("call ShowList_SVHD_GV('"+MaGV+"',"+page*limit+");");
-
-        console.log("call ShowList_SVHD_GV('"+MaGV+"',"+page*limit+");")
         let count = await Model.InleSQL("select CountList_SVHD_GV('"+MaGV+"') AS Number");
-        
         callback(JSON.stringify([result, count]), 'application/json');
     }
-
     if(index === 'loadChamdiemhuongdan'){
         let MaDoan = head_params.get('MaDoan');
         let MaPC = head_params.get('MaPC');
@@ -314,10 +311,8 @@ module.exports = async (callback, scanner) => {
 
         let result = await Model.InleSQL("call ShowInfor_SVHD('"+MaSV+"')");
         let result1 = await Model.InleSQL("call ShowInfor_DA('"+MaGV+"','"+MaDoan+"',"+MaCT+");"); 
-        let result2 = await Model.InleSQL("call ShowDiem('"+MaPC+"','"+MaGV+"');"); 
+        let result2 = await Model.InleSQL("call ShowFullDiem('"+MaSV+"');"); 
         let result3 = await Model.InleSQL("call ShowFile_BaoCao('"+MaPC+"');"); 
-
-        console.log("call ShowDiem('"+MaPC+"','"+MaGV+"');")
 
         let data = [];
         data.push(result);
@@ -326,7 +321,6 @@ module.exports = async (callback, scanner) => {
         data.push(result3);
         callback(JSON.stringify(data), 'application/json');
     }
-
     if(index === 'chamDiemHuongdan'){
         let DiemCham = head_params.get('DiemCham');
         let MaPC = head_params.get('MaPC');
@@ -335,11 +329,20 @@ module.exports = async (callback, scanner) => {
         let result1 = await Model.InleSQL("call ChamDiem_HD('"+MaPC+"', '"+MaGV+"',"+DiemCham+");");
         console.log("call ChamDiem_HD('"+MaPC+"', '"+MaGV+"',"+DiemCham+");")
         if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
-            
             callback(JSON.stringify("that bai"), 'application/json');
         }else{
             callback(JSON.stringify(result1), 'application/json');
         }
     }
+
+
+    // if(index === 'danhsach-chamdiem-huongdan'){
+    //     let MaGV = head_params.get('MaGV');
+    //     let limit = 10;
+    //     let page = Number(head_params.get('page')) - 1;
+    //     let result = await Model.InleSQL("call ShowList_SVHD_GV('"+MaGV+"',"+page*limit+");");
+    //     let count = await Model.InleSQL("select CountList_SVHD_GV('"+MaGV+"') AS Number");
+    //     callback(JSON.stringify([result, count]), 'application/json');
+    // }
     
 }

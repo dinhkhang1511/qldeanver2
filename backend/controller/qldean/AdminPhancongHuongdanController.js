@@ -78,8 +78,12 @@ module.exports = async (callback, scanner) => {
               listKhoa = listKhoa[0];
           }
 
+          console.log("select Diem from diemsang where NamBD='"+Khoa+"' and MaNganh='"+MaNghanh+"';")
+
           if(GPA == 0){ GPA = await Model.InleSQL("select Diem from diemsang where NamBD='"+Khoa+"' and MaNganh='"+MaNghanh+"';"); GPA = Number(GPA[0]['Diem']);
           }else{ await Model.InleSQL("update DiemSang set Diem='"+GPA+"' where MaNganh='"+MaNghanh+"' and NamBD="+Khoa) }
+
+
 
           let count = await Model.InleSQL("select CountList_SvDAHD('"+Khoa+"','"+MaNghanh+"') AS NumberSV");
           let select = await Model.InleSQL("call ShowList_SvDAHD('"+Khoa+"','"+MaNghanh+"',"+page*limit+")");
