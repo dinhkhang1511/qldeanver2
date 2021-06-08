@@ -336,13 +336,13 @@ module.exports = async (callback, scanner) => {
     }
 
 
-    // if(index === 'danhsach-chamdiem-huongdan'){
-    //     let MaGV = head_params.get('MaGV');
-    //     let limit = 10;
-    //     let page = Number(head_params.get('page')) - 1;
-    //     let result = await Model.InleSQL("call ShowList_SVHD_GV('"+MaGV+"',"+page*limit+");");
-    //     let count = await Model.InleSQL("select CountList_SVHD_GV('"+MaGV+"') AS Number");
-    //     callback(JSON.stringify([result, count]), 'application/json');
-    // }
+    if(index === 'danhsach-chamdiem-huongdan'){
+        let MaGV = head_params.get('MaGV');
+        let limit = 10;
+        let page = Number(head_params.get('page')) - 1;
+        let result = await Model.InleSQL("call ShowList_SVHD_GV('"+MaGV+"',"+page*limit+");");
+        let count = await Model.InleSQL("select CountList_SVHD_GV('"+MaGV+"') AS Number");
+        callback(JSON.stringify([result, count]), 'application/json');
+    }
     
 }
