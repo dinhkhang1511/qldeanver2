@@ -37,11 +37,12 @@ let SERVER = async (con) => {
 
             ///UPLOAD LÀM SAU
             if(req.url.includes('api/upfile_')){
+                console.log('have upload fiel')
                 var form = new formidable.IncomingForm();
                 form.uploadDir = "controller/qldean/uploads/";
                 form.parse(scanner.req, function (err, fields, file) {
                     var path = file.file.path;
-                    var newpath = form.uploadDir + file.file.name;
+                    var newpath = form.uploadDir + fields.namefile;
                     fs.rename(path, newpath, function (err) {
                         if (err) throw err;
                         res.writeHead(200)

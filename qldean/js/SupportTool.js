@@ -25,6 +25,51 @@ function getCurrentTime(){
   return date+' '+time;
 }
 
+function getCurrentTimex(){
+  var today = new Date();
+
+  var Moth;
+  var Day;
+  var Gio;
+  var Phut;
+  var Giay;
+
+  if(Number(today.getMonth()+1) < 10){
+    Moth = '0'+Number(today.getMonth()+1)
+  }else{
+    Moth = Number(today.getMonth()+1);
+  }
+
+  if(Number(today.getDate()) < 10){
+    Day = '0'+Number(today.getDate())
+  }else{
+    Day = Number(today.getDate());
+  }
+
+  if(Number(today.getHours()) < 10){
+    Gio = '0'+Number(today.getHours())
+  }else{
+    Gio = Number(today.getHours());
+  }
+
+  if(Number(today.getMinutes()) < 10){
+    Phut = '0'+Number(today.getMinutes())
+  }else{
+    Phut = Number(today.getMinutes());
+  }
+
+  if(Number(today.getSeconds()) < 10){
+    Giay = '0'+Number(today.getSeconds())
+  }else{
+    Giay = Number(today.getSeconds());
+  }
+
+  var date = today.getFullYear()+'-'+Moth+'-'+Day;
+  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  return date+' '+time;
+}
+
+
 function getCurrentDay(){
   var today = new Date();
   var date = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();

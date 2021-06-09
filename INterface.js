@@ -281,3 +281,14 @@ function returnCheckBoxHaveMore(label,listlabel){
     element = element + '</span></div>';
     return element;
 }
+
+
+function returnCheckBoxHaveMore_(listlabel){
+    var element = ''
+    for(var i = 0; i < listlabel.length; i++){
+        element = element + '<div class="form-check"><input class="form-check-input" type="checkbox" value="'+listlabel[i]+'" id="flexCheckDefault"><label>'+listlabel[i]+'</label></div>'
+    }
+    element = element + '<div class="form-check"><input id="check-khac" class="form-check-input" type="checkbox" value="khac" id="flexCheckDefault"><label class="form-check-label" for="flexCheckDefault">Khác</label></div>';
+    element = element + '<input class="form-control input-more-checkbox" type="text" value="">'
+    return element;
+}
