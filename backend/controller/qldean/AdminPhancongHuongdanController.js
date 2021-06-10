@@ -156,11 +156,9 @@ module.exports = async (callback, scanner) => {
     }
 
     if(index === 'danhsachGVHDphancong'){
-
         let MaSV = String(head_params.get('MaSV'));
         let MaNghanh = String(head_params.get('MaNghanh'));
         let Khoa = Number(head_params.get('Khoa'));
-
         let result = await Model.InleSQL("call ShowInfor_SVHD('"+MaSV+"')");
         let result1 =  await Model.InleSQL("call ComboBox_PhanCongGVHD('"+Khoa+"','"+MaNghanh+"')");
         let data = [];
@@ -170,13 +168,24 @@ module.exports = async (callback, scanner) => {
         callback(JSON.stringify(data), 'application/json');
     }
 
+    if(index === 'infoGVHD'){
+        let MaGV = String(head_params.get('MaGV'));
+        let result = await Model.InleSQL("call ShowInfor_GV('"+MaGV+"')");
+        let data = [];
+        data.push(result);
+        callback(JSON.stringify(data), 'application/json');
+    }
+
     if(index === 'addGVHDphancong'){
         let MaGVHD = String(head_params.get('MaGVHD'));
         let MaSV = String(head_params.get('MaSV'));
         let NgaySinh = String(head_params.get('NgaySinh'));
+
         console.log(MaGVHD,MaSV,NgaySinh)
-        let  result1 = await Model.InleSQL('call PhanCong_GVHD("'+MaSV+'","'+NgaySinh+'", "'+MaGVHD+'");');
-              console.log(result1)
+
+        let  result1 = await Model.InleSQL('call PhanCong_GVHD("'+MaSV+'", "'+MaGVHD+'");');
+        console.log('call PhanCong_GVHD("'+MaSV+'", "'+MaGVHD+'");')
+
             if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
                 callback(JSON.stringify("that bai"), 'application/json');
             }else{

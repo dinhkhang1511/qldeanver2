@@ -18,7 +18,7 @@ const bubbleSort = (array) => {
 var niemkhoamoi;
 var ismokhoa = false;
 
-var MaAdmin = 'ADMIN';
+var MaAdmin = getCookie('userlogin');
 
 var listinfoitem;
 var currentlist = 0;

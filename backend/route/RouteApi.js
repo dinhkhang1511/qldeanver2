@@ -1,6 +1,8 @@
 module.exports = (setroute = require("./Setroute")) => {
     let root_1 = "qldean.com";
-    
+
+    setroute.pushRoute(root_1,"GET","api/login", "qldean/LoginController@login");
+
     setroute.pushRoute(root_1,"GET","api/danhsachtieuban", "qldean/AdminTieubanController@danhsachtieuban");
     setroute.pushRoute(root_1,"GET","api/danhsachdulieutieuban", "qldean/AdminTieubanController@danhsachdulieutieuban");
     setroute.pushRoute(root_1,"GET","api/timmatb", "qldean/AdminTieubanController@timmatb");
@@ -42,10 +44,12 @@ module.exports = (setroute = require("./Setroute")) => {
     setroute.pushRoute(root_1,"GET","api/danhsachphancongHD", "qldean/AdminPhancongHuongdanController@danhsachphancongHD");
     setroute.pushRoute(root_1,"GET","api/danhsachGVHDphancong", "qldean/AdminPhancongHuongdanController@danhsachGVHDphancong");
     setroute.pushRoute(root_1,"GET","api/addGVHDphancong", "qldean/AdminPhancongHuongdanController@addGVHDphancong");
+    setroute.pushRoute(root_1,"GET","api/infoGVHD", "qldean/AdminPhancongHuongdanController@infoGVHD");
 
     setroute.pushRoute(root_1,"GET","api/danhsachphancongPB", "qldean/AdminPhancongPhanbienController@danhsachphancongPB");
     setroute.pushRoute(root_1,"GET","api/danhsachGVPBphancong", "qldean/AdminPhancongPhanbienController@danhsachGVPBphancong");
     setroute.pushRoute(root_1,"GET","api/addGVPBphancong", "qldean/AdminPhancongPhanbienController@addGVPBphancong");
+    setroute.pushRoute(root_1,"GET","api/infoGVPB", "qldean/AdminPhancongPhanbienController@infoGVPB");
 
     setroute.pushRoute(root_1,"GET","api/danhsachphancongTB", "qldean/AdminPhancongTieubanController@danhsachphancongTB");
     setroute.pushRoute(root_1,"GET","api/danhsachTBphancong", "qldean/AdminPhancongTieubanController@danhsachTBphancong");

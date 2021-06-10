@@ -18,7 +18,7 @@ $(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
     $( "#act-giangvien" ).addClass( "active" )
 });
 
-var MaAdmin = 'ADMIN';
+var MaAdmin = getCookie('userlogin');
 
 var listinfoitem;
 var currentlist = 0;

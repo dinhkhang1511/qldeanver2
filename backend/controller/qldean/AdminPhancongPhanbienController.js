@@ -143,11 +143,19 @@ module.exports = async (callback, scanner) => {
        
         let result = await Model.InleSQL("call ShowInfor_SVPB('"+MaSV+"')");
         let result1 = await Model.InleSQL("call ComboBox_PhanCongGVPB('"+MaNghanh+"', '"+MaSV+"');");
-        console.log("call ShowInfor_SVPB('"+MaSV+"')");
+
         let data = [];
         data.push(result)
         data.push(result1)
-        console.log(data)
+   
+        callback(JSON.stringify(data), 'application/json');
+    }
+
+    if(index === 'infoGVPB'){
+        let MaGV = String(head_params.get('MaGV'));
+        let result = await Model.InleSQL("call ShowInfor_GV('"+MaGV+"')");
+        let data = [];
+        data.push(result);
         callback(JSON.stringify(data), 'application/json');
     }
 

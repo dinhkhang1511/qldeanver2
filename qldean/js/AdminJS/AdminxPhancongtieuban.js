@@ -3,7 +3,7 @@ let currentrowtable;
 var page_num = 1;
 var tol_page = 0;
 
-var MaAdmin = 'ADMIN';
+var MaAdmin = getCookie('userlogin');
 
 var tieudeBangTB = ['Mã sinh viên','Tên sinh viên','Email','Điểm PB','Mã GVPB','Điểm'];
 var tennutBangTB = ['Phân công'];
@@ -81,7 +81,7 @@ function loadListTieuban(){
 }
 
 function loadPhancongTieuban(MaSV,MaDA){
-    xhttp.open("GET", "/api/danhsachTBphancong?MaSV="+MaSV+"&Khoa="+khoacurrent, false);
+    xhttp.open("GET", "/api/danhsachTBphancong?MaSV="+MaSV+"&Khoa="+khoacurrent+"&MaNghanh="+String(nghanhcurrent), false);
     xhttp.send();
 }
 

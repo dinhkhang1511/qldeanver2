@@ -3,7 +3,7 @@ let currentrowtable;
 var page_num = 1;
 var tol_page = 0;
 
-var MaAdmin = 'ADMIN';
+var MaAdmin = getCookie('userlogin');
 
 var tieudeBangHD = ['Mã sinh viên','Tên sinh viên','Email','GPA','Mã GVHD','Điểm'];
 var tennutBangHD = ['Phân công'];
@@ -39,7 +39,7 @@ var xhttp = new XMLHttpRequest();
         if (this.readyState == 4 && this.status == 200) {
                 if(String(this.responseURL).includes('api/danhsachphancongHD')){
                     var data = JSON.parse(this.responseText);
-                    console.log(data);
+
 
                     listnghanh = data[0];
                     listkhoa = [];
@@ -64,7 +64,7 @@ var xhttp = new XMLHttpRequest();
 
                 if(String(this.responseURL).includes('api/danhsachGVHDphancong')){
                     var data = JSON.parse(this.responseText)
-                    console.log(data);
+
                     LoadPhancongHuongdan(data);
                 }
                 if(String(this.responseURL).includes('api/addGVHDphancong')){
@@ -73,6 +73,14 @@ var xhttp = new XMLHttpRequest();
                     else
                         loadListHuongdan();
                 }
+                if(String(this.responseURL).includes('api/infoGVHD')){
+                    var data = JSON.parse(this.responseText)
+                    console.log(data)
+                    LoadInfoGV(data[0][0][0]);
+                }
+                
+
+
         }
     };
 
@@ -88,15 +96,8 @@ function loadPhancongHuongdan(MaSV){
 }
 
 function loadAddPhancongHuongdan(){
-    var e = document.getElementsByClassName("slide-select-lorm").item(0);
-    var strUser = String(e.value).split(' - ');
-    console.log(strUser[0])
-    if(String(MaGVtemp) !== String(strUser[0])){
-        xhttp.open("GET", "/api/addGVHDphancong?MaSV="+MaSVtemp+"&MaGVHD="+strUser[0]+"&NgaySinh="+NgaySinhtemp, false);
+        xhttp.open("GET", "/api/addGVHDphancong?MaSV="+MaSVtemp+"&MaGVHD="+MaGVtemp, false);
         xhttp.send();
-    }else{
-        loadListHuongdan();
-    }
 }
 
 
@@ -105,13 +106,16 @@ function changeKhoaandNghanh(){
     nghanhcurrent = String(e.options[e.selectedIndex].value);
     e = document.getElementsByClassName("select-combox-headbar").item(1);
     khoacurrent = e.options[e.selectedIndex].value;
-    console.log("mới tạo "+nghanhcurrent,khoacurrent);
     loadListHuongdan();
 }
 
 
+function loadInfoGV(){
+    xhttp.open("GET", "/api/infoGVHD?MaGV="+MaGVtemp, false);
+    xhttp.send();
+}
+
 function LoadListHuongdan(data) {
-  
     listmanganh = [];
     listtennghanh = [];
     for(let i = 0;i < listnghanh.length; i++){
@@ -125,8 +129,8 @@ function LoadListHuongdan(data) {
     $('.btn-follow-row').show();
     $('.nav-page').show();
     $('#head-bar').show();
-
     $('.Add-New-Row').hide();
+    $('#detail-bar').hide();
 
     $('#head-bar').empty();
     $('#button-bar').empty();
@@ -135,6 +139,7 @@ function LoadListHuongdan(data) {
     $('.btn-follow-row').empty();
     $('.nav-page').empty();
 
+    
 
     $('#head-bar').append(returnFormComboxHeadBar('Nghành',listmanganh, listtennghanh, nghanhcurrent, 'changeKhoaandNghanh',250,0));
     $('#head-bar').append(returnFormComboxHeadBar('Niêm khóa',listkhoa , listniemkhoa, khoacurrent, 'changeKhoaandNghanh',120,20));
@@ -151,14 +156,13 @@ function LoadListHuongdan(data) {
 
 
 function LoadPhancongHuongdan(data) {
-
     var InfoSV = data[0][0][0];
-    console.log(InfoSV)
     var listgvhd = data[1][0];
 
     console.log(InfoSV)
     console.log(listgvhd)
 
+    $('#detail-bar').show();
     $('#button-bar').show();
     $('.chose-bar').hide();
     $('#table_data').hide();
@@ -172,77 +176,139 @@ function LoadPhancongHuongdan(data) {
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Phụ trách')  + returnNameIndex('Hướng dẫn') + returnNameIndex('Phân công')  + returnReturnBtn());
 
-    $('.Add-New-Row').append(returnLormInfo( ['Mã sinh viên: '+InfoSV.MaSV,'Tên sinh viên: '+InfoSV.TenSV]));
-    $('.Add-New-Row').append(returnLormInfo( ['Lớp: '+InfoSV.MaLop,'GPA: '+InfoSV.GPA]));
-    $('.Add-New-Row').append(returnLormOneInfo('SDT: '+InfoSV.SDT));
-    $('.Add-New-Row').append(returnLormOneInfo('Email: '+InfoSV.Email));
+    // $('.Add-New-Row').append(returnLormInfo( ['Mã sinh viên: '+InfoSV.MaSV,'Tên sinh viên: '+InfoSV.TenSV]));
+    // $('.Add-New-Row').append(returnLormInfo( ['Lớp: '+InfoSV.MaLop,'GPA: '+InfoSV.GPA]));
+    // $('.Add-New-Row').append(returnLormOneInfo('SDT: '+InfoSV.SDT));
+    // $('.Add-New-Row').append(returnLormOneInfo('Email: '+InfoSV.Email));
 
+    // if(String(InfoSV.TenDA) != '')
+    // $('.Add-New-Row').append(returnLormInfo(['Mã đồ án: '+InfoSV.MaDA ,'Tên đồ án: '+InfoSV.TenDA]));
+    // else
+    // $('.Add-New-Row').append(returnLormInfo(['Mã đồ án: '+InfoSV.MaDA ,'Tên đồ án: Chưa đặt tên']));
 
+    // if(String(InfoSV.Diem) != '')
+    // $('.Add-New-Row').append(returnLormOneInfo('Điểm hướng dẫn: '+InfoSV.Diem));
+    // else
+    // $('.Add-New-Row').append(returnLormOneInfo('Điểm hướng dẫn: Chưa chấm'));
 
+    // MaDAtemp = InfoSV.MaDA;
+    // MaSVtemp = InfoSV.MaSV;
+    // NgaySinhtemp = InfoSV.NgaySinh;
 
-    if(String(InfoSV.TenDA) != '')
-    $('.Add-New-Row').append(returnLormInfo(['Mã đồ án: '+InfoSV.MaDA ,'Tên đồ án: '+InfoSV.TenDA]));
-    else
-    $('.Add-New-Row').append(returnLormInfo(['Mã đồ án: '+InfoSV.MaDA ,'Tên đồ án: Chưa đặt tên']));
+    // let listGVHD = [];
+    // let choseGV;
 
-
-    if(String(InfoSV.Diem) != '')
-    $('.Add-New-Row').append(returnLormOneInfo('Điểm hướng dẫn: '+InfoSV.Diem));
-    else
-    $('.Add-New-Row').append(returnLormOneInfo('Điểm hướng dẫn: Chưa chấm'));
-
-    MaDAtemp = InfoSV.MaDA;
-    MaSVtemp = InfoSV.MaSV;
-    NgaySinhtemp = InfoSV.NgaySinh;
-
-    let listGVHD = [];
-    let choseGV;
-
-    for(let i = 0; i < listgvhd.length; i++){
-        if(String(listgvhd[i].MaGV) ===  String(MaGVtemp)) choseGV = listgvhd[i].MaGV+' - '+listgvhd[i].TenGV
-        listGVHD.push( listgvhd[i].MaGV+' - '+listgvhd[i].TenGV)
-    }
+    // for(let i = 0; i < listgvhd.length; i++){
+    //     if(String(listgvhd[i].MaGV) ===  String(MaGVtemp)) choseGV = listgvhd[i].MaGV+' - '+listgvhd[i].TenGV
+    //     listGVHD.push( listgvhd[i].MaGV+' - '+listgvhd[i].TenGV)
+    // }
        
+    // if(String(MaGVtemp) == 'null')
+    // $('.Add-New-Row').append(returnLormInputSelect('Phân công giáo viên hướng dẫn: ',listGVHD ,listgvhd[0].MaGV+' - '+listgvhd[0].TenGV));
+    // else
+    // $('.Add-New-Row').append(returnLormInputSelect('Phân công giáo viên hướng dẫn: ',listGVHD ,choseGV));
+    // $('.Add-New-Row').append(returnLormBtn(nutPhancongHD,maunutPhancongHD,idnutPhancongHD));
 
-    if(String(MaGVtemp) == 'null')
-    $('.Add-New-Row').append(returnLormInputSelect('Phân công giáo viên hướng dẫn: ',listGVHD ,listgvhd[0].MaGV+' - '+listgvhd[0].TenGV));
-    else
-    $('.Add-New-Row').append(returnLormInputSelect('Phân công giáo viên hướng dẫn: ',listGVHD ,choseGV));
-    $('.Add-New-Row').append(returnLormBtn(nutPhancongHD,maunutPhancongHD,idnutPhancongHD));
-
-}
-
-
-function LoadChitietHuongdan() {
-    $('#button-bar').show();
-    $('.chose-bar').hide();
-    $('#table_data').hide();
-    $('.btn-follow-row').hide();
-    $('.nav-page').hide();
-
-    $('.Add-New-Row').show();
-
-    $('#button-bar').empty();
     $('.Add-New-Row').empty();
 
-    $('#button-bar').append(returnIconHome() + returnNameIndex('Phụ trách')  + returnNameIndex('Hướng dẫn') + returnNameIndex('Chi tiết')  +  returnReturnBtn());
 
-    $('.Add-New-Row').append(returnLormInfo(listInfoHuongdan1));
-    $('.Add-New-Row').append(returnLormInfo(listInfoHuongdan2));
-    // $('.Add-New-Row').append(returnLormOneInfo('Giảng viên hướng dẫn: GV02 - Trần Minh Chiến'));
-    $('.Add-New-Row').append(returnLormOneInfo('Tiểu ban: TB02'));
+    $('#detail-bar').empty();
 
-    $('.Add-New-Row').append(returnLormOneInfo('Giảng viên hướng dẫn: GV02 - Trần Minh Chiến'));
-    $('.Add-New-Row').append(returnLormBtn(['Thoát'],['tomato'],['thoat']));
+    $('#detail-bar').append(
 
+        '<div class="float-thong-tin-doan">'+
+        '<span id="thongtin-doan">'+
+            '<span id="thongtin-doan-doan">'+
+                '<div>Thông tin sinh viên:</div>'+
+                '<div>Mã: '+InfoSV.MaSV+'</div>'+
+                '<div>Tên: '+InfoSV.TenSV+'</div>'+
+                '<div>Ngày sinh: '+InfoSV.NgaySinh.replace('T17:00:00.000Z','')+'</div>'+
+                '<div>SDT: '+InfoSV.SDT+'</div>'+
+                '<div>Email: '+InfoSV.Email+'</div>'+
+                '<div>Lớp: '+InfoSV.MaLop+'</div>'+
+                '<div>Ngành: '+InfoSV.TenNganh+' - '+InfoSV.TenCN+'</div>'+
+
+                '<div style="color: rgb(0, 0, 0); font-weight: bold;">Điểm đồ án:</div>'+
+                '<span>Điểm GVHD: '+InfoSV.Diem+' </span>'+
+                '<span></span>'+
+                '<span></span>'+
+                '<span></span>'+
+            '</span>'+
+        '</span>'+
+        '</div>'
+
+    );
+
+
+    $('#detail-bar').append(
+        '<span id="thongtin-sv">'+
+            '<div>Thông tin giảng viên:</div>'+
+            '<div>Mã: DA03</div>'+
+            '<div>Tên: Lập trình AI</div>'+
+            '<div>SDT: 01551551530</div>'+
+            '<div>Email: cuocsong@gmail.com</div>'+
+            '<div></div>'+
+        '</span>'
+    )
+
+
+    MaSVtemp = InfoSV.MaSV;
+
+    var elementListGV = '';
+    for(var i = 0; i < listgvhd.length; i++){
+        if(String(InfoSV.MaGVHD) === String(listgvhd[i].MaGV))
+        elementListGV = elementListGV + '<option value='+listgvhd[i].MaGV+' selected>'+listgvhd[i].MaGV+' - '+listgvhd[i].TenGV+'</option>';
+        else
+        elementListGV = elementListGV + '<option value='+listgvhd[i].MaGV+'>'+listgvhd[i].MaGV+' - '+listgvhd[i].TenGV+'</option>';
+    }
+
+    $('#detail-bar').append(
+        '<div class="phan-cong-muc">'+
+            '<select class="select-sinh-vien browser-default custom-select">'+
+                    elementListGV+
+            '</select>'+
+            '<button class="phancong-sinhvien-doan-btn">Phân công</button>'+
+        '</div>'
+    )
+
+    if(String(InfoSV.MaGVHD) != 'null'){
+        MaGVtemp = String(InfoSV.MaGVHD);
+    }else{
+        MaGVtemp = String(listgvhd[0].MaGV);
+    }
+
+    $('.select-sinh-vien').on('change', function() {
+        MaGVtemp = this.value;
+        loadInfoGV();
+    });
+
+    loadInfoGV();
 }
+
+
+function LoadInfoGV(data){
+    $('#thongtin-sv').empty();
+
+
+    console.log(data)
+    $('#thongtin-sv').append(
+        '<div>Thông tin giảng viên:</div>'+
+        '<div>Mã: '+data.MaNV+'</div>'+
+        '<div>Tên: '+data.TenNV+'</div>'+
+        '<div>SDT: '+data.SDT+'</div>'+
+        '<div>Email: '+data.Email+'</div>'+
+        '<div>Ngày sinh: '+data.NgaySinh.replace('T17:00:00.000Z','')+'</div>'+
+        '<div></div>'
+    )
+}
+
 
 
 //CLICK-----------------------------------------------
 function EventAdminClick(event) {
     var x = event.target;
     if( x.parentNode.className == "no-color-lum-table"){
-        console.log(nienkhoahientai,khoacurrent);
+
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         if(khoacurrent == nienkhoahientai){
         $('#no-color-btn-follow-row').attr("id", "yes-color-btn-follow-row");
@@ -253,13 +319,12 @@ function EventAdminClick(event) {
     }else if(x.parentNode.className == 'btn-follow-row'){
         if(x.id == "phancongx" ){
             if(khoacurrent == nienkhoahientai){
-            console.log(listinfoitem[currentrowtable].MaSV)
             MaGVtemp = listinfoitem[currentrowtable].MaGVHD;
             loadPhancongHuongdan(listinfoitem[currentrowtable].MaSV);
             }
-        }else if(x.id == "chitietx"){
-            LoadChitietHuongdan();
         }
+    }else if(x.className === 'phancong-sinhvien-doan-btn'){
+        loadAddPhancongHuongdan();
     }else if(x.className == "add_new_btn" || x.parentNode.className == "add_new_btn" || x.parentNode.parentNode.className == "add_new_btn" ||  x.parentNode.parentNode.parentNode.className == "add_new_btn"){
         LoadAddFormHuongdan();
     }else if(x.className == "return_btn" || x.parentNode.className == "return_btn" || x.parentNode.parentNode.className == "return_btn" ||  x.parentNode.parentNode.parentNode.className == "return_btn"){

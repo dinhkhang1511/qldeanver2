@@ -2,7 +2,8 @@ var listinfoitem;
 var page_num = 1;
 var tol_page = 1;
 
-var MaGV = "GVCN006";
+console.log(getCookie('userlogin') + 'mã đăng nhập')
+var MaGV = getCookie('userlogin');
 var MaPC = "";
 var MaCT = "";
 var MaSV = "";

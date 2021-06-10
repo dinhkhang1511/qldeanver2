@@ -2,7 +2,11 @@ $(".left-bar").load("/qldean/Student/SlideBar.html",function () {
     $( "#act-doan" ).addClass( "active" )
 });
 
-var MaSV = 'N17DCCN002';
+var MaSV = 'N17DCCN001';
+
+// console.log(getCookie('userlogin'))
+
+
 var danhsachcheckMota = ['Tệp văn bản','Tệp trình chiếu','Tệp chương trình'];
 var contentfile = '';
 var filename = '';

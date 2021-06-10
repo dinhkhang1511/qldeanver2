@@ -3,7 +3,7 @@ let currentrowtable;
 var page_num = 1;
 var tol_page = 0;
 
-var MaAdmin = 'ADMIN';
+var MaAdmin = getCookie('userlogin');
 
 var tieudeBangPB = ['Mã sinh viên','Tên sinh viên','Email','Điểm HD','Mã GVPB','Điểm'];
 var tennutBangPB = ['Phân công'];
@@ -71,6 +71,11 @@ var xhttp = new XMLHttpRequest();
                     else
                         loadListPhanbien()
                 }
+                if(String(this.responseURL).includes('api/infoGVPB')){
+                    var data = JSON.parse(this.responseText)
+                    console.log(data)
+                    LoadInfoGV(data[0][0][0]);
+                }
         }
     };
 
@@ -88,10 +93,8 @@ function loadPhancongPhanbien(MaSV,MaDA){
 }
 
 function loadAddPhancongPhanbien(){
-    var e = document.getElementsByClassName("slide-select-lorm").item(0);
-    var strUser = String(e.value).split(' - ');
-    console.log(strUser[0],MaDAtemp)
-    xhttp.open("GET", "/api/addGVPBphancong?MaSV="+MaSVtemp+"&MaGVPB="+strUser[0], false);
+
+    xhttp.open("GET", "/api/addGVPBphancong?MaSV="+MaSVtemp+"&MaGVPB="+MaGVtemp, false);
     xhttp.send();
 }
 
@@ -102,6 +105,11 @@ function changeKhoaandNghanh(){
     khoacurrent = e.options[e.selectedIndex].value;
     console.log("mới tạo "+nghanhcurrent,khoacurrent)
     loadListPhanbien();
+}
+
+function loadInfoGV(){
+    xhttp.open("GET", "/api/infoGVPB?MaGV="+MaGVtemp, false);
+    xhttp.send();
 }
 
 
@@ -121,7 +129,7 @@ function LoadListPhanbien(data) {
     $('.btn-follow-row').show();
     $('.nav-page').show();
     $('#head-bar').show();
-
+    $('#detail-bar').hide();
     $('.Add-New-Row').hide();
 
     $('#head-bar').empty();
@@ -155,7 +163,7 @@ function LoadPhancongPhanbien(data) {
     $('#table_data').hide();
     $('.btn-follow-row').hide();
     $('.nav-page').hide();
-
+    $('#detail-bar').show();
     $('.Add-New-Row').show();
 
     $('#button-bar').empty();
@@ -164,44 +172,137 @@ function LoadPhancongPhanbien(data) {
 
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Phụ trách')  + returnNameIndex('Phản biện') + returnNameIndex('Phân công')  + returnReturnBtn());
-    $('.Add-New-Row').append(returnLormInfo( ['Mã sinh viên: '+InfoSV.MaSV,'Tên sinh viên: '+InfoSV.TenSV]));
+    // $('.Add-New-Row').append(returnLormInfo( ['Mã sinh viên: '+InfoSV.MaSV,'Tên sinh viên: '+InfoSV.TenSV]));
 
-    $('.Add-New-Row').append(returnLormInfo( ['Lớp: '+InfoSV.Lop,'GPA: '+InfoSV.GPA]));
-    $('.Add-New-Row').append(returnLormOneInfo('Email: '+InfoSV.Email));
+    // $('.Add-New-Row').append(returnLormInfo( ['Lớp: '+InfoSV.Lop,'GPA: '+InfoSV.GPA]));
+    // $('.Add-New-Row').append(returnLormOneInfo('Email: '+InfoSV.Email));
 
-    if(String(InfoSV.TenDA) != 'null')
-    $('.Add-New-Row').append(returnLormInfo(['Mã đồ án: '+InfoSV.MaDA ,'Tên đồ án: '+InfoSV.TenDA]));
-    else
-    $('.Add-New-Row').append(returnLormInfo(['Mã đồ án: '+InfoSV.MaDA ,'Tên đồ án: Chưa đặt tên']));
+    // if(String(InfoSV.TenDA) != 'null')
+    // $('.Add-New-Row').append(returnLormInfo(['Mã đồ án: '+InfoSV.MaDA ,'Tên đồ án: '+InfoSV.TenDA]));
+    // else
+    // $('.Add-New-Row').append(returnLormInfo(['Mã đồ án: '+InfoSV.MaDA ,'Tên đồ án: Chưa đặt tên']));
 
-    $('.Add-New-Row').append(returnLormOneInfo('Giảng viên hướng dẫn: ' +InfoSV.MaGVHD + ' - '+InfoSV.TenGVHD));
+    // $('.Add-New-Row').append(returnLormOneInfo('Giảng viên hướng dẫn: ' +InfoSV.MaGVHD + ' - '+InfoSV.TenGVHD));
 
-    if(String(InfoSV.DiemHD) != 'null')
-    $('.Add-New-Row').append(returnLormOneInfo('Điểm hướng dẫn: '+InfoSV.DiemHD));
-    else
-    $('.Add-New-Row').append(returnLormOneInfo('Điểm hướng dẫn: Chưa chấm'));
+    // if(String(InfoSV.DiemHD) != 'null')
+    // $('.Add-New-Row').append(returnLormOneInfo('Điểm hướng dẫn: '+InfoSV.DiemHD));
+    // else
+    // $('.Add-New-Row').append(returnLormOneInfo('Điểm hướng dẫn: Chưa chấm'));
 
-    if(String(InfoSV.DiemPB) != '')
-    $('.Add-New-Row').append(returnLormOneInfo('Điểm phản biện: '+InfoSV.DiemPB));
-    else
-    $('.Add-New-Row').append(returnLormOneInfo('Điểm phản biện: Chưa chấm'));
+    // if(String(InfoSV.DiemPB) != '')
+    // $('.Add-New-Row').append(returnLormOneInfo('Điểm phản biện: '+InfoSV.DiemPB));
+    // else
+    // $('.Add-New-Row').append(returnLormOneInfo('Điểm phản biện: Chưa chấm'));
 
-    MaDAtemp = InfoSV.MaDA;
+    // MaDAtemp = InfoSV.MaDA;
 
-    let listGVPB = [];
-    let choseGV;
+    // let listGVPB = [];
+    // let choseGV;
 
-    for(let i = 0; i < listgvpb.length; i++){
-        if(String(listgvpb[i].MaGV) ===  String(MaGVtemp)) choseGV = listgvpb[i].MaGV+' - '+listgvpb[i].TenGV
-        listGVPB.push( listgvpb[i].MaGV+' - '+listgvpb[i].TenGV)
+    // for(let i = 0; i < listgvpb.length; i++){
+    //     if(String(listgvpb[i].MaGV) ===  String(MaGVtemp)) choseGV = listgvpb[i].MaGV+' - '+listgvpb[i].TenGV
+    //     listGVPB.push( listgvpb[i].MaGV+' - '+listgvpb[i].TenGV)
+    // }
+
+    // if(String(MaGVtemp) == 'null')
+    // $('.Add-New-Row').append(returnLormInputSelect('Phân công giáo viên phản biện: ',listGVPB ,listgvpb[0].MaGV+' - '+listgvpb[0].TenGV));
+    // else
+    // $('.Add-New-Row').append(returnLormInputSelect('Phân công giáo viên phản biện: ',listGVPB ,choseGV));
+    // $('.Add-New-Row').append(returnLormBtn(nutPhancongPB,maunutPhancongPB,idnutPhancongPB));
+
+    $('.Add-New-Row').empty();
+    $('#detail-bar').empty();
+
+    $('#detail-bar').append(
+
+        '<div class="float-thong-tin-doan">'+
+        '<span id="thongtin-doan">'+
+            '<span id="thongtin-doan-doan">'+
+                '<div>Thông tin sinh viên:</div>'+
+                '<div>Mã: '+InfoSV.MaSV+'</div>'+
+                '<div>Tên: '+InfoSV.TenSV+'</div>'+
+                '<div>Ngày sinh: '+InfoSV.NgaySinh.replace('T17:00:00.000Z','')+'</div>'+
+                '<div>SDT: '+InfoSV.SDT+'</div>'+
+                '<div>Email: '+InfoSV.Email+'</div>'+
+                '<div>Lớp: '+InfoSV.MaLop+'</div>'+
+                '<div>Ngành: '+InfoSV.TenNganh+' - '+InfoSV.TenCN+'</div>'+
+
+                '<div style="color: rgb(0, 0, 0); font-weight: bold;">Điểm đồ án:</div>'+
+                '<span>Điểm GVHD: '+InfoSV.DiemHD+' </span>'+
+                '<span>Điểm GVPB: '+InfoSV.DiemPB+' </span>'+
+                '<span></span>'+
+                '<span></span>'+
+                '<span></span>'+
+            '</span>'+
+        '</span>'+
+        '</div>'
+    );
+
+    $('#detail-bar').append(
+        '<span id="thongtin-sv">'+
+            '<div>Thông tin giảng viên:</div>'+
+            '<div>Mã: DA03</div>'+
+            '<div>Tên: Lập trình AI</div>'+
+            '<div>SDT: 01551551530</div>'+
+            '<div>Email: cuocsong@gmail.com</div>'+
+            '<div></div>'+
+        '</span>'
+    )
+
+
+    MaSVtemp = InfoSV.MaSV;
+
+    var elementListGV = '';
+    for(var i = 0; i < listgvpb.length; i++){
+        if(String(InfoSV.MaGVPB) === String(listgvpb[i].MaGV))
+        elementListGV = elementListGV + '<option value='+listgvpb[i].MaGV+' selected>'+listgvpb[i].MaGV+' - '+listgvpb[i].TenGV+'</option>';
+        else
+        elementListGV = elementListGV + '<option value='+listgvpb[i].MaGV+'>'+listgvpb[i].MaGV+' - '+listgvpb[i].TenGV+'</option>';
     }
 
-    if(String(MaGVtemp) == 'null')
-    $('.Add-New-Row').append(returnLormInputSelect('Phân công giáo viên phản biện: ',listGVPB ,listgvpb[0].MaGV+' - '+listgvpb[0].TenGV));
-    else
-    $('.Add-New-Row').append(returnLormInputSelect('Phân công giáo viên phản biện: ',listGVPB ,choseGV));
-    $('.Add-New-Row').append(returnLormBtn(nutPhancongPB,maunutPhancongPB,idnutPhancongPB));
+    $('#detail-bar').append(
+        '<div class="phan-cong-muc">'+
+            '<select class="select-sinh-vien browser-default custom-select">'+
+                    elementListGV+
+            '</select>'+
+            '<button class="phancong-sinhvien-doan-btn">Phân công</button>'+
+        '</div>'
+    )
 
+
+    if(String(InfoSV.MaGVPB) != 'null'){
+        MaGVtemp = String(InfoSV.MaGVPB);
+    }else{
+        MaGVtemp = String(listgvpb[0].MaGV);
+    }
+
+    $('.select-sinh-vien').on('change', function() {
+        MaGVtemp = this.value;
+        loadInfoGV();
+    });
+
+    loadInfoGV();
+
+
+
+}
+
+
+
+function LoadInfoGV(data){
+    $('#thongtin-sv').empty();
+
+
+    console.log(data)
+    $('#thongtin-sv').append(
+        '<div>Thông tin giảng viên:</div>'+
+        '<div>Mã: '+data.MaNV+'</div>'+
+        '<div>Tên: '+data.TenNV+'</div>'+
+        '<div>SDT: '+data.SDT+'</div>'+
+        '<div>Email: '+data.Email+'</div>'+
+        '<div>Ngày sinh: '+data.NgaySinh.replace('T17:00:00.000Z','')+'</div>'+
+        '<div></div>'
+    )
 }
 
 
@@ -257,7 +358,7 @@ function EventAdminClick(event) {
         loadListPhanbien();
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
-    }else if(x.id == 'phancong'){
+    }else if(x.className == 'phancong-sinhvien-doan-btn'){
         loadAddPhancongPhanbien();
     }else{
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');

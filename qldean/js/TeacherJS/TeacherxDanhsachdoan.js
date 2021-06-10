@@ -30,7 +30,9 @@ var listchuyenganh = [];
     var listmachuyennganh = [];
     var listtenchuyennganh = [];
 
-var MaGV = "GVCN006";
+console.log(getCookie('userlogin') + 'mã đăng nhập')
+var MaGV = getCookie('userlogin');
+
 var MaChuyennganh = "";
 var MaDoan = '';
 var TenDoan = '';

@@ -2,7 +2,7 @@ $(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
     $( "#act-tieuban" ).addClass( "active" )
 });
 
-var MaAdmin = 'ADMIN';
+var MaAdmin = getCookie('userlogin');
 
 var listinfoitem;
 var currentlist = 0;
@@ -178,14 +178,12 @@ function addTieuban() {
     }
 }
 function updateListTieuban() {
-
     var thoigiantieuban = document.getElementsByClassName('thoigianform').item(0).value;
     thoigiantieuban = String(thoigiantieuban).split('T')
     var ngay = thoigiantieuban[0];
 
     var e = document.getElementsByClassName("combo-box-add-long ").item(0);
     ca = String(e.options[e.selectedIndex].value);
-
 
     if(String(ngay) !== ''){
         xhttp.open("GET", "/api/suatb?ngay="+ngay+"&ca="+ca+"&maTB="+ $(".label-item-add").text()+"&MaNganh="+nghanhcurrent, false);

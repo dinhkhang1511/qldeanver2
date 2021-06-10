@@ -144,11 +144,11 @@ module.exports = async (callback, scanner) => {
         let MaSV = String(head_params.get('MaSV'));
         let MaNghanh = String(head_params.get('MaNghanh'));
         let Khoa = Number(head_params.get('Khoa'));
-        console.log("Xxx");
        
         let result = await Model.InleSQL("call ShowInfor_SVTB('"+MaSV+"')");
-        let result1 = await Model.InleSQL("call ComboBox_PhanCongDATB('"+Khoa+"');");
-        console.log("call ComboBox_PhanCongDATB('"+Khoa+"');");
+        let result1 = await Model.InleSQL("call ComboBox_PhanCongDATB('"+Khoa+"','"+MaNghanh+"');");
+
+        console.log("call ComboBox_PhanCongDATB('"+Khoa+"','"+MaNghanh+"');")
         let data = [];
         data.push(result)
         data.push(result1)

@@ -1673,3 +1673,36 @@ iframe {
     color: white;
     border-radius: 3px;
 }
+
+
+
+
+
+
+#diem-doan-phancong-admin{
+    position: relative;
+    float: right;
+    width: 50%;
+    font-size: 15px;
+    font-weight: 400;
+    background-color: white;
+    margin-right: 7px;
+    margin-top: 1px;
+    padding-bottom: 20px;
+
+
+}
+
+#diem-doan-phancong-admin div:first-child{
+    color: rgb(39, 167, 81);
+    font-size: 17px;
+    margin-top: 7px;
+    margin-left: 10px;
+}
+
+#diem-doan-phancong-admin div:not(#diem-doan-phancong-admin div:first-child){
+    margin-left: 20px;
+    margin-top: 9px;
+    position: relative;
+    
+}
