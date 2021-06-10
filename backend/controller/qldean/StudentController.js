@@ -70,7 +70,7 @@ module.exports = async (callback, scanner) => {
         let limit = 10;
         let page = Number(head_params.get('page')) - 1;
 
-        let count = await Model.InleSQL("select CountList_SVBaoCao('"+MaTB+"')"); 
+        let count = await Model.InleSQL("select CountList_SVBaoCao('"+MaTB+"') AS Number"); 
         let select = await Model.InleSQL("call ShowList_SVBaoCao('"+MaTB+"',"+page*limit+");"); 
 
         let data = [];

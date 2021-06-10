@@ -2,21 +2,16 @@ $(".left-bar").load("/qldean/Student/SlideBar.html",function () {
     $( "#act-doan" ).addClass( "active" )
 });
 
-
 var MaSV = 'N17DCCN002';
 var danhsachcheckMota = ['Tệp văn bản','Tệp trình chiếu','Tệp chương trình'];
 var contentfile = '';
 var filename = '';
 
-
-var tieudeBangTieuban = ['Tiểu ban','Ngày','Ca'];
+var tieudeBangTieuban = ['STT','MaSV','TenSV','MaLop','SDT','Email'];
 
 var listinfoitem;
 var page_num = 1;
 var tol_page = 0;
-
-
-
 
 
 var MaDA;
@@ -49,6 +44,8 @@ var xhttp = new XMLHttpRequest();
                 if(String(this.responseURL).includes('danhsach-tieuban-sinhvien')){
                     var data = JSON.parse(this.responseText);
                     console.log(data)
+                    tol_page =  Math.ceil(data[0][0]["Number"] / 10); 
+                    LoadDanhsachtieuban(data[1][0])
                 }
             }
         }
@@ -162,7 +159,7 @@ function LoadListTieuban(infodoan,infodiem,infotep,infogvtb) {
 
     }
     if(String(infodiem.DiemTB) != 'null'){
-        elementDiem = elementDiem + '<div>Tiểu ban:</div><div style="margin-top: 0px;"><table style="width:100%; margin-top: 3px;"><tr>' + '<td>'+infodiem.MaTB+'</td> <td>Điểm: '+infodiem.DiemTB+'</td>' + '</tr></table></div>';
+        elementDiem = elementDiem + '<div>Tiểu ban:</div><div style="margin-top: 0px;"><table style="width:100%; margin-top: 3px;"><tr>' + '<td>'+infodiem.MaTB+'&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td> <td>Điểm: '+infodiem.DiemTB+'</td>' + '</tr></table></div>';
         listDiemx = listDiemx + String(infodiem.DiemTB)+'-';
 
 
@@ -282,6 +279,15 @@ function LoadListTieuban(infodoan,infodiem,infotep,infogvtb) {
 
 
 function LoadDanhsachtieuban(data) {
+
+
+
+    var listdata = [];
+    for(var i = 0; i < data.length; i++){
+        listdata.push({stt: (page_num-1)*10 + i+1, Masv: data[i].MaSV, TenSV: data[i].TenSV, MaLop: data[i].MaLop,SDT:data[i].SDT, Email: data[i].Email})
+    }
+
+
     $('#button-bar').show();
     $('.chose-bar').show();
     $('#table_data').show();
@@ -289,6 +295,7 @@ function LoadDanhsachtieuban(data) {
     $('.nav-page').show();
     $('#head-bar').show();
     $('.Add-New-Row').hide();
+    $('.Detail-project').hide();
 
     $('#head-bar').empty();
     $('#button-bar').empty();
@@ -297,13 +304,10 @@ function LoadDanhsachtieuban(data) {
     $('.btn-follow-row').empty();
     $('.nav-page').empty();
 
-    $('#button-bar').append(returnIconHome() + returnNameIndex('Quản lý tiểu ban') +  returnAddBtn());
-    // $('#head-bar').append(returnFormComboxHeadBar('Nghành',listmanganh, listtennghanh, nghanhcurrent, 'changeKhoaandNghanh',250,0));
-    // $('#head-bar').append(returnFormComboxHeadBar('Niêm khóa',listkhoa , listniemkhoa, khoacurrent, 'changeKhoaandNghanh',120,20));
-    // $('.chose-bar').append(returnSearchForm('Tìm mã tiểu ban','Làm mới') + '<div style="margin-top:10px ;margin-right:5px;float: right;">Hội đồng thi Khoa Công Nghệ Thông Tin</div>' );
-    // $('#table_data').append(returnTable( tieudeBangTieuban ,listTB));
-    // $('.btn-follow-row').append(returnButtonTable(tennutBangTieuban,idnutBangTieuban));
-    // $('.nav-page').append(returNavForm(tol_page+1, page_num));
+    $('#button-bar').append(returnIconHome() + returnNameIndex('Đồ án') + returnNameIndex('Danh sách báo cáo') +  returnReturnBtn());
+    $('.chose-bar').append(returnSearchForm('Tìm mã sinh viên','Làm mới')  );
+    $('#table_data').append(returnTable( tieudeBangTieuban ,listdata));
+    $('.nav-page').append(returNavForm(tol_page+1, page_num));
 }
 
 
@@ -332,6 +336,30 @@ async function EventTeacherClick(event) {
         
     }else if(x.className == "return_btn" || x.parentNode.className == "return_btn" || x.parentNode.parentNode.className == "return_btn" ||  x.parentNode.parentNode.parentNode.className == "return_btn"){
         
+        $('#button-bar').show();
+        $('.chose-bar').hide();
+        $('#table_data').hide();
+        $('.btn-follow-row').hide();
+        $('.nav-page').hide();
+        $('#head-bar').hide();
+        $('.Add-New-Row').hide();
+    
+        $('.Detail-project').show();
+    
+        $('#head-bar').empty();
+        $('#button-bar').empty();
+        $('.chose-bar').empty();
+        $('#table_data').empty();
+        $('.btn-follow-row').empty();
+        $('.nav-page').empty();
+    
+        
+    
+        $('#button-bar').append(returnIconHome() + returnNameIndex('Đồ án'));
+    
+        $('.Detail-project').show();
+
+
     }else if(x.id == "cap-nhat-baocao" ){
 
 
