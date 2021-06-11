@@ -242,6 +242,19 @@ function returnFormComboxHeadBar(tieude,danhsach,danhsachva, chon, hamchon,width
     return element + '</select>';
 }
 
+
+// function returnFormComboxHeadBarSmall(tieude,danhsach,danhsachva, chon, hamchon,width,left){
+//     var element = '<span style="margin-left:'+left+'px" class="title-combox-headbar-small">'+tieude+'</span><select style="width:'+width+'px;" class="browser-default custom-select select-combox-headbar-small" onchange="'+hamchon+'();">'
+//     for(var i = 0; i < danhsach.length; i++){
+//         if(String(danhsach[i]) === String(chon))
+//         element = element + '<option selected value="'+danhsach[i]+'">'+danhsachva[i]+'</option>';
+//         else
+//         element = element + '<option value="'+danhsach[i]+'">'+danhsachva[i]+'</option>';
+//     }
+//     return element + '</select>';
+// }
+
+
 function returnFormAddComboxBar(idselect,danhsach,danhsachva,chon,hamchon,width,left,nameinput,idinput,namebtn,idbtn,color){
     var element = '<select  style="margin-left:'+left+'px; width:'+width+'px;" id="'+idselect+'" class="browser-default custom-select select-combox-headbar" onchange="'+hamchon+'();">'
     for(var i = 0; i < danhsach.length; i++){
