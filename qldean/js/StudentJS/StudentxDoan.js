@@ -144,10 +144,6 @@ function LoadListTieuban(infodoan,infodiem,infotep,infogvtb) {
     filename = infodoan.Tep;
 
 
-
-
-
-
     var elementDiem = '<span id="info-diem-doan-sv"><div>Điểm đồ án:</div>';
 
     if(String(infodiem.DiemHD) != 'null'){
@@ -283,15 +279,10 @@ function LoadListTieuban(infodoan,infodiem,infotep,infogvtb) {
 
 
 function LoadDanhsachtieuban(data) {
-
-
-
     var listdata = [];
     for(var i = 0; i < data.length; i++){
         listdata.push({stt: (page_num-1)*10 + i+1, Masv: data[i].MaSV, TenSV: data[i].TenSV, MaLop: data[i].MaLop,SDT:data[i].SDT, Email: data[i].Email})
     }
-
-
     $('#button-bar').show();
     $('.chose-bar').show();
     $('#table_data').show();
@@ -386,16 +377,12 @@ async function EventTeacherClick(event) {
 
         if(document.getElementById('cap-nhat-baocao').style.opacity === '1'){
 
-
-
-
             var namefilex;
             if(isupdatefile == true){
                 namefilex = MaSV+MaDA+getCurrentTimex().replace(/\D/g,'')+contentfile['name'];
             }else{
                 namefilex = filename;
             }
-
 
             var checkedValue = []; 
             var inputElements = document.getElementsByClassName('form-check-input');
@@ -412,8 +399,6 @@ async function EventTeacherClick(event) {
                 if(String(checkedValue[i]) !== 'khac')
                 infotep = infotep + checkedValue[i] + ',';
             }
-
-
             console.log(infotep,MaPC,listDiemx,namefilex,getCurrentTime)
             xhttp.open("GET", "/api/nopbaocao-sinhvien?MaPC="+MaPC+"&infotep="+infotep+"&listDiemx="+listDiemx+"&ngay="+getCurrentTimex()+"&namefilex="+namefilex, false);
             xhttp.send();

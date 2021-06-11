@@ -2,11 +2,7 @@ $(".left-bar").load("/qldean/Teacher/SlideBar.html",function () {
     $( "#act-danhsachdoan" ).addClass( "active" )
 });
 
-var listinfoitem;
-var page_num = 1;
-var tol_page = 1;
-
-var tieudeBangTacadoan =  ['Đồ án' , 'Chuyên ngành' , 'Người tạo','Ngày tạo','Lần cuối cập nhật','Trạng thái'] 
+var tieudeBangTacadoan =  ['Đồ án' , 'Chuyên ngành' , 'Người tạo','Ngày tạo','Lần cuối cập nhật','Sinh viên thực hiện'] 
 var tennutBangTacadoan = ['Tài liệu'];
 var idnutBangTacadoan = ['tailieu'];
 
@@ -16,11 +12,11 @@ var idnutBangCanhandoan = ['sua','xoa','tailieu'];
 
 var tieudeBangTailieu = ['Tệp','Giảng viên','Thời gian','Trạng thái']
 
-var nutThemDoan = ['Xác nhận', 'Thoát']
+var nutThemDoan = ['Xác nhận', 'Thoát'];
 var maunutThemDoan = ['tomato','green'];
 var idnutThemDoan = ['them','thoat'];
 
-var nutSuaDoan = ['Xác nhận', 'Thoát']
+var nutSuaDoan = ['Xác nhận', 'Thoát'];
 var maunutSuaDoan = ['tomato','green'];
 var idnutSuaDoan = ['suax','thoat'];
 
@@ -30,7 +26,6 @@ var listchuyenganh = [];
     var listmachuyennganh = [];
     var listtenchuyennganh = [];
 
-console.log(getCookie('userlogin') + 'mã đăng nhập')
 var MaGV = getCookie('userlogin');
 
 var MaChuyennganh = "";
@@ -38,18 +33,22 @@ var MaDoan = '';
 var TenDoan = '';
 var MaCT = '';
 var MaSV = '';
+var MaCTTailieu = '';
 
-var contentfile1;
-var contentfile2;
-var file1 = false;
-var file2 = false;
-var filename1;
-var filename2;
+var contentfile;
+var namefilex;
+var tepname;
 
+var listinfoitem;
+var page_num = 1;
+var tol_page = 1;
 
 var pageStatus = 1;  /// MANY PAGE
 var pagelist = 0; ///SWITCH
 let checkfileupdate = false; ///FILE IS UPDATED ?
+
+var checkaddthemfile = false;
+var NUMBERFILE;
 
 
 var xhttp = new XMLHttpRequest();
@@ -121,7 +120,6 @@ var xhttp = new XMLHttpRequest();
                     };
                 }
 
-    
                 if(String(this.responseURL).includes('api/dieukiensuadoan')){
                     var data = JSON.parse(this.responseText);
                     LoadSuaDoan(data[0][0]);
@@ -129,9 +127,17 @@ var xhttp = new XMLHttpRequest();
                 if(String(this.responseURL).includes('api/suadoan')){
                     if(String(this.responseText) == '"that bai"')alert('Fail')
                     else {
-                        LoadHeadPage1();
-                        if(pagelist == 1) loadListDoanCanhan();
-                        else if((pagelist == 2)) loadListDoanTatca();
+
+                        if(pageStatus == 2){
+                             $('.Form-input-file').hide();
+                             $('.shadow-input-diem').hide();
+                            loadListTailieu()   
+                        }else{
+                            LoadHeadPage1();
+                            if(pagelist == 1) loadListDoanCanhan();
+                            else if((pagelist == 2)) loadListDoanTatca();
+                        }
+
                     };
                 }
                 if(String(this.responseURL).includes('api/xoadoan')){
@@ -142,29 +148,53 @@ var xhttp = new XMLHttpRequest();
                         else if((pagelist == 2)) loadListDoanTatca();
                     };
                 }
+
+
                 if(String(this.responseURL).includes('api/firstload-phancong-tailieu')){
                     var data = JSON.parse(this.responseText);
                     console.log("Thông tin đồ án")
                     console.log(data[0][0][0])
                     console.log(data[1][0])
                     LoadPhancongTailieu(data[0][0][0],data[1][0]);
-
-                    console.log(data[1][0])
-                    
+                    console.log(data[1][0])  
                 }
                 if(String(this.responseURL).includes('api/infosv-phancong-tailieu')){
                     var data = JSON.parse(this.responseText);
                     console.log(data[0][0][0])
                     LoadInfoSvPhancongtailieu(data[0][0][0])
                 }
+                if(String(this.responseURL).includes('api/IsExitFileHD')){
+                    var data = JSON.parse(this.responseText);
+                    console.log(data[0][0]['Number'])
+
+                    if(Number(data[0][0]['Number']) === 0){
+                        NUMBERFILE = Number(data[0][0]['Number']);
+                        loadAddThemFile();
+
+                    }else{
+                        if (confirm('Tài liệu hướng dẫn bạn tải lên cho đồ án này chưa được sử dụng. Bạn có muốn thay thế nó không?')) {
+                            // Save it!
+                            NUMBERFILE = Number(data[0][0]['Number']);
+                            checkaddthemfile = true;
+                            loadAddThemFile();
+                            console.log('Thing was saved to the database.');
+                          } else {
+                            // Do nothing!
+                            $('.Form-input-file').hide();
+                            $('.shadow-input-diem').hide();
+                            console.log('Thing was not saved to the database.');
+                          }
+                    }
+                    // LoadInfoSvPhancongtailieu(data[0][0][0])
+                }
+
+                
                 if(String(this.responseURL).includes('api/add-phancong-tailieu')){
                     if(String(this.responseText) == '"that bai"')alert('Fail')
                     else {
                         loadListTailieu()
                     };
                 }  
-
-                
         }
     };
 
@@ -173,7 +203,7 @@ function changeChuyennganh(){
     var e = document.getElementsByClassName("select-combox-headbar").item(0);
     MaChuyennganh = String(e.options[e.selectedIndex].value);
     if(pagelist == 1) loadListDoanCanhan();
-    else if((pagelist == 2)) loadListDoanTatca();
+    else if(pagelist == 2) loadListDoanTatca();
 }
 
 function chuyendoiBangdoantatca(data){
@@ -182,7 +212,12 @@ function chuyendoiBangdoantatca(data){
     for(let i = 0; i < data.length; i++){
         if(Number(data[i].totalPCInCurYear) == 0)  status = 'Chưa phân công';
         else  status = 'Đã phân công';
-        listdoantatca.push({Doan: String(data[i].MaDA+data[i].TenDA) , CN: String(data[i].MaCN+data[i].tenCN), Nguoitao: String(data[i].MaGV+data[i].TenGV) , Ngaytao: String(data[i].minThoiGian), Capnhatcuoi: String(data[i].maxThoiGian) , Trangthai: status  })
+
+        if(String(data[i].MaSV) === 'null')
+        listdoantatca.push({Doan: String(data[i].MaDA+data[i].TenDA) , CN: String(data[i].MaCN+data[i].tenCN), Nguoitao: String(data[i].MaGV+data[i].TenGV) , Ngaytao: String(data[i].minThoiGian), Capnhatcuoi: String(data[i].maxThoiGian) , Trangthai:'' })
+        else
+        listdoantatca.push({Doan: String(data[i].MaDA+data[i].TenDA) , CN: String(data[i].MaCN+data[i].tenCN), Nguoitao: String(data[i].MaGV+data[i].TenGV) , Ngaytao: String(data[i].minThoiGian), Capnhatcuoi: String(data[i].maxThoiGian) , Trangthai: String(data[i].MaSV) +' - ' + String(data[i].TenSV) })
+
     }
     return listdoantatca;
 }
@@ -238,11 +273,20 @@ function loadFirstPhancongtailieu(){
     xhttp.send();
 }
 
-
 function loadInfoSvPhancongtailieu(MaSV){
     xhttp.open("GET", "/api/infosv-phancong-tailieu?MaSV="+MaSV, false);
     xhttp.send();
 }
+
+function loadCheckFileuploadTailieu(){
+    xhttp.open("GET", "/api/IsExitFileHD?MaGV="+MaGV+"&MaDA="+MaDoan, false);
+    xhttp.send();
+}
+
+
+
+
+
 
 
 //ELEMENT-----------------------------------------------------
@@ -342,7 +386,6 @@ function LoadListDoanTatca(data){
 }
 
 function ResetCheckbox(){
-
     for(var i = 0; i < danhsachcheckMota.length; i++){
         if(document.getElementsByClassName("form-check-input").item(i)) document.getElementsByClassName("form-check-input").item(i).checked = false;
     }
@@ -391,23 +434,16 @@ function LoadAddDoan(){
             $(".input-more-checkbox").hide();
         }
     });
-
     document.getElementById('selectedFile').onchange = function() {
         ResetCheckbox();
+        document.getElementsByClassName('input-more-checkbox').item(0).value = '';
+        document.getElementsByClassName("form-check-input").item(danhsachcheckMota.length).checked = false;
         var fullPath = document.getElementById('selectedFile').value;
         if (fullPath) {
-            var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
-            var filename = fullPath.substring(startIndex);
-            if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
-                filename = filename.substring(1);
-            }
-            let countfile = 0;
-            if(file1 == false){ countfile = 1; contentfile1 = document.getElementById("selectedFile").files[0]; file1 = true, filename1 = filename}
-            $('.uploadfile-tag').append('<span id="contentfile-'+countfile+'" class="item-add-file-upload"><span>'+filename+'</span>   <span>   <svg height="20px"    viewBox="0 0 512.171 512.171" width="20px"> <path d="m243.1875 182.859375 113.132812-113.132813c12.5-12.5 12.5-32.765624 0-45.246093l-15.082031-15.082031c-12.503906-12.503907-32.769531-12.503907-45.25 0l-113.128906 113.128906-113.132813-113.152344c-12.5-12.5-32.765624-12.5-45.246093 0l-15.105469 15.082031c-12.5 12.503907-12.5 32.769531 0 45.25l113.152344 113.152344-113.128906 113.128906c-12.503907 12.503907-12.503907 32.769531 0 45.25l15.082031 15.082031c12.5 12.5 32.765625 12.5 45.246093 0l113.132813-113.132812 113.128906 113.132812c12.503907 12.5 32.769531 12.5 45.25 0l15.082031-15.082031c12.5-12.503906 12.5-32.769531 0-45.25zm0 0"/> </svg>  </span> </span>   ')
-            if(file1 == true){
-                $(".display-checkbox").show()
-                $('.add-file-add-row').hide();
-            }
+            contentfile = document.getElementById("selectedFile").files[0];
+            $('.uploadfile-tag').append('<span id="contentfile-'+1+'" class="item-add-file-upload"><span>'+contentfile['name']+'</span>   <span>   <svg height="20px"    viewBox="0 0 512.171 512.171" width="20px"> <path d="m243.1875 182.859375 113.132812-113.132813c12.5-12.5 12.5-32.765624 0-45.246093l-15.082031-15.082031c-12.503906-12.503907-32.769531-12.503907-45.25 0l-113.128906 113.128906-113.132813-113.152344c-12.5-12.5-32.765624-12.5-45.246093 0l-15.105469 15.082031c-12.5 12.503907-12.5 32.769531 0 45.25l113.152344 113.152344-113.128906 113.128906c-12.503907 12.503907-12.503907 32.769531 0 45.25l15.082031 15.082031c12.5 12.5 32.765625 12.5 45.246093 0l113.132813-113.132812 113.128906 113.132812c12.503907 12.5 32.769531 12.5 45.25 0l15.082031-15.082031c12.5-12.503906 12.5-32.769531 0-45.25zm0 0"/> </svg>  </span> </span>')
+            $(".display-checkbox").show();
+            $('.add-file-add-row').hide();
         }
     };
 }
@@ -417,7 +453,7 @@ function loadAddDoan(){
     var TenDoan = document.getElementsByClassName('input-new-row-long form-control').item(0).value;
     var e = document.getElementsByClassName('combo-box-add-long').item(0);
     var chuyennganh = e.options[e.selectedIndex].value;
-    var filedoc = filename1;
+    var filedoc = namefilex;
     var checkedValue = []; 
     var inputElements = document.getElementsByClassName('form-check-input');
     for(var i=0; inputElements[i]; ++i){
@@ -433,11 +469,10 @@ function loadAddDoan(){
         if(String(checkedValue[i]) !== 'khac')
         infotep = infotep + checkedValue[i] + ',';
     }
-
+    console.log("/api/themdoan?MaDoan="+MaDoan+"&TenDoan="+TenDoan+"&chuyennganh="+chuyennganh+"&ngay="+getCurrentTime()+"&MaGV="+MaGV+"&filedoc="+filedoc+"&infotep="+infotep)
     xhttp.open("GET", "/api/themdoan?MaDoan="+MaDoan+"&TenDoan="+TenDoan+"&chuyennganh="+chuyennganh+"&ngay="+getCurrentTime()+"&MaGV="+MaGV+"&filedoc="+filedoc+"&infotep="+infotep, false);
     xhttp.send();
 }
-
 
 function LoadSuaDoan(data){
     checkfileupdate = false;
@@ -465,33 +500,35 @@ function LoadSuaDoan(data){
     $('.Add-New-Row').append(returnFormInputTextLength('Tên đồ án',data.TenDA ));
     $('.Add-New-Row').append(returnFormInputSelect('Chuyên nghành', 'changeChuyennghanh' , listmachuyennganh,listtenchuyennganh, data.MaCN));
 
-
-
     $('.Add-New-Row').append('<div><span>Thêm tệp: </span> <span class="uploadfile-tag">  <button onclick="getFile()"; class="add-file-add-row">Thêm tệp</button>   </span></div>');
    
     if(String(data.Tep_Goc) !== 'null'){
-        file1 = true;
-        $('.uploadfile-tag').append('<span id="contentfile-'+1+'" class="item-add-file-upload"><span>'+data.Tep_Goc+'</span>   <span>   <svg height="20px"    viewBox="0 0 512.171 512.171" width="20px"> <path d="m243.1875 182.859375 113.132812-113.132813c12.5-12.5 12.5-32.765624 0-45.246093l-15.082031-15.082031c-12.503906-12.503907-32.769531-12.503907-45.25 0l-113.128906 113.128906-113.132813-113.152344c-12.5-12.5-32.765624-12.5-45.246093 0l-15.105469 15.082031c-12.5 12.503907-12.5 32.769531 0 45.25l113.152344 113.152344-113.128906 113.128906c-12.503907 12.503907-12.503907 32.769531 0 45.25l15.082031 15.082031c12.5 12.5 32.765625 12.5 45.246093 0l113.132813-113.132812 113.128906 113.132812c12.503907 12.5 32.769531 12.5 45.25 0l15.082031-15.082031c12.5-12.503906 12.5-32.769531 0-45.25zm0 0"/> </svg>  </span> </span>   ')
+        tepname = data.Tep_Goc;
+        $('.uploadfile-tag').append('<span id="contentfile-'+1+'" class="item-add-file-upload"><span>'+tepname+'</span>   <span>   <svg height="20px"    viewBox="0 0 512.171 512.171" width="20px"> <path d="m243.1875 182.859375 113.132812-113.132813c12.5-12.5 12.5-32.765624 0-45.246093l-15.082031-15.082031c-12.503906-12.503907-32.769531-12.503907-45.25 0l-113.128906 113.128906-113.132813-113.152344c-12.5-12.5-32.765624-12.5-45.246093 0l-15.105469 15.082031c-12.5 12.503907-12.5 32.769531 0 45.25l113.152344 113.152344-113.128906 113.128906c-12.503907 12.503907-12.503907 32.769531 0 45.25l15.082031 15.082031c12.5 12.5 32.765625 12.5 45.246093 0l113.132813-113.132812 113.128906 113.132812c12.503907 12.5 32.769531 12.5 45.25 0l15.082031-15.082031c12.5-12.503906 12.5-32.769531 0-45.25zm0 0"/> </svg>  </span> </span>   ')
         $(".display-checkbox").show();
         $('.add-file-add-row').hide();
 
-        filename1 = data.Tep_Goc;
         $('.Add-New-Row').append(returnCheckBoxHaveMore('Mô tả',danhsachcheckMota));
-    for(var i = 0; i < danhsachcheckMota.length ; i++){
-        if(String(data.MoTa).includes(danhsachcheckMota[i])){
-            document.getElementsByClassName("form-check-input").item(i).checked = true;
+        for(var i = 0; i < danhsachcheckMota.length ; i++){
+            if(String(data.MoTa).includes(danhsachcheckMota[i])){
+                document.getElementsByClassName("form-check-input").item(i).checked = true;
+            }
         }
-    }
-    if(String(data.MoTa) !== ''){
-        var Motacuoi = String(data.MoTa).split(',')
-        Motacuoi = Motacuoi[Motacuoi.length - 2];
-        if(!danhsachcheckMota.includes(Motacuoi)){
-            if(String(Motacuoi) != ''){
-                $(".input-more-checkbox").show();
-                document.getElementsByClassName("form-check-input").item(danhsachcheckMota.length).checked = true;
-                document.getElementsByClassName('input-more-checkbox').item(0).value = Motacuoi;
+
+        if(String(data.MoTa) !== ''){
+            var Motacuoi = String(data.MoTa).split(',')
+            Motacuoi = Motacuoi[Motacuoi.length - 2];
+            if(!danhsachcheckMota.includes(Motacuoi)){
+                if(String(Motacuoi) != ''){
+                    $(".input-more-checkbox").show();
+                    document.getElementsByClassName("form-check-input").item(danhsachcheckMota.length).checked = true;
+                    document.getElementsByClassName('input-more-checkbox').item(0).value = Motacuoi;
+                }else{
+                    $(".input-more-checkbox").hide();
+                    document.getElementsByClassName("form-check-input").item(danhsachcheckMota.length).checked = false;
+                }
             }else{
-                $(".input-more-checkbox").hide();
+                $(".input-more-checkbox").hide()
                 document.getElementsByClassName("form-check-input").item(danhsachcheckMota.length).checked = false;
             }
         }else{
@@ -499,15 +536,9 @@ function LoadSuaDoan(data){
             document.getElementsByClassName("form-check-input").item(danhsachcheckMota.length).checked = false;
         }
     }else{
-        $(".input-more-checkbox").hide()
-        document.getElementsByClassName("form-check-input").item(danhsachcheckMota.length).checked = false;
-    }
-    }else{
-        file1 = false;
         $(".display-checkbox").hide()
         $('.add-file-add-row').show();
     }
-
 
     $('.Add-New-Row').append(returnFormBtn(nutSuaDoan,maunutSuaDoan,idnutSuaDoan));
 
@@ -522,24 +553,17 @@ function LoadSuaDoan(data){
 
     document.getElementById('selectedFile').onchange = function() {
         ResetCheckbox();
+        document.getElementsByClassName('input-more-checkbox').item(0).value = '';
+        document.getElementsByClassName("form-check-input").item(danhsachcheckMota.length).checked = false;
+        checkfileupdate = true;
         var fullPath = document.getElementById('selectedFile').value;
         if (fullPath) {
-            var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
-            var filename = fullPath.substring(startIndex);
-            if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
-                filename = filename.substring(1);
-            }
-            let countfile = 0;
-            if(file1 == false){ countfile = 1; contentfile1 = document.getElementById("selectedFile").files[0]; file1 = true, filename1 = filename}
-            $('.uploadfile-tag').append('<span id="contentfile-'+countfile+'" class="item-add-file-upload"><span>'+filename+'</span>   <span>   <svg height="20px"    viewBox="0 0 512.171 512.171" width="20px"> <path d="m243.1875 182.859375 113.132812-113.132813c12.5-12.5 12.5-32.765624 0-45.246093l-15.082031-15.082031c-12.503906-12.503907-32.769531-12.503907-45.25 0l-113.128906 113.128906-113.132813-113.152344c-12.5-12.5-32.765624-12.5-45.246093 0l-15.105469 15.082031c-12.5 12.503907-12.5 32.769531 0 45.25l113.152344 113.152344-113.128906 113.128906c-12.503907 12.503907-12.503907 32.769531 0 45.25l15.082031 15.082031c12.5 12.5 32.765625 12.5 45.246093 0l113.132813-113.132812 113.128906 113.132812c12.503907 12.5 32.769531 12.5 45.25 0l15.082031-15.082031c12.5-12.503906 12.5-32.769531 0-45.25zm0 0"/> </svg>  </span> </span>   ')
-            if(file1 == true){
-                $(".display-checkbox").show()
-                $('.add-file-add-row').hide();
-            }
+            contentfile = document.getElementById("selectedFile").files[0];
+            $('.uploadfile-tag').append('<span id="contentfile-'+1+'" class="item-add-file-upload"><span>'+contentfile['name']+'</span>   <span>   <svg height="20px"    viewBox="0 0 512.171 512.171" width="20px"> <path d="m243.1875 182.859375 113.132812-113.132813c12.5-12.5 12.5-32.765624 0-45.246093l-15.082031-15.082031c-12.503906-12.503907-32.769531-12.503907-45.25 0l-113.128906 113.128906-113.132813-113.152344c-12.5-12.5-32.765624-12.5-45.246093 0l-15.105469 15.082031c-12.5 12.503907-12.5 32.769531 0 45.25l113.152344 113.152344-113.128906 113.128906c-12.503907 12.503907-12.503907 32.769531 0 45.25l15.082031 15.082031c12.5 12.5 32.765625 12.5 45.246093 0l113.132813-113.132812 113.128906 113.132812c12.503907 12.5 32.769531 12.5 45.25 0l15.082031-15.082031c12.5-12.503906 12.5-32.769531 0-45.25zm0 0"/> </svg>  </span> </span>   ')
+            $(".display-checkbox").show()
+            $('.add-file-add-row').hide();
         }
     };
-    console.log(data)
-    console.log(data.MaCT)
     NUMBERFILE = data.MaCT;
 }
 
@@ -551,7 +575,7 @@ function loadSuaDoan(){
     var filedoc = '';
     var ischangefile = 'x';
     if(checkfileupdate === true){
-        filedoc = filename1;
+        filedoc = namefilex;
         ischangefile = 's';
     }
     var checkedValue = []; 
@@ -575,6 +599,112 @@ function loadSuaDoan(){
 
 
 ////////////////////////////
+function LoadTailieu(data){
+    pageStatus = 2;
+
+    var listtailieu = [];
+    var trangthai;
+    for(var i = 0; i < data.length; i++){
+        if(Number(data[i].MaCT) == String(MaCTTailieu) && String(MaCTTailieu) != 'null') trangthai = 'Đã phân công';
+        else trangthai = 'Chưa phân công';
+        listtailieu.push({tep:data[i].Tep_Goc,giangvien: data[i].MaGV + '-' + data[i].TenNV,thoigian: data[i].ThoiGian, trangthai:trangthai });
+    }
+
+    $('#button-bar').show();
+    $('#table_data').show();
+    $('.btn-follow-row').show();
+    $('.nav-page').show();
+    $('.label-bar').show();
+
+    $('.chose-bar').hide();
+    $('.switch-bar').hide();
+    $('#head-bar').hide();
+    $('.Add-New-Row').hide();
+    $('.Detail-project').hide();
+    $('#detail-bar').hide()
+
+    $('#button-bar').empty();
+    $('.chose-bar').empty();
+    $('#table_data').empty();
+    $('.btn-follow-row').empty();
+    $('.nav-page').empty();
+    $('.label-bar').empty();
+    $('#head-bar').empty();
+
+    $('#button-bar').append(returnIconHome() + returnNameIndex('Đồ án') + returnNameIndex('Tài liệu')  +  returnReturnBtn());
+    if(pagelist == 2)  $('.label-bar').append( '<div id="label-table"> <span> Đồ án: '+MaDoan+'-'+TenDoan+' </span>  <button id="btn-upfile-label">Thêm tệp</button>  </div>' )
+    else $('.label-bar').append( '<div id="label-table"> <span> Đồ án: '+MaDoan+'-'+TenDoan+' </span>   </div>' )
+
+    $('#table_data').append(returnTable(tieudeBangTailieu,listtailieu));
+    $('.btn-follow-row').append(returnButtonTable(['Phân công'],['phancong']));
+    $('.nav-page').append(returNavForm(tol_page+1, page_num));
+    console.log(data);
+}
+
+
+function loadAddThemFile(){
+
+    namefilex = MaGV+MaDoan+getCurrentTimex().replace(/\D/g,'')+contentfile['name'];
+    var formData = new FormData();
+    formData.append("file", contentfile);        
+    formData.append("namefile", namefilex);                            
+    xhttp.open("POST", '/api/upfile_doan');
+    xhttp.send(formData);
+
+
+    var chuyennganh = MaChuyennganh;
+    var filedoc = namefilex;
+    var ischangefile = 'x';
+    if(checkaddthemfile === true){
+        ischangefile = 's';
+    }
+    var checkedValue = []; 
+    var inputElements = document.getElementsByClassName('form-check-input');
+    for(var i=0; inputElements[i]; ++i){
+          if(inputElements[i].checked){
+               checkedValue.push(inputElements[i].value);
+          }
+    }
+    if(checkedValue.includes('khac')){
+        checkedValue.push(document.getElementsByClassName('input-more-checkbox').item(0).value)
+    }
+    var infotep = '';
+    for(var i = 0; i < checkedValue.length; i++){
+        if(String(checkedValue[i]) !== 'khac')
+        infotep = infotep + checkedValue[i] + ',';
+    }
+    console.log("/api/suadoan?MaDoan="+MaDoan+"&TenDoan="+TenDoan+"&chuyennganh="+chuyennganh+"&ngay="+getCurrentTime()+"&MaGV="+MaGV+"&filedoc="+filedoc+"&infotep="+infotep+"&NUMBERFILE="+NUMBERFILE+"&ischangefile="+ischangefile)
+    xhttp.open("GET", "/api/suadoan?MaDoan="+MaDoan+"&TenDoan="+TenDoan+"&chuyennganh="+chuyennganh+"&ngay="+getCurrentTime()+"&MaGV="+MaGV+"&filedoc="+filedoc+"&infotep="+infotep+"&NUMBERFILE="+NUMBERFILE+"&ischangefile="+ischangefile, false);
+    xhttp.send();
+}
+
+function LoadThemFile(){
+
+
+    $("#tep-tai-lieu").val(null);
+    ResetCheckbox();
+    document.getElementsByClassName('input-more-checkbox').item(0).value = '';
+    document.getElementsByClassName("form-check-input").item(danhsachcheckMota.length).checked = false;
+
+    $("#check-khac").change(function() {
+        if(this.checked){
+            $(".input-more-checkbox").show();
+        }else{
+            $(".input-more-checkbox").hide();
+        }
+    });
+
+    document.getElementById('tep-tai-lieu').onchange = function() {
+        ResetCheckbox();
+        document.getElementsByClassName('input-more-checkbox').item(0).value = '';
+        document.getElementsByClassName("form-check-input").item(danhsachcheckMota.length).checked = false;
+
+        var fullPath = document.getElementById('tep-tai-lieu').value;
+        if (fullPath) {
+            contentfile = document.getElementById("tep-tai-lieu").files[0];
+        }
+    };
+}
 
 
 function LoadPhancongTailieu(doan,listsinhvien){
@@ -603,7 +733,6 @@ function LoadPhancongTailieu(doan,listsinhvien){
     $('#detail-bar').empty();
 
     $('#button-bar').append(returnIconHome() + returnNameIndex('Đồ án') + returnNameIndex('Tài liệu')  + returnNameIndex('Phân công')  + returnReturnBtn());
-
 
     $('#detail-bar').append(
         '<span id="thongtin-doan">'+
@@ -649,19 +778,13 @@ function LoadPhancongTailieu(doan,listsinhvien){
     }else{
         MaSV = doan.MaSV;
     }
-
     $('.select-sinh-vien').on('change', function() {
         MaSV = this.value;
         loadInfoSvPhancongtailieu(this.value);
     });
-    
     $('#detail-bar').append('<button class="phancong-sinhvien-doan-btn">Phân công</button>')
     loadInfoSvPhancongtailieu(MaSV);
 }
-
-
-
-
 
 function LoadInfoSvPhancongtailieu(infosv){
     $('#thongtin-sv').empty();
@@ -678,58 +801,16 @@ function LoadInfoSvPhancongtailieu(infosv){
     )
 }
 
-function LoadTailieu(data){
-    pageStatus = 2;
-
-    var listtailieu = [];
-    var trangthai;
-    for(var i = 0; i < data.length; i++){
-        if(Number(data[i].TrangThai) == 0) trangthai = 'Chưa';
-        else trangthai = 'Đã';
-        listtailieu.push({tep:data[i].Tep_Goc,giangvien: data[i].MaGV + '-' + data[i].TenNV,thoigian: data[i].ThoiGian, trangthai:trangthai });
-    }
-
-    $('#button-bar').show();
-    $('#table_data').show();
-    $('.btn-follow-row').show();
-    $('.nav-page').show();
-    $('.label-bar').show();
-
-    $('.chose-bar').hide();
-    $('.switch-bar').hide();
-    $('#head-bar').hide();
-    $('.Add-New-Row').hide();
-    $('.Detail-project').hide();
-    $('#detail-bar').hide()
-
-    $('#button-bar').empty();
-    $('.chose-bar').empty();
-    $('#table_data').empty();
-    $('.btn-follow-row').empty();
-    $('.nav-page').empty();
-    $('.label-bar').empty();
-    $('#head-bar').empty();
-
-    $('#button-bar').append(returnIconHome() + returnNameIndex('Đồ án') + returnNameIndex('Tài liệu')  +  returnReturnBtn());
-    $('.label-bar').append( '<div id="label-table"> Đồ án: '+MaDoan+'-'+TenDoan+'</div>' )
-
-    $('#table_data').append(returnTable(tieudeBangTailieu,listtailieu));
-    $('.btn-follow-row').append(returnButtonTable(['Phân công'],['phancong']));
-    $('.nav-page').append(returNavForm(tol_page+1, page_num));
-
-    console.log(data);
-}
-
 
 //CLICK-----------------------------------------------
 async function EventTeacherClick(event) {
     var x = event.target;
+    ///COLLUM TABLE
     if( x.parentNode.className == "no-color-lum-table"){
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#no-color-btn-follow-row').attr("id", "yes-color-btn-follow-row");
         x.parentNode.className = 'yes-color-lum-table';
         currentrowtable = Number(x.parentNode.id.replace('collumtalbe-',''));
-        // console.log(listinfoitem[currentrowtable].pbFileKhac,  listinfoitem[currentrowtable].totalPC)
         if(listinfoitem[currentrowtable].pbFileKhac == 1 || listinfoitem[currentrowtable].totalPC == 1){
             document.querySelector('#yes-color-btn-follow-row div:first-child').style.background = "rgba(70, 100, 145, 0.233)";
             document.querySelector('#yes-color-btn-follow-row div:nth-child(2)').style.background = "rgba(202, 107, 72, 0.26)";
@@ -737,91 +818,10 @@ async function EventTeacherClick(event) {
             document.querySelector('#yes-color-btn-follow-row div:first-child').style.background = "rgb(70, 100, 145)";
             document.querySelector('#yes-color-btn-follow-row div:nth-child(2)').style.background = "rgb(202, 107, 72)";
         }
-    }else if(x.parentNode.className == 'btn-follow-row'){
-        if(x.id == "tailieu"){
-            MaDoan = listinfoitem[currentrowtable].MaDA;
-            TenDoan = listinfoitem[currentrowtable].TenDA;
-            loadListTailieu()
-        }
-        if(x.id == "xoa"){
-            MaDoan = listinfoitem[currentrowtable].MaDA;
-            loadXoaDoan();
-        }
-        if(x.id == "phancong"){
-            MaCT = listinfoitem[currentrowtable].MaCT;
-            console.log(MaCT);
-            loadFirstPhancongtailieu();
-        }
-        if(x.id == 'sua'){
-            if(listinfoitem[currentrowtable].pbFileKhac == 0 && listinfoitem[currentrowtable].totalPC == 0){
-                MaDoan = listinfoitem[currentrowtable].MaDA;
-                dieukiensuadoan();
-            }
-        }
-    }else if(x.parentNode.parentNode.className == 'item-add-file-upload'){
-        x.parentNode.parentNode.parentNode.removeChild(x.parentNode.parentNode);
-        checkfileupdate = true;
-        console.log('delete');
-        $(".display-checkbox").hide();
-        console.log(Number(String(x.parentNode.parentNode.id).replace('contentfile-','')))
-        if(Number(String(x.parentNode.parentNode.id).replace('contentfile-','')) == 1){ contentfile1 = '' ; file1 = false};
-        if(Number(String(x.parentNode.parentNode.id).replace('contentfile-','')) == 2){ contentfile2 = '' ; file2 = false};
-        if(file1 == false || file2 == false){
-            $('.add-file-add-row').show();
-        }
-    }else if(x.parentNode.parentNode.parentNode.className == 'item-add-file-upload'){
-        x.parentNode.parentNode.parentNode.parentNode.removeChild(x.parentNode.parentNode.parentNode);
-        checkfileupdate = true;
-        console.log('deletxe')
-        $(".display-checkbox").hide();
-        console.log(Number(String(x.parentNode.parentNode.parentNode.id).replace('contentfile-','')))
-        if(Number(String(x.parentNode.parentNode.parentNode.id).replace('contentfile-','')) == 1) { contentfile1 = '' ; file1 = false};
-        if(Number(String(x.parentNode.parentNode.parentNode.id).replace('contentfile-','')) == 2) { contentfile2 = '' ; file2 = false};
-        if(file1 == false || file2 == false){
-            $('.add-file-add-row').show();
-        }
-    }else if(x.className == "add_new_btn" || x.parentNode.className == "add_new_btn" || x.parentNode.parentNode.className == "add_new_btn" ||  x.parentNode.parentNode.parentNode.className == "add_new_btn"){
-        dieukienthemdoan();
-    }else if(x.className == "return_btn" || x.parentNode.className == "return_btn" || x.parentNode.parentNode.className == "return_btn" ||  x.parentNode.parentNode.parentNode.className == "return_btn"){
-        $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
-        $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
-        if(pageStatus <= 2){
-        LoadHeadPage1();
-        if(pagelist == 1) loadListDoanCanhan();
-        else if((pagelist == 2)) loadListDoanTatca();
-        }else if(pageStatus == 3){
-            loadListTailieu()
-        }
-    }else if(x.id == "them" ){
-        loadAddDoan();
-        if(file1 == true){
-            console.log('thuc hien 1')
-            var formData = new FormData();
-            formData.append("file", contentfile1);                                
-            xhttp.open("POST", '/api/upfile_doan');
-            xhttp.send(formData);
-        }
-        if(file2 == true){
-            await new Promise(resolve => setTimeout(resolve, 3000));
-            console.log('thuc hien 2')
-            var formData = new FormData();
-            formData.append("file", contentfile2);                                
-            xhttp.open("POST", '/api/upfile_doan');
-            xhttp.send(formData);
-        }
+    }
 
-    }else if(x.id == "suax" ){
-        loadSuaDoan();
-        if(checkfileupdate == true){
-        if(file1 == true){
-            console.log('thuc hien 1')
-            var formData = new FormData();
-            formData.append("file", contentfile1);                                
-            xhttp.open("POST", '/api/upfile_doan');
-            xhttp.send(formData);
-        }
-        }
-    }else if(x.className == "loadswitch1"){
+    ///SWITCH BTN
+    else if(x.className == "loadswitch1"){
         $('#activeswitchbar').removeAttr('id');
         x.id = 'activeswitchbar';
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
@@ -835,22 +835,150 @@ async function EventTeacherClick(event) {
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
         page_num = 1;
         loadListDoanTatca();
-    }else if(x.parentNode.className == "nav-page" ){
+    }
+
+    ///BUTTON TABLE
+    else if(x.parentNode.className == 'btn-follow-row'){
+        if(x.id == 'sua'){
+            if(listinfoitem[currentrowtable].pbFileKhac == 0 && listinfoitem[currentrowtable].totalPC == 0){
+                MaDoan = listinfoitem[currentrowtable].MaDA;
+                dieukiensuadoan();
+            }
+        }
+        if(x.id == "xoa"){
+            MaDoan = listinfoitem[currentrowtable].MaDA;
+            loadXoaDoan();
+        }
+        if(x.id == "phancong"){
+            MaCT = listinfoitem[currentrowtable].MaCT;
+            console.log(MaCT);
+            loadFirstPhancongtailieu();
+        }
+        if(x.id == "tailieu"){
+            MaDoan = listinfoitem[currentrowtable].MaDA;
+            TenDoan = listinfoitem[currentrowtable].TenDA;
+            MaCTTailieu = listinfoitem[currentrowtable].MaCT;
+            loadListTailieu()
+            $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
+            $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
+        }
+    }
+
+    ///NAV-PAGE
+    else if(x.parentNode.className == "nav-page" ){
         if(pageStatus == 1){
             page_num = Number(x.innerHTML);
             LoadHeadPage1();
             if(pagelist == 1) loadListDoanCanhan();
             else if((pagelist == 2)) loadListDoanTatca();
         }
-    }else if(x.className == "phancong-sinhvien-doan-btn"){
+    }
+    
+    ///DELETE ITEM FILE
+    else if(x.parentNode.parentNode.className == 'item-add-file-upload'){
+        checkfileupdate = true;
+        x.parentNode.parentNode.parentNode.removeChild(x.parentNode.parentNode);
+        $(".display-checkbox").hide();
+        $('.add-file-add-row').show();
+        console.log('delete');
+    }else if(x.parentNode.parentNode.parentNode.className == 'item-add-file-upload'){
+        checkfileupdate = true;
+        x.parentNode.parentNode.parentNode.parentNode.removeChild(x.parentNode.parentNode.parentNode);
+        $(".display-checkbox").hide();
+        $('.add-file-add-row').show();
+        console.log('deletxe');
+    }
+
+    ///ADD NEW BTN
+    else if(x.className == "add_new_btn" || x.parentNode.className == "add_new_btn" || x.parentNode.parentNode.className == "add_new_btn" ||  x.parentNode.parentNode.parentNode.className == "add_new_btn"){
+        dieukienthemdoan();
+    }
+    
+    ///RETURN BTN
+    else if(x.className == "return_btn" || x.parentNode.className == "return_btn" || x.parentNode.parentNode.className == "return_btn" ||  x.parentNode.parentNode.parentNode.className == "return_btn"){
+        $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
+        $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
+        if(pageStatus <= 2){
+        LoadHeadPage1();
+        if(pagelist == 1) loadListDoanCanhan();
+        else if((pagelist == 2)) loadListDoanTatca();
+        }else if(pageStatus == 3){
+            loadListTailieu()   
+        }
+    }
+    
+    /// THOAT BTN
+    else if(x.id == "thoat" ){
+        $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
+        $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
+        if(pageStatus <= 2){
+        LoadHeadPage1();
+        if(pagelist == 1) loadListDoanCanhan();
+        else if((pagelist == 2)) loadListDoanTatca();
+        }else if(pageStatus == 3){
+            loadListTailieu()   
+        }
+    }
+    
+    ///XAC NHAN THEM BTN
+    else if(x.id == "them" ){
+        namefilex = MaGV+MaDoan+getCurrentTimex().replace(/\D/g,'')+contentfile['name'];
+        var formData = new FormData();
+        formData.append("file", contentfile);        
+        formData.append("namefile", namefilex);                            
+        xhttp.open("POST", '/api/upfile_doan');
+        xhttp.send(formData);
+        loadAddDoan();
+    }
+    
+    ///XAC NHAN SUA BTN
+    else if(x.id == "suax" ){
+        if(checkfileupdate == true){
+            namefilex = MaGV+MaDoan+getCurrentTimex().replace(/\D/g,'')+contentfile['name'];
+            var formData = new FormData();
+            formData.append("file", contentfile);        
+            formData.append("namefile", namefilex);                            
+            xhttp.open("POST", '/api/upfile_doan');
+            xhttp.send(formData);
+            loadSuaDoan();
+        }else{
+            loadSuaDoan();
+        }
+    }
+    
+    ///PHAN CONG TAILIEUBTN
+    else if(x.className == "phancong-sinhvien-doan-btn"){
         console.log(MaDoan,MaGV,MaSV,MaCT)
         xhttp.open("GET", "/api/add-phancong-tailieu?MaDoan="+MaDoan+"&MaGV="+MaGV+"&MaSV="+MaSV+"&MaCT="+MaCT, false);
-        xhttp.send();
-        
-    }else{
+        xhttp.send();    
+    }
+    
+    ///UPLOAD FILE BTN
+    else if(x.id == "btn-upfile-label"){
+        $('.Form-input-file').show();
+        $('.shadow-input-diem').show();
+        LoadThemFile();
+    }else if(x.id == "btn-thoat-diem"){
+        $('.Form-input-file').hide();
+        $('.shadow-input-diem').hide();
+    }else if(x.id == "btn-nhap-diem"){
+        loadCheckFileuploadTailieu();
+
+    }
+    
+    
+
+    
+    ///ELSE
+    else{
+        if(document.querySelector('#yes-color-btn-follow-row div:first-child')){
+            document.querySelector('#yes-color-btn-follow-row div:first-child').style.background = "rgba(70, 100, 145, 0.233)";
+            document.querySelector('#yes-color-btn-follow-row div:nth-child(2)').style.background = "rgba(202, 107, 72, 0.26)";
+        }
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
     }
 }
 //FIRST---------------------------------------------------------
 loadListDoan();
+

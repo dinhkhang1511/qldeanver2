@@ -270,7 +270,7 @@
     position: relative;
     float: left;
     background-color:rgb(255, 255, 255);
-    width: calc(100% - 1px);
+    width: calc(100% - 2px);
     margin-left: 1px;
     margin-top: 10px;
     padding: 5px;
@@ -1254,6 +1254,7 @@ p:nth-child(odd) {
 }
 
 #contain-form-group{
+    float: left;
     width: 70%;
     margin-left: 15%;
     margin-top: 10%;
@@ -1708,4 +1709,44 @@ iframe {
     margin-top: 9px;
     position: relative;
     
+}
+
+#btn-upfile-label{
+    padding: 1px 10px;
+    border: none;
+    border-radius: 3px;
+    color: white;
+    background-color: tomato;
+    float: right;
+    margin-right: 7px;
+    cursor: pointer;
+}
+
+
+
+.Form-input-file{
+    display: none;
+    position: absolute;
+    z-index: 10;
+    left: calc(50% - 150px);
+    transform: translateX(calc(-50% - 150px));
+    top: 50%;
+    transform: translateY(-50%);
+    height: 300px;
+    width: 300px;
+    background-color: rgb(252, 252, 252);
+    box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.329);
+    border-radius: 4px;
+}
+
+
+.up-file-tailieu{
+    position: relative;
+    float: left;
+    margin-left: 15%;
+    width: calc(100% - 15%);
+    height: auto;
+    background-color: white;
+    border-radius: 3px;
+    margin-top: -10px;
 }

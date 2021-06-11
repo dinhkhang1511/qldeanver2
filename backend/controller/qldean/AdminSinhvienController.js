@@ -244,7 +244,23 @@ module.exports = async (callback, scanner) => {
                 Khoatemp = Number(line.split(',')[2]);
             }
         });
+
         lineReader.on('close', async function () {
+
+            ///SUA LOI XUNG DOT ///
+            listKhoa = await Model.InleSQL("call ComboBox_Khoa('"+MaNghanh+"')");
+            listKhoa = listKhoa[0];
+            let templistcheck = [];
+            for(let o = 0; o < listKhoa.length; o++){
+                templistcheck.push(Number(listKhoa[o].namBD));
+            }
+            templistcheck = bubbleSort(templistcheck);
+            console.log(Number(templistcheck[0]) + 'xxxxxxxxxxx')
+            if(Khoa > Number(templistcheck[0])){
+                Khoa = Number(templistcheck[0]);
+            }
+            ////////
+
             console.log(String(MaAdmin+','+MaNghanh+','+Khoa), String(MaAdmin+','+MaNghanhtemp+','+Khoatemp))
             fs.readFile("controller/qldean/Text/AdminStatus.txt", 'utf8', function (err,data) {
                 let formatted = data.replace( String(MaAdmin+','+MaNghanhtemp+','+Khoatemp),String(MaAdmin+','+MaNghanh+','+Khoa));
@@ -302,6 +318,4 @@ module.exports = async (callback, scanner) => {
               callback(JSON.stringify(result1), 'application/json');
           }
     }
-
-
 }

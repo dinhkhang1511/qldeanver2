@@ -71,6 +71,9 @@ module.exports = (setroute = require("./Setroute")) => {
     setroute.pushRoute(root_1,"GET","api/themdoan", "qldean/TeacherController@themdoan");
     setroute.pushRoute(root_1,"GET","api/danhsachtatcadoan", "qldean/TeacherController@danhsachtatcadoan");
     setroute.pushRoute(root_1,"GET","api/danhsachdoanhuongdan", "qldean/TeacherController@danhsachdoanhuongdan");
+    setroute.pushRoute(root_1,"GET","api/IsExitFileHD", "qldean/TeacherController@IsExitFileHD");
+
+    
 
     setroute.pushRoute(root_1,"GET","api/danhsach-chamdiem-huongdan", "qldean/TeacherController@danhsach-chamdiem-huongdan");
     setroute.pushRoute(root_1,"GET","api/loadChamdiemhuongdan", "qldean/TeacherController@loadChamdiemhuongdan");

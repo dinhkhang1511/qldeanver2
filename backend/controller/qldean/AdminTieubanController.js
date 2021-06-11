@@ -98,6 +98,21 @@ module.exports = async (callback, scanner) => {
             }
         });
         lineReader.on('close', async function () {
+
+            ///SUA LOI XUNG DOT ///
+            listKhoa = await Model.InleSQL("call ComboBox_Khoa('"+MaNghanh+"')");
+            listKhoa = listKhoa[0];
+            let templistcheck = [];
+            for(let o = 0; o < listKhoa.length; o++){
+                templistcheck.push(Number(listKhoa[o].namBD));
+            }
+            templistcheck = bubbleSort(templistcheck);
+            console.log(Number(templistcheck[0]) + 'xxxxxxxxxxx')
+            if(Khoa > Number(templistcheck[0])){
+                Khoa = Number(templistcheck[0]);
+            }
+            ////////
+
             console.log(String(MaAdmin+','+MaNghanh+','+Khoa), String(MaAdmin+','+MaNghanhtemp+','+Khoatemp))
             fs.readFile("controller/qldean/Text/AdminStatus.txt", 'utf8', function (err,data) {
                 let formatted = data.replace( String(MaAdmin+','+MaNghanhtemp+','+Khoatemp),String(MaAdmin+','+MaNghanh+','+Khoa));
@@ -210,17 +225,21 @@ module.exports = async (callback, scanner) => {
     }
     
     if(index === 'danhsachGVphancongTB'){
+        let MaTB = head_params.get('MaTB');
         let MaNghanh = head_params.get('MaNghanh');
         let ngay = String(head_params.get('ngay')).replace('T17:00:00.000Z','');
         let ca = head_params.get('ca');
-        console.log("call ComboBox_PhanCongGVTB('"+MaNghanh+"', '"+ngay+"', '"+ca+"')")
-        let  result1 = await Model.InleSQL("call ComboBox_PhanCongGVTB('"+MaNghanh+"', '"+ngay+"', '"+ca+"')");
-        console.log(result1)    
-        if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
-                callback(JSON.stringify("that bai"), 'application/json');
-            }else{
-                callback(JSON.stringify(result1), 'application/json');
-            }
+
+        let result1 = await Model.InleSQL("call ComboBox_PhanCongGVTB('"+MaNghanh+"', '"+ngay+"', '"+ca+"')");
+        let result2 = await Model.InleSQL("call ShowInfor_TB('"+MaTB+"')");
+
+        console.log("call ShowInfor_TB('"+MaTB+"')")
+
+        let data = [];
+        data.push(result1);
+        data.push(result2);
+
+        callback(JSON.stringify(data), 'application/json');
     }
 
     if(index === 'checkaddGVintoTieuban'){
@@ -234,20 +253,8 @@ module.exports = async (callback, scanner) => {
         let TB = head_params.get('TB');
         let listGVSQL = String(head_params.get('listGVSQL'));
 
-        console.log("call PhanCong_GVTB('"+listGVSQL+"','"+TB+"')")
-        // let GV1 = head_params.get('GV1');
-        // let GV2 = head_params.get('GV2');
-        // let GV3 = head_params.get('GV3');
-        // let GV4 = head_params.get('GV4');
-        // let GV5 = head_params.get('GV5');
-    
         let  result1 = await Model.InleSQL("call PhanCong_GVTB('"+listGVSQL+"','"+TB+"')");
 
-    //    let  result1 = await Model.InleSQL("insert into phanconggvtb (MaGV, MaTB) values ('"+GV1+"', '"+TB+"')");
-    //         result1 = await Model.InleSQL("insert into phanconggvtb (MaGV, MaTB) values ('"+GV2+"', '"+TB+"')");
-    //         result1 = await Model.InleSQL("insert into phanconggvtb (MaGV, MaTB) values ('"+GV3+"', '"+TB+"')");
-    //         result1 = await Model.InleSQL("insert into phanconggvtb (MaGV, MaTB) values ('"+GV4+"', '"+TB+"')");
-    //         result1 = await Model.InleSQL("insert into phanconggvtb (MaGV, MaTB) values ('"+GV5+"', '"+TB+"')");
         console.log(result1)    
         if(String(result1).includes('Duplicate entry') || String(result1).includes('fail')){
                 callback(JSON.stringify("that bai"), 'application/json');

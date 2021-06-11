@@ -215,6 +215,9 @@ module.exports = async (callback, scanner) => {
         let page = Number(head_params.get('page')) - 1;
 
         let count = await Model.InleSQL("select CountList_DA('"+MaChuyennganh+"') AS Number;");
+
+
+        console.log("select CountList_DA('"+MaChuyennganh+"') AS Number;")
         let select = await Model.InleSQL("call ShowList_DA('"+MaChuyennganh+"',"+limit*page+");");
 
         let data = [];
@@ -439,5 +442,19 @@ module.exports = async (callback, scanner) => {
         }else{
             callback(JSON.stringify(result1), 'application/json');
         }
+    }
+
+    if(index === 'IsExitFileHD'){
+        let MaGV = head_params.get('MaGV');
+        let MaDA = head_params.get('MaDA');
+
+        let result = await Model.InleSQL("SELECT IsExitFileHD('"+MaDA+"', '"+MaGV+"') AS Number;"); 
+
+        console.log("SELECT IsExitFileHD('"+MaDA+"', '"+MaGV+"');");
+
+        let data = [];
+        data.push(result);
+        callback(JSON.stringify(data), 'application/json');
+
     }
 }

@@ -65,7 +65,7 @@ function getCurrentTimex(){
   }
 
   var date = today.getFullYear()+'-'+Moth+'-'+Day;
-  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  var time = Gio + ":" + Phut + ":" + Giay;
   return date+' '+time;
 }
 
