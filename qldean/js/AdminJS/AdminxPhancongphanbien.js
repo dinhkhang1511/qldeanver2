@@ -1,9 +1,13 @@
+$( "#act-phancongphanbien" ).addClass( "active" );
+
 var listinfoitem;
 let currentrowtable;
 var page_num = 1;
 var tol_page = 0;
 
-var MaAdmin = getCookie('userlogin');
+$("#name-user").empty();
+$("#name-user").append('Admin: ' + getCookie('QLNAME'));
+var MaAdmin = getCookie('QL');
 
 var tieudeBangPB = ['Mã sinh viên','Tên sinh viên','Email','Điểm HD','Mã GVPB','Điểm'];
 var tennutBangPB = ['Phân công'];
@@ -25,10 +29,6 @@ var listkhoa = [];
 var listnghanh = [];
     var listmanganh = [];
     var listtennghanh = [];
-
-$(".left-bar").load("/qldean/Admin/SlideBarCollapse.html",function () {
-    $( "#act-phancongphanbien" ).addClass( "active" );
-});
 
 
 var xhttp = new XMLHttpRequest();
@@ -360,6 +360,11 @@ function EventAdminClick(event) {
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
     }else if(x.className == 'phancong-sinhvien-doan-btn'){
         loadAddPhancongPhanbien();
+    }else if(x.id == "logout" ||  x.parentNode.id == "logout" || x.parentNode.parentNode.id == "logout"){
+        if (confirm('Bạn có muốn đăng xuất')) {
+            window.location.replace("/login");
+          } else {
+          }
     }else{
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");

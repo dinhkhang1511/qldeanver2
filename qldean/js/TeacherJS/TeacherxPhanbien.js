@@ -1,9 +1,15 @@
+$( "#act-phanbien" ).addClass( "active" );
+
 var listinfoitem;
 var page_num = 1;
 var tol_page = 1;
 
-console.log(getCookie('userlogin') + 'mã đăng nhập')
-var MaGV = getCookie('userlogin');
+$("#name-user").empty();
+$("#name-user").append('GV: ' + getCookie('GVNAME'));
+var MaGV = getCookie('GV');
+console.log(MaGV + ':MÃ')
+
+
 var MaPC = "";
 var MaCT = "";
 var MaSV = "";
@@ -20,9 +26,6 @@ var listBtnpk =  ['Thêm','Thoát'];
 var listColorpk = ['tomato', 'green'];
 var listIdBtn = ['them', 'thoa'];
 
-$(".left-bar").load("/qldean/Teacher/SlideBarCollapse.html",function () {
-    $( "#act-phanbien" ).addClass( "active" );
-});
 
 var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -263,6 +266,11 @@ function EventTeacherClick(event) {
         $('.Form-input-diem').hide();
         $('.shadow-input-diem').hide();
 
+    }else if(x.id == "logout" ||  x.parentNode.id == "logout" || x.parentNode.parentNode.id == "logout"){
+        if (confirm('Bạn có muốn đăng xuất')) {
+            window.location.replace("/login");
+          } else {
+          }
     }else{
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");

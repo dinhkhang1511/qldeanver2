@@ -67,17 +67,17 @@
 							</label>
 						</div>
 
-						<div>
+						<!-- <div>
 							<a href="#" class="txt1">
 								Quên mật khẩu
 							</a>
-						</div>
+						</div> -->
 					</div>
 
 					<div class="container-login100-form-btn">
-						<button  onclick="LoadLogin()" class="login100-form-btn">
+						<div style="cursor: pointer;" onclick="LoadLogin()" class="login100-form-btn">
 							Đăng nhập
-						</button>
+						</div>
 					</div>
 				</form>
 			</div>
@@ -107,8 +107,22 @@
 
 <script>
 	function LoadLogin(){
+		
+		console.log(String(document.getElementById('passwordinput').value))
+		console.log('/api/login?username='+String(document.getElementById('teninput').value)+'&pass='+String(document.getElementById('passwordinput').value))
+		$.getJSON('/api/login?username='+String(document.getElementById('teninput').value)+'&pass='+String(document.getElementById('passwordinput').value), function(data) {
+			console.log(data)
+			if(String(data[0]) != 'null'){
+			setCookie(String(data[0]), data[1] , 1);
+			setCookie(String(data[2]), data[3] , 1);
+			if(String(data[0]) === 'QL') window.location.replace("/admin/quanlytieuban");
+			if(String(data[0]) === 'GV') window.location.replace("/giangvien/danhsachdoan");
+			if(String(data[0]) === 'SV') window.location.replace("/thongtindoan");
+			}else{
+				alert('Nhập sai mật khẩu hoặc tên đăng nhập!')
+			}
+		});
+	
 
-		setCookie('userlogin', String(document.getElementById('teninput').value).trim() , 1)
-		console.log("Xxxxxxx")
     }
 </script>

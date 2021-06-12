@@ -8,52 +8,23 @@ module.exports = async (callback, scanner) => {
     let head_params = scanner.head_params;
 
 
-    //call CheckLogin('GVCN006','GVCN006#151187')
-    //call CheckLogin('QL001','QL001#010621')
+    //call CheckLogin('GVCN006','GVCN006#19871114')
+    //call CheckLogin('QL001','QL001#14111987')
 
     if(index === 'login'){
-
         let username = String(head_params.get('username'))
         let pass = String(head_params.get('pass'))
+        pass = pass.replace('@','#');
 
+        console.log(username,pass)
 
         let count = await Model.InleSQL("call CheckLogin('"+username+"','"+pass+"')");
 
+        console.log(count)
 
-
-        console.log(count[0][0]['Quyen'] + 'xxxx')
-
-
-        if(String(count[0][0]['Quyen']) === 'SV'){
-            scanner.res.writeHead(302, {'Location': '/thongtindoan'});
-            scanner.res.end();
-        }else if(String(count[0][0]['Quyen']) === 'GV'){
-          scanner.res.writeHead(302, {'Location': '/giangvien/danhsachdoan'});
-          scanner.res.end();
-        }else if(String(count[0][0]['Quyen']) === 'QL'){
-          scanner.res.writeHead(302, {'Location': '/admin/quanlytieuban'});
-          scanner.res.end();
-        }else{
-
-        fs.readFile('../qldean/login-form/Login_v15/Login.html', (err, content) => {
-            if (err) {
-              if (err.code == "ENOENT") {
-                // Page Not Found
-                fs.readFile(path.join(__dirname, "404.html"),(err, content) => {
-                    console.log(__dirname)
-                    callback(JSON.stringify('error'), 'text/html');
-                  }
-                );
-              }else{
-                // Server Error
-                callback(JSON.stringify('error'), 'text/html');
-              }
-            }else{
-                callback(content, 'text/html');
-            }
-        });
-
-        }
+        let data = [];
+        data.push(count[0][0]['Quyen'],username,String(count[0][0]['Quyen']) + 'NAME',count[0][0]['user']);
+        callback(JSON.stringify(data), 'application/json');
     }
 
 }

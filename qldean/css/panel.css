@@ -58,6 +58,7 @@
     text-align: center;
     margin-top: 0px;
     background-color: tomato;
+    cursor: pointer;
 }
 .left-bar{
     position: fixed;

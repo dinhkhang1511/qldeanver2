@@ -1,6 +1,4 @@
-$(".left-bar").load("/qldean/Teacher/SlideBar.html",function () {
-    $( "#act-danhsachdoan" ).addClass( "active" )
-});
+$( "#act-danhsachdoan" ).addClass( "active" )
 
 var tieudeBangTacadoan =  ['Đồ án' , 'Chuyên ngành' , 'Người tạo','Ngày tạo','Lần cuối cập nhật','Sinh viên thực hiện'] 
 var tennutBangTacadoan = ['Tài liệu'];
@@ -26,7 +24,12 @@ var listchuyenganh = [];
     var listmachuyennganh = [];
     var listtenchuyennganh = [];
 
-var MaGV = getCookie('userlogin');
+
+$("#name-user").empty();
+$("#name-user").append('GV: ' + getCookie('GVNAME'));
+var MaGV = getCookie('GV');
+console.log(MaGV + ':MÃ')
+
 
 var MaChuyennganh = "";
 var MaDoan = '';
@@ -964,11 +967,12 @@ async function EventTeacherClick(event) {
     }else if(x.id == "btn-nhap-diem"){
         loadCheckFileuploadTailieu();
 
+    }else if(x.id == "logout" ||  x.parentNode.id == "logout" || x.parentNode.parentNode.id == "logout"){
+        if (confirm('Bạn có muốn đăng xuất')) {
+            window.location.replace("/login");
+          } else {
+          }
     }
-    
-    
-
-    
     ///ELSE
     else{
         if(document.querySelector('#yes-color-btn-follow-row div:first-child')){

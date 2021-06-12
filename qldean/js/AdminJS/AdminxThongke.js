@@ -1,8 +1,8 @@
-$(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
-    $( "#act-thongke" ).addClass( "active" )
-});
+$( "#act-thongke" ).addClass( "active" )
 
-
+$("#name-user").empty();
+$("#name-user").append('Admin: ' + getCookie('QLNAME'));
+var MaAdmin = getCookie('QL');
 
 function LoadBieudonam() {
     $('#button-bar').show();

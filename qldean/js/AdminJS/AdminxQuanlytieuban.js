@@ -1,8 +1,10 @@
-$(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
-    $( "#act-tieuban" ).addClass( "active" )
-});
+$( "#act-tieuban" ).addClass( "active" )
 
-var MaAdmin = getCookie('userlogin');
+$("#name-user").empty();
+$("#name-user").append('Admin: ' + getCookie('QLNAME'));
+var MaAdmin = getCookie('QL');
+
+console.log(MaAdmin + ':MÃ')
 
 var listinfoitem;
 var currentlist = 0;
@@ -472,14 +474,9 @@ function EventAdminClick(event) {
         document.getElementsByClassName("slide-bar-add-new-row").item(4).style.display = "none";
         $('#bo-item-giangvientb').hide();
         $('#them-item-giangvientb').show();
-    }else{
-        $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
-        $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
-    }
-    if(x.id == 'phancong'){
+    }else if(x.id == 'phancong'){
         addphancongtieuban();
-    }
-    if(x.parentNode.className == "nav-page" ){
+    }else if(x.parentNode.className == "nav-page" ){
         if(currentlist == 1){
             console.log("loaddataa")
             page_num = Number(x.innerHTML);
@@ -488,6 +485,14 @@ function EventAdminClick(event) {
             page_num = Number(x.innerHTML);
             loadListSearchTieuban();
         }
+    }else if(x.id == "logout" ||  x.parentNode.id == "logout" || x.parentNode.parentNode.id == "logout"){
+        if (confirm('Bạn có muốn đăng xuất')) {
+            window.location.replace("/login");
+          } else {
+          }
+    }else{
+        $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
+        $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
     }
 }
 

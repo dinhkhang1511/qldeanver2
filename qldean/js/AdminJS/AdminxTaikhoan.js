@@ -1,8 +1,8 @@
+$( "#act-taikhoan" ).addClass( "active" )
 
-$(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
-    $( "#act-tieuban" ).addClass( "active" )
-    $('#logo-title').append('<img src="/Asset 4.png" alt="" srcset="">')
-});
+$("#name-user").empty();
+$("#name-user").append('Admin: ' + getCookie('QLNAME'));
+var MaAdmin = getCookie('QL');
 
 var listButtonpk = ['Phân công','Sửa','Xóa'];
 var listIdBtnTable = ['phancongx', 'suax' , 'xoax'];
@@ -17,9 +17,6 @@ var listSuaIdBtn = ['sua', 'thoa'];
 
 var listphancongbtn =  ['Phân công','Thoát'];
 
-$(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
-    $( "#act-taikhoan" ).addClass( "active" )
-});
 
 var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -119,6 +116,11 @@ function EventAdminClick(event) {
         x.id = 'activeswitchbar';
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
+    }else if(x.id == "logout" ||  x.parentNode.id == "logout" || x.parentNode.parentNode.id == "logout"){
+        if (confirm('Bạn có muốn đăng xuất')) {
+            window.location.replace("/login");
+          } else {
+          }
     }else{
 
     }

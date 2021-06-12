@@ -1,8 +1,9 @@
-$(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
-    $( "#act-sinhvien" ).addClass( "active" )
-});
+$( "#act-sinhvien" ).addClass( "active" )
 
-var MaAdmin = getCookie('userlogin');
+
+$("#name-user").empty();
+$("#name-user").append('Admin: ' + getCookie('QLNAME'));
+var MaAdmin = getCookie('QL');
 
 var niemkhoamoi;
 var ismokhoa = false;
@@ -682,6 +683,8 @@ function EventAdminClick(event) {
         }
     }else if(x.id == 'sua'){
         updateListSinhvien();
+    }else if(x.id == 'thoat'){
+        loadListSinhvien();
     }else if(x.id == 'themlopbtn'){
         $('#combox-ds-lop').hide();
         $('#label-lop').show();
@@ -692,6 +695,11 @@ function EventAdminClick(event) {
         $('#label-lop').hide();
         $('#themlopbtn').show();
         $('#dslopbtn').hide();
+    }else if(x.id == "logout" ||  x.parentNode.id == "logout" || x.parentNode.parentNode.id == "logout"){
+        if (confirm('Bạn có muốn đăng xuất')) {
+            window.location.replace("/login");
+          } else {
+          }
     }else{
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");

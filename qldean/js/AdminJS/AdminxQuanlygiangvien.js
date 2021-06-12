@@ -1,24 +1,9 @@
-// var listinfoitem;
-// var page_num = 1;
-// var tol_page = 0;
-
-// var listGVTitle = ['Mã' , 'Tên' , 'Ngày sinh' , 'Email'] 
-// var listGVdata = [{Ma:'SV021', Ten:'le tuan', Ngaysinh: '21/12/2222', Email:'LEtan@prox.com'},{Ma:'SV021', Ten:'le tuan', Ngaysinh: '21/12/2222', Email:'LEtan@prox.com'}]
-// var listButtonpk = ['Sửa','Xóa'];
-// var listIdBtnTable = [ 'suax' , 'xoax'];
-
-// var listBtnpk =  ['Thêm','Thoát'];
-// var listColorpk = ['tomato', 'green'];
-// var listIdBtn = ['them', 'thoat'];
+$( "#act-giangvien" ).addClass( "active" )
 
 
-// let IdGV;
-
-$(".left-bar").load("/qldean/Admin/SlideBar.html",function () {
-    $( "#act-giangvien" ).addClass( "active" )
-});
-
-var MaAdmin = getCookie('userlogin');
+$("#name-user").empty();
+$("#name-user").append('Admin: ' + getCookie('QLNAME'));
+var MaAdmin = getCookie('QL');
 
 var listinfoitem;
 var currentlist = 0;
@@ -329,8 +314,12 @@ function EventAdminClick(event) {
 
         $('.yes-color-lum-table').removeClass('yes-color-lum-table').addClass('no-color-lum-table');
         $('#yes-color-btn-follow-row').attr("id", "no-color-btn-follow-row");
-    }
-    else if(x.parentNode.className == "nav-page" ){
+    }else if(x.id == "logout" ||  x.parentNode.id == "logout" || x.parentNode.parentNode.id == "logout"){
+        if (confirm('Bạn có muốn đăng xuất')) {
+            window.location.replace("/login");
+          } else {
+          }
+    }else if(x.parentNode.className == "nav-page" ){
         page_num = Number(x.innerHTML)
         loadListDataGiangvien();
     } 

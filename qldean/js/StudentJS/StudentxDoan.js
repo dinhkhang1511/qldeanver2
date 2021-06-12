@@ -1,10 +1,11 @@
-$(".left-bar").load("/qldean/Student/SlideBar.html",function () {
-    $( "#act-doan" ).addClass( "active" )
-});
+$( "#act-doan" ).addClass( "active" )
 
-var MaSV = 'N17DCCN001';
+// var MaSV = 'N17DCCN001';
 
-// console.log(getCookie('userlogin'))
+$("#name-user").empty();
+$("#name-user").append('SV: ' + getCookie('SVNAME'));
+var MaSV = getCookie('SV');
+console.log(MaSV + ':MÃ')
 
 
 var danhsachcheckMota = ['Tệp văn bản','Tệp trình chiếu','Tệp chương trình'];
@@ -409,6 +410,11 @@ async function EventTeacherClick(event) {
 
     }else if(x.id == "danhsach-tieuban" ){
         loadDanhsachtieuban()
+    }else if(x.id == "logout" ||  x.parentNode.id == "logout" || x.parentNode.parentNode.id == "logout"){
+        if (confirm('Bạn có muốn đăng xuất')) {
+            window.location.replace("/login");
+          } else {
+          }
     }
 }
 
