@@ -172,31 +172,91 @@
 
     </div>
 
-    <div id="head-bar">
 
+    <div id="wrap-ong-noi">
+        <div id="wrap-chart">
+            <div id="head-bar-char"></div>
+            <div id="content-chart">
+                <canvas id="myChart" ></canvas>
+            </div>
+        </div>
+        <button id="at-55gn">5 năm gần nhất</button>
+        <button id="cn-55gn">5 năm gần nhất</button>
+        <button id="pt-55gn">5 năm gần nhất</button>
+
+        <button id="mo-rong-chart">mở rộng >></button>
     </div>
-
-
-    <div id="content-chart">
-        <canvas id="myChart" ></canvas>
-    </div>
-
-
-
-
-</div>
 
 
 <style>
+#head-bar-char{
+    margin-top: 10px;
+    border-radius: 3px;
+    position: relative;
+    float: left;
+    width:100%;
+    background-color: white;
+    padding: 7px 10px;
+}
 #content-chart{
     position: relative;
     float: left;
     background-color: white;
-    width:80%;
-    margin-left: 10%;
-    margin-top: 10px;
+    width:100%;
+    margin-left: 0%;
+    height: 490px;
+    border-radius: 3px;
+    margin-top: 1px;
+}
+
+#wrap-chart{
+    position: relative;
+    float: left;
+    width:100%;
+    margin-left: 0%;
     height: auto;
 }
+
+#wrap-ong-noi{
+    position: relative;
+    float: left;
+    width:980px;
+    margin-left: 0%;
+    height: auto;
+}
+
+#wrap-ong-noi button:not(#mo-rong-chart){
+    float: left;
+    background-color: thistle;
+    border: none;
+    padding: 3px 7px;
+    margin-top: 2px;
+    border-radius: 4px;
+    color: rgb(44, 44, 44);
+    cursor: pointer;
+}
+
+#at-55gn{
+    margin-left: 12.5%;
+}
+#cn-55gn{
+    margin-left: 20%;
+}
+#pt-55gn{
+    margin-left: 20%;
+}
+
+ #mo-rong-chart{
+     position: relative;
+     float: right;
+     background-color: thistle;
+    border: none;
+    padding: 3px 7px;
+    margin-top: 2px;
+    border-radius: 4px;
+    color: rgb(44, 44, 44);
+    cursor: pointer;
+ }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.2/chart.min.js" integrity="sha512-VCHVc5miKoln972iJPvkQrUYYq7XpxXzvqNfiul1H4aZDwGBGC0lq373KNleaB2LpnC2a/iNfE5zoRYmB4TRDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -206,44 +266,36 @@ var ctx = document.getElementById('myChart');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['Red', 'Blue', 'Yellow'],
+        labels: ['AT', 'CN', 'PT'],
         datasets: [{
-            type: 'line', 
-            label: '# of Votes',
-            data: [2, 2, 2],
-            backgroundColor: [
-                'green',
-            ],
-            borderWidth: 4
-        },{
-            type: 'line', 
-            label: '# of Votes',
-            data: [4, 13, 2],
-            backgroundColor: [
-                'black',
-            ],
-            borderWidth: 4
-        },{
             type: 'bar', 
-            label: '# of Votes',
+            label: 'AT',
             data: [1, 3, 3],
             backgroundColor: [
-                'blue',
+                'rgba(54, 162, 235, 0.5)',
 
             ],
-
-            borderWidth: 1
-        },{
-            label: '# of Votes',
-            data: [12, 19, 3],
-            backgroundColor: [
-                'tomato',
+            borderColor: [
+                'black',
             ],
             borderWidth: 1
         },{
-            label: '# of Votes',
+            label: 'CN',
             data: [12, 19, 3],
             backgroundColor: [
+                'rgba(255, 99, 132, 0.5)',
+            ],
+            borderColor: [
+                'black',
+            ],
+            borderWidth: 1
+        },{
+            label: 'PT',
+            data: [12, 19, 3],
+            backgroundColor: [
+                'rgba(255, 206, 86, 0.5)',
+            ],
+            borderColor: [
                 'black',
             ],
             borderWidth: 1
@@ -264,4 +316,50 @@ var myChart = new Chart(ctx, {
         
     }
 });
+
+
+document.getElementById('mo-rong-chart').style.display = 'none';
+
+
+$('#at-55gn').click(function() {
+  document.getElementById('wrap-ong-noi').style.width = '600px';
+  document.getElementById('content-chart').style.height = '300px';
+  document.getElementById('at-55gn').style.display = 'none';
+  document.getElementById('cn-55gn').style.display = 'none';
+  document.getElementById('pt-55gn').style.display = 'none';
+  document.getElementById('mo-rong-chart').style.display = 'block';
+});
+
+
+$('#mo-rong-chart').click(function() {
+  document.getElementById('wrap-ong-noi').style.width = '980px';
+  document.getElementById('content-chart').style.height = '490px';
+  document.getElementById('at-55gn').style.display = 'block';
+  document.getElementById('cn-55gn').style.display = 'block';
+  document.getElementById('pt-55gn').style.display = 'block';
+  document.getElementById('mo-rong-chart').style.display = 'none';
+});
 </script>
+
+
+
+<!-- {
+    type: 'line', 
+    label: '# of Votes',
+    data: [2, 2, 2],
+    backgroundColor: [
+        'green',
+    ],
+    borderWidth: 4
+},{
+    type: 'line', 
+    label: '# of Votes',
+    data: [4, 13, 2],
+    backgroundColor: [
+        'black',
+    ],
+    borderColor: [
+        'black',
+    ],
+    borderWidth: 4
+} -->

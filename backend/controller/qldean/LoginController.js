@@ -11,6 +11,12 @@ module.exports = async (callback, scanner) => {
     //call CheckLogin('GVCN006','GVCN006#19871114')
     //call CheckLogin('QL001','QL001#14111987')
 
+//     -- call CheckLogin('QL001','QL001@010621'); 
+//     -- call CheckLogin('GVCN006','GVCN006@19871114')
+//    call CheckLogin('N17DCCN002','N17DCCN002@230621')
+   
+//    #ddmmyy -.-
+
     if(index === 'login'){
         let username = String(head_params.get('username'))
         let pass = String(head_params.get('pass'))
