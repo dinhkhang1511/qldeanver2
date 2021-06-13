@@ -42,6 +42,14 @@ var xhttp = new XMLHttpRequest();
                     console.log(data)
                     LoadChart5nam(data);
                 }
+                if(String(this.responseURL).includes('api/loadBieudoPhodiem')){
+                    var data = JSON.parse(this.responseText);
+                    console.log(data)
+                    // LoadChart5nam(data);
+                    LoadBieudoPhodiem(data)
+                }
+
+                
         }
     };
 
@@ -86,6 +94,13 @@ function loadThongke5nam(){
     xhttp.open("GET", "/api/loadBieudoThongke5nam?HD="+HDcurrent, false);
     xhttp.send();
 }
+
+
+function loadBieudoPhodiem(){
+    xhttp.open("GET", "/api/loadBieudoPhodiem?HD="+HDcurrent+"&Khoa="+khoacurrent, false);
+    xhttp.send();
+}
+
 
 function FirstLoadBieudoToankhoa(data) {
     $('#button-bar').show();
@@ -355,6 +370,142 @@ Display2Tab();
 }
 
 
+
+function LoadBieudoPhodiem(data){
+
+ 
+    var temlist = data[0][0][0];
+    var listLabel = ['[0,4)','[4,5.5)','[5.5,7)','[7,8.5)','[8.5,10)'];
+    var listSet = [];
+    for(var i = 0; i < listLabel.length; i++){
+        listSet.push(temlist[listLabel[i]])
+    }
+
+    $('#content-chart-back-1').empty();
+    $('#content-chart-back-1').append('<canvas id="myChart__" ></canvas>');
+
+
+    console.log(listSet)
+
+    var ctxx = document.getElementById('myChart__');
+    new Chart(ctxx, {
+        type: 'bar',
+        data: {
+            labels: listLabel,
+            datasets: [{
+                type: 'bar', 
+                label: 'pass',
+                data: listSet,
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.5)',
+                ],
+                borderColor: [
+                    'black',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            tooltips:{
+                mode:'index',
+            },
+            scales: {
+  
+            }
+        }
+    });
+
+
+
+
+
+
+     temlist = data[1][0][0];
+     listLabel = ['[0,4)','[4,5.5)','[5.5,7)','[7,8.5)','[8.5,10)'];
+     listSet = [];
+    for(var i = 0; i < listLabel.length; i++){
+        listSet.push(temlist[listLabel[i]])
+    }
+
+    $('#content-chart-back-2').empty();
+    $('#content-chart-back-2').append('<canvas id="myChart___" ></canvas>');
+
+
+    ctxx = document.getElementById('myChart___');
+    new Chart(ctxx, {
+        type: 'bar',
+        data: {
+            labels: listLabel,
+            datasets: [{
+                type: 'bar', 
+                label: 'pass',
+                data: listSet,
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.5)',
+                ],
+                borderColor: [
+                    'black',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            tooltips:{
+                mode:'index',
+            },
+            scales: {
+  
+            }
+        }
+    });
+
+
+
+
+
+    temlist = data[2][0][0];
+    listLabel = ['[0,4)','[4,5.5)','[5.5,7)','[7,8.5)','[8.5,10)'];
+    listSet = [];
+   for(var i = 0; i < listLabel.length; i++){
+       listSet.push(temlist[listLabel[i]])
+   }
+
+   $('#content-chart-back-3').empty();
+   $('#content-chart-back-3').append('<canvas id="myChart____" ></canvas>');
+
+
+   ctxx = document.getElementById('myChart____');
+   new Chart(ctxx, {
+       type: 'bar',
+       data: {
+           labels: listLabel,
+           datasets: [{
+               type: 'bar', 
+               label: 'pass',
+               data: listSet,
+               backgroundColor: [
+                   'rgba(54, 162, 235, 0.5)',
+               ],
+               borderColor: [
+                   'black',
+               ],
+               borderWidth: 1
+           }]
+       },
+       options: {
+           tooltips:{
+               mode:'index',
+           },
+           scales: {
+ 
+           }
+       }
+   });
+
+
+}
+
+
 function Display2Tab(){
 
     document.getElementById('wrap-ong-noi').style.display = 'block';
@@ -386,8 +537,13 @@ function Display4Tab(){
     for(var i = 0; i < x55gn.length; i++) x55gn.item(i).style.display = 'none';
     document.getElementById('mo-rong-chart').style.display = 'block';
 
+    for(var i = 0; i <= 2; i++){
+        document.getElementsByClassName('svg_expand').item(i).style.display = 'block';
+        document.getElementsByClassName('head-bar-char-back_').item(i).style.fontSize = '13px';
+    }
+    
+
     for(var i = 1; i <= 3; i++){
-        // document.getElementById('wrap-ba-noi-'+i).style.float = 'left';
         document.getElementById('wrap-ba-noi-'+i).style.display = 'block';
         document.getElementById('wrap-ba-noi-'+i).style.width = '100%';
         document.getElementById('content-chart-back-'+i).style.height = (document.getElementById('wrap-ba-noi-'+i).offsetWidth / 2) + 'px';
@@ -405,6 +561,8 @@ function DisplayOneInTab(num,numray){
         document.getElementById('wrap-ba-noi-'+numray[i]).style.display = 'none';
     }
 
+    document.getElementsByClassName('head-bar-char-back_').item(num-1).style.fontSize = '17px';
+    document.getElementsByClassName('svg_expand').item(num-1).style.display = 'none';
     document.getElementById('wrap-ba-noi-'+num).style.float = 'left';
     document.getElementById('wrap-ba-noi-'+num).style.display = 'block';
     document.getElementById('wrap-ba-noi-'+num).style.width = '980px';
@@ -422,8 +580,13 @@ function EventAdminClick(event) {
             console.log(x.id)
             HDcurrent = String(x.id).split('-')[0];
             loadThongke5nam();
+            document.getElementById('wrap-ba-noi-1').style.display = 'none';
+            document.getElementById('wrap-ba-noi-2').style.display = 'none';
+            document.getElementById('wrap-ba-noi-3').style.display = 'none';    
         }
         if(String(x.id).includes('phodiembtn')){
+            HDcurrent = String(x.id).split('-')[0];
+            loadBieudoPhodiem();
             Display4Tab();
         }
     }else if(x.id == "mo-rong-chart-back"){
@@ -454,11 +617,11 @@ function EventAdminClick(event) {
         document.getElementById('wrap-ba-noi-2').style.display = 'none';
         document.getElementById('wrap-ba-noi-3').style.display = 'none';
 
-    }else if( x.id == "mo-rong-chart-back-1"){
+    }else if( x.id == "head-bar-char-back_1" ||  x.parentNode.id == "head-bar-char-back_1" ||  x.parentNode.parentNode.id == "head-bar-char-back_1"){
         DisplayOneInTab(1,[2,3])
-    }else if( x.id == "mo-rong-chart-back-2"){
+    }else if( x.id == "head-bar-char-back_2" ||  x.parentNode.id == "head-bar-char-back_2" ||  x.parentNode.parentNode.id == "head-bar-char-back_2"){
         DisplayOneInTab(2,[1,3])
-    }else if( x.id == "mo-rong-chart-back-3"){
+    }else if( x.id == "head-bar-char-back_3" ||  x.parentNode.id == "head-bar-char-back_3" ||  x.parentNode.parentNode.id == "head-bar-char-back_3"){
         DisplayOneInTab(3,[1,2])
     }else if( x.id == "thu-nho-chart-back"){
         Display2Tab();

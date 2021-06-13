@@ -30,4 +30,20 @@ module.exports = async (callback, scanner) => {
         callback(JSON.stringify(data), 'application/json');
     }
 
+    if (index === 'loadBieudoPhodiem'){
+        let HD = head_params.get('HD');
+        let Khoa = head_params.get('Khoa');
+        let result1 = await Model.InleSQL("call ThongKePhoDiem("+Khoa+",'HD,1,"+HD+",');");
+        let result2 = await Model.InleSQL("call ThongKePhoDiem("+Khoa+",'PB,1,"+HD+",');");
+        let result3 = await Model.InleSQL("call ThongKePhoDiem("+Khoa+",'TB,1,"+HD+",');");
+
+        console.log("call ThongKePhoDiem("+Khoa+",'TB,1,"+HD+",');")
+
+        let data = [];
+        data.push(result1);
+        data.push(result2);
+        data.push(result3);
+        callback(JSON.stringify(data), 'application/json');
+    }
+
 }
