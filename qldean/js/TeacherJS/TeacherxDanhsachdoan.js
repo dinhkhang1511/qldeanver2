@@ -102,6 +102,7 @@ var xhttp = new XMLHttpRequest();
 
                 if(String(this.responseURL).includes('api/dieukienthemdoan')){
                     var data = JSON.parse(this.responseText);
+                    console.log(data)
                     listchuyenganh = data[0][0];
                     listmachuyennganh = [];
                     for(let i = 0; i< listchuyenganh.length; i++){
@@ -217,9 +218,9 @@ function chuyendoiBangdoantatca(data){
         else  status = 'Đã phân công';
 
         if(String(data[i].MaSV) === 'null')
-        listdoantatca.push({Doan: String(data[i].MaDA+data[i].TenDA) , CN: String(data[i].MaCN+data[i].tenCN), Nguoitao: String(data[i].MaGV+data[i].TenGV) , Ngaytao: String(data[i].minThoiGian), Capnhatcuoi: String(data[i].maxThoiGian) , Trangthai:'' })
+        listdoantatca.push({Doan: String(data[i].MaDA+' - '+data[i].TenDA) , CN: String(data[i].MaCN+' - '+data[i].tenCN), Nguoitao: String(data[i].MaGV+' - '+data[i].TenGV) , Ngaytao: String(data[i].minThoiGian).replace('T',' '), Capnhatcuoi: String(data[i].maxThoiGian) , Trangthai:'' })
         else
-        listdoantatca.push({Doan: String(data[i].MaDA+data[i].TenDA) , CN: String(data[i].MaCN+data[i].tenCN), Nguoitao: String(data[i].MaGV+data[i].TenGV) , Ngaytao: String(data[i].minThoiGian), Capnhatcuoi: String(data[i].maxThoiGian) , Trangthai: String(data[i].MaSV) +' - ' + String(data[i].TenSV) })
+        listdoantatca.push({Doan: String(data[i].MaDA+' - '+data[i].TenDA) , CN: String(data[i].MaCN+' - '+data[i].tenCN), Nguoitao: String(data[i].MaGV+' - '+data[i].TenGV) , Ngaytao: String(data[i].minThoiGian).replace('T',' '), Capnhatcuoi: String(data[i].maxThoiGian) , Trangthai: String(data[i].MaSV) +' - ' + String(data[i].TenSV) })
 
     }
     return listdoantatca;
@@ -231,7 +232,7 @@ function chuyendoiBangdoancanhan(data){
     for(let i = 0;i < data.length; i++){
         if(data[i].totalPCinCurYear == 0) status = 'Chưa phân công';
         else status = 'Đã phân công';
-        bangcanhan.push({madoan: data[i].MaDA, Tendoan: data[i].TenDA, ngaytao:data[i].ThoiGian, trangthai: status})
+        bangcanhan.push({madoan: data[i].MaDA, Tendoan: data[i].TenDA, ngaytao:data[i].ThoiGian.replace('T',' '), trangthai: status})
     }
     return bangcanhan;
 }
@@ -257,7 +258,7 @@ function loadListTailieu(){
 }
 
 function dieukienthemdoan(){
-    xhttp.open("GET", "/api/dieukienthemdoan?MaNghanh=CN", false);
+    xhttp.open("GET", "/api/dieukienthemdoan?MaGV="+MaGV, false);
     xhttp.send();
 }
 
@@ -749,7 +750,7 @@ function LoadPhancongTailieu(doan,listsinhvien){
                 '<div style="color: rgb(107, 144, 185);">Tài liệu hướng dẫn:</div>'+
                 '<span>Người cập nhật: '+doan.MaNguoiCapNhat+' - '+doan.TenNguoiCapNhat+'</span>'+
                 '<span>Ngày cập nhật: '+doan.NgayCapNhat.replace('T17:00:00.000Z','')+'</span>'+
-                '<span>Tệp: <a href="http://">'+doan.Tep_Goc+'</a> </span>'+
+                '<span>Tệp: <a href="/qldean/uploads/'+doan.Tep+'">'+doan.Tep_Goc+'</a> </span>'+
                 '<span>Mô tả: '+doan.MoTa+'</span><span></span><span></span>'+
             '</span>'+
         '</span>'
@@ -967,11 +968,6 @@ async function EventTeacherClick(event) {
     }else if(x.id == "btn-nhap-diem"){
         loadCheckFileuploadTailieu();
 
-    }else if(x.id == "logout" ||  x.parentNode.id == "logout" || x.parentNode.parentNode.id == "logout"){
-        if (confirm('Bạn có muốn đăng xuất')) {
-            window.location.replace("/login");
-          } else {
-          }
     }
     ///ELSE
     else{

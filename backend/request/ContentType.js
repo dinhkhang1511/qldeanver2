@@ -11,6 +11,13 @@ module.exports = (extname) => {
         case ".m3u8":    contentType = "application/x-mpegURL";      break;
         case ".ts":    contentType = "video/mp2t";      break;
         case ".torrent": contentType = "application/force-download"; break;
+        case ".rar": contentType = "application/force-download"; break;
+        case ".zip": contentType = "application/force-download"; break;
+        case ".pdf": contentType = "application/force-download"; break;
+        case ".cpp": contentType = "application/force-download"; break;
+        case ".docx": contentType = "application/force-download"; break;
+        case ".doc": contentType = "application/force-download"; break;
+        // default: contentType = "application/force-download";
     }
     return contentType;
 }

@@ -22,8 +22,9 @@ module.exports = async (callback, scanner) => {
         callback(JSON.stringify([result, count]), 'application/json');
     }
     if (index === 'dieukienthemdoan'){
-        let MaNghanh = head_params.get('MaNghanh');
-        let list = await Model.InleSQL("call ComboBox_CN('"+MaNghanh+"')");
+        // let MaNghanh = head_params.get('MaNghanh');
+        let MaGV = head_params.get('MaGV');
+        let list = await Model.InleSQL("call ComboBox_CN_GV('"+MaGV+"')");
         let MaDoan = await Model.InleSQL("select auto_IDDA() AS MaDoan");
         let data = [];
         data.push(list);
@@ -107,7 +108,7 @@ module.exports = async (callback, scanner) => {
         let listChuyennganh;
         let MaChuyennganhtemp;
 
-        listChuyennganh = await Model.InleSQL("call ComboBox_CN(substring('"+MaGV+"',3,2))");
+        listChuyennganh = await Model.InleSQL("call ComboBox_CN_GV('"+MaGV+"')");
         listChuyennganh = listChuyennganh[0];
 
     if(MaChuyennganh === '' || String(MaChuyennganh) === 'null'){

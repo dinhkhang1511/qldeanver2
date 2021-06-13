@@ -180,13 +180,58 @@
                 <canvas id="myChart" ></canvas>
             </div>
         </div>
-        <button id="at-55gn">5 năm gần nhất</button>
-        <button id="cn-55gn">5 năm gần nhất</button>
-        <button id="pt-55gn">5 năm gần nhất</button>
-
-        <button id="mo-rong-chart">mở rộng >></button>
     </div>
 
+    <div id="wrap-ba-noi">
+        <div id="wrap-chart">
+            <div class="head-bar-char-back"> <div id="lable-header-bar">Chuyên ngành An toàn thông tin trong 5 năm</div> </div>
+            <div id="content-chart-back">
+                <canvas id="myChart_" ></canvas>
+            </div>
+        </div>
+        <button id="mo-rong-chart-back"> mở rộng</button>
+        <button id="thu-nho-chart-back"> thu nhỏ</button>
+    </div>
+
+
+    <div class="contain-3-tab">
+
+    <div id="wrap-ba-noi-1">
+        <div id="wrap-chart">
+            <div class="head-bar-char-back_"> <div id="lable-header-bar-1">Phổ điểm hướng dẫn</div> </div>
+            <div id="content-chart-back-1">
+                <canvas id="myChart__" ></canvas>
+            </div>
+        </div>
+        <button id="mo-rong-chart-back-1"> mở rộng</button>
+        <button id="thu-nho-chart-back-1"> thu nhỏ</button>
+    </div>
+
+
+    <div id="wrap-ba-noi-2">
+        <div id="wrap-chart">
+            <div class="head-bar-char-back_"> <div id="lable-header-bar-2">Phổ điểm phản biện</div> </div>
+            <div id="content-chart-back-2">
+                <canvas id="myChart__" ></canvas>
+            </div>
+        </div>
+        <button id="mo-rong-chart-back-2"> mở rộng</button>
+        <button id="thu-nho-chart-back-2"> thu nhỏ</button>
+    </div>
+
+
+    <div id="wrap-ba-noi-3">
+        <div id="wrap-chart">
+            <div class="head-bar-char-back_"> <div id="lable-header-bar-3">Phổ điểm tiểu ban</div> </div>
+            <div id="content-chart-back-3">
+                <canvas id="myChart__" ></canvas>
+            </div>
+        </div>
+        <button id="mo-rong-chart-back-3"> mở rộng</button>
+        <button id="thu-nho-chart-back-3"> thu nhỏ</button>
+    </div>
+
+</div>
 
 <style>
 #head-bar-char{
@@ -198,6 +243,32 @@
     background-color: white;
     padding: 7px 10px;
 }
+
+.head-bar-char-back{
+    margin-top: 10px;
+    border-radius: 3px;
+    position: relative;
+    float: left;
+    width:100%;
+    background-color: white;
+    padding: 7px 10px;
+}
+
+
+.head-bar-char-back_{
+    margin-top: 10px;
+    border-radius: 3px;
+    position: relative;
+    float: left;
+    width:100%;
+    background-color: white;
+    padding: 0px 10px;
+}
+
+.head-bar-char-back_ div{
+    font-size: 13px;
+}
+
 #content-chart{
     position: relative;
     float: left;
@@ -217,34 +288,41 @@
     height: auto;
 }
 
+
+
 #wrap-ong-noi{
     position: relative;
     float: left;
     width:980px;
     margin-left: 0%;
+    margin-right: 10px;
     height: auto;
 }
-
-#wrap-ong-noi button:not(#mo-rong-chart){
+#wrap-ong-noi span:not(#mo-rong-chart, .title-combox-headbar){
     float: left;
-    background-color: thistle;
     border: none;
     padding: 3px 7px;
     margin-top: 2px;
     border-radius: 4px;
     color: rgb(44, 44, 44);
-    cursor: pointer;
+    font-size: 13px;
+
+    width: 125px;
 }
 
-#at-55gn{
-    margin-left: 12.5%;
+#wrap-ong-noi span button:not(#mo-rong-chart){
+    float: left;
+    background-color: rgba(122, 182, 63, 0.664);
+    border: none;
+
+    padding: 4px 3px;
+    border-radius: 2px;
+    margin-left: 4px;
+
+    cursor: pointer;
+
 }
-#cn-55gn{
-    margin-left: 20%;
-}
-#pt-55gn{
-    margin-left: 20%;
-}
+
 
  #mo-rong-chart{
      position: relative;
@@ -257,88 +335,287 @@
     color: rgb(44, 44, 44);
     cursor: pointer;
  }
+
+
+
+
+
+ #wrap-ba-noi{
+     overflow: hidden;
+    position: relative;
+    float: left;
+    width:980px;
+    margin-left: 0%;
+    height: auto;
+ }
+ #content-chart-back{
+    position: relative;
+    float: left;
+    background-color: white;
+    width:100%;
+    margin-left: 0%;
+    height: 490px;
+    border-radius: 3px;
+    margin-top: 1px;
+ }
+ #lable-header-bar{
+     position: relative;
+     float: left;
+     padding: 7px 0px 8px 0px;
+ }
+#mo-rong-chart-back{
+    position: relative;
+     float: left;
+     background-color: thistle;
+    border: none;
+    padding: 3px 7px;
+    margin-top: 2px;
+    border-radius: 4px;
+    color: rgb(44, 44, 44);
+    cursor: pointer;
+}
+#thu-nho-chart-back{
+    position: relative;
+     float: right;
+     background-color: thistle;
+    border: none;
+    padding: 3px 7px;
+    margin-top: 2px;
+    border-radius: 4px;
+    color: rgb(44, 44, 44);
+    cursor: pointer;
+}
+
+
+
+
+#wrap-ba-noi-1{
+     overflow: hidden;
+    position: relative;
+    float: left;
+    width:980px;
+    margin-left: 0%;
+    height: auto;
+ }
+ #content-chart-back-1{
+    position: relative;
+    float: left;
+    background-color: white;
+    width:100%;
+    margin-left: 0%;
+    height: 490px;
+    border-radius: 3px;
+    margin-top: 1px;
+ }
+ #lable-header-bar-1{
+     position: relative;
+     float: left;
+     padding: 7px 0px 8px 0px;
+ }
+#mo-rong-chart-back-1{
+    position: relative;
+     float: left;
+     background-color: thistle;
+    border: none;
+    padding: 3px 7px;
+    margin-top: 2px;
+    border-radius: 4px;
+    color: rgb(44, 44, 44);
+    cursor: pointer;
+}
+#thu-nho-chart-back-1{
+    position: relative;
+     float: right;
+     background-color: thistle;
+    border: none;
+    padding: 3px 7px;
+    margin-top: 2px;
+    border-radius: 4px;
+    color: rgb(44, 44, 44);
+    cursor: pointer;
+}
+
+
+
+#wrap-ba-noi-2{
+     overflow: hidden;
+    position: relative;
+    float: left;
+    width:980px;
+    margin-left: 0%;
+    height: auto;
+ }
+ #content-chart-back-2{
+    position: relative;
+    float: left;
+    background-color: white;
+    width:100%;
+    margin-left: 0%;
+    height: 490px;
+    border-radius: 3px;
+    margin-top: 1px;
+ }
+ #lable-header-bar-2{
+     position: relative;
+     float: left;
+     padding: 7px 0px 8px 0px;
+ }
+#mo-rong-chart-back-2{
+    position: relative;
+     float: right;
+     background-color: thistle;
+    border: none;
+    padding: 3px 7px;
+    margin-top: 2px;
+    border-radius: 4px;
+    color: rgb(44, 44, 44);
+    cursor: pointer;
+}
+#thu-nho-chart-back-2{
+    position: relative;
+     float: right;
+     background-color: thistle;
+    border: none;
+    padding: 3px 7px;
+    margin-top: 2px;
+    border-radius: 4px;
+    color: rgb(44, 44, 44);
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+#wrap-ba-noi-3{
+     overflow: hidden;
+    position: relative;
+    float: right;
+    width:980px;
+    margin-left: 0%;
+    height: auto;
+ }
+ #content-chart-back-3{
+    position: relative;
+    float: left;
+    background-color: white;
+    width:100%;
+    margin-left: 0%;
+    height: 490px;
+    border-radius: 3px;
+    margin-top: 1px;
+ }
+ #lable-header-bar-3{
+     position: relative;
+     float: left;
+     padding: 7px 0px 8px 0px;
+ }
+#mo-rong-chart-back-3{
+    position: relative;
+     float: left;
+     background-color: thistle;
+    border: none;
+    padding: 3px 7px;
+    margin-top: 2px;
+    border-radius: 4px;
+    color: rgb(44, 44, 44);
+    cursor: pointer;
+}
+#thu-nho-chart-back-3{
+    position: relative;
+     float: right;
+     background-color: thistle;
+    border: none;
+    padding: 3px 7px;
+    margin-top: 2px;
+    border-radius: 4px;
+    color: rgb(44, 44, 44);
+    cursor: pointer;
+}
+
+.contain-3-tab{
+    float: left;
+    position: relative;
+    width: calc(23.4% - 5px);
+}
+
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.2/chart.min.js" integrity="sha512-VCHVc5miKoln972iJPvkQrUYYq7XpxXzvqNfiul1H4aZDwGBGC0lq373KNleaB2LpnC2a/iNfE5zoRYmB4TRDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
-var ctx = document.getElementById('myChart');
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ['AT', 'CN', 'PT'],
-        datasets: [{
-            type: 'bar', 
-            label: 'AT',
-            data: [1, 3, 3],
-            backgroundColor: [
-                'rgba(54, 162, 235, 0.5)',
 
-            ],
-            borderColor: [
-                'black',
-            ],
-            borderWidth: 1
-        },{
-            label: 'CN',
-            data: [12, 19, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.5)',
-            ],
-            borderColor: [
-                'black',
-            ],
-            borderWidth: 1
-        },{
-            label: 'PT',
-            data: [12, 19, 3],
-            backgroundColor: [
-                'rgba(255, 206, 86, 0.5)',
-            ],
-            borderColor: [
-                'black',
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        tooltips:{
-            mode:'index',
-        },
-        scales: {
-    //   x: {
-    //     stacked: true,
-    //   },
-    //   y: {
-    //     stacked: true
-    //   }
-    }
-        
-    }
-});
-
-
+document.getElementById('wrap-ba-noi').style.display = 'none';
 document.getElementById('mo-rong-chart').style.display = 'none';
 
 
-$('#at-55gn').click(function() {
-  document.getElementById('wrap-ong-noi').style.width = '600px';
-  document.getElementById('content-chart').style.height = '300px';
-  document.getElementById('at-55gn').style.display = 'none';
-  document.getElementById('cn-55gn').style.display = 'none';
-  document.getElementById('pt-55gn').style.display = 'none';
-  document.getElementById('mo-rong-chart').style.display = 'block';
-});
+// $('#at-55gn').click(function() {
+//   document.getElementById('wrap-ong-noi').style.width = '595px';
+//   document.getElementById('content-chart').style.height = '300px';
+//   document.getElementById('at-55gn').style.display = 'none';
+//   document.getElementById('cn-55gn').style.display = 'none';
+//   document.getElementById('pt-55gn').style.display = 'none';
+//   document.getElementById('is-55gn').style.display = 'none';
+//   document.getElementById('os-55gn').style.display = 'none';
+//   document.getElementById('mo-rong-chart').style.display = 'block';
 
 
-$('#mo-rong-chart').click(function() {
-  document.getElementById('wrap-ong-noi').style.width = '980px';
-  document.getElementById('content-chart').style.height = '490px';
-  document.getElementById('at-55gn').style.display = 'block';
-  document.getElementById('cn-55gn').style.display = 'block';
-  document.getElementById('pt-55gn').style.display = 'block';
-  document.getElementById('mo-rong-chart').style.display = 'none';
-});
+//   document.getElementById('wrap-ba-noi').style.float = 'right';
+//   document.getElementById('wrap-ba-noi').style.display = 'block';
+//   document.getElementById('wrap-ba-noi').style.width = '595px';
+//   document.getElementById('content-chart-back').style.height = '300px';
+
+//   document.getElementById('thu-nho-chart-back').style.display = 'none';
+  
+// });
+
+
+// $('#mo-rong-chart').click(function() {
+//   document.getElementById('wrap-ong-noi').style.width = '980px';
+//   document.getElementById('content-chart').style.height = '490px';
+//   document.getElementById('at-55gn').style.display = 'block';
+//   document.getElementById('cn-55gn').style.display = 'block';
+//   document.getElementById('pt-55gn').style.display = 'block';
+//   document.getElementById('is-55gn').style.display = 'block';
+//   document.getElementById('os-55gn').style.display = 'block';
+//   document.getElementById('mo-rong-chart').style.display = 'none';
+//   document.getElementById('wrap-ba-noi').style.display = 'none';
+// });
+
+
+// $('#mo-rong-chart-back').click(function() {
+//     document.getElementById('wrap-ong-noi').style.display = 'none';
+//     document.getElementById('wrap-ba-noi').style.float = 'left';
+//   document.getElementById('wrap-ba-noi').style.display = 'block';
+//   document.getElementById('wrap-ba-noi').style.width = '980px';
+//   document.getElementById('content-chart-back').style.height = '490px';
+
+//   document.getElementById('mo-rong-chart-back').style.display = 'none';
+//   document.getElementById('thu-nho-chart-back').style.display = 'block';
+// });
+
+
+// $('#thu-nho-chart-back').click(function() {
+//     document.getElementById('wrap-ong-noi').style.display = 'block';
+//     document.getElementById('wrap-ong-noi').style.width = '595px';
+//   document.getElementById('content-chart').style.height = '300px';
+//   document.getElementById('at-55gn').style.display = 'none';
+//   document.getElementById('cn-55gn').style.display = 'none';
+//   document.getElementById('pt-55gn').style.display = 'none';
+//   document.getElementById('is-55gn').style.display = 'none';
+//   document.getElementById('os-55gn').style.display = 'none';
+//   document.getElementById('mo-rong-chart').style.display = 'block';
+
+
+//   document.getElementById('wrap-ba-noi').style.float = 'right';
+//   document.getElementById('wrap-ba-noi').style.display = 'block';
+//   document.getElementById('wrap-ba-noi').style.width = '595px';
+//   document.getElementById('content-chart-back').style.height = '300px';
+//   document.getElementById('mo-rong-chart-back').style.display = 'block';
+//   document.getElementById('thu-nho-chart-back').style.display = 'none';
+// });
 </script>
 
 
